@@ -1,0 +1,5 @@
+**/*.test.ts
+**/*.test.js
+**/.npmignore
+**/dist/
+**/node_modules/
