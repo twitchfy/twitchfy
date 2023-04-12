@@ -35,4 +35,13 @@ This powerful node module allows you to customize your own Twitch Bot.
     chatbot.login("username") //you have to include the username of the user
     
    </p>
+</div>
 <div>
+
+
+ You can search for the package's documentation in https://pablornc.github.io/twitchapi/
+
+ You are free of making a pull request in the <a href="https://pablornc.github.io/twitchapi/">official github repository</a>!
+
+ 
+</div>
