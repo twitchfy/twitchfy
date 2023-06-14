@@ -101,7 +101,8 @@ export class ChatBotWs extends client {
 
 
             this.chatbot.on("ready", () => {
-                for (const channel of this.chatbot.options.channels) {
+
+                for (const channel of this.chatbot.options.channels ?? []) {
                     
                     this.chatbot.channels.join(channel)
 
