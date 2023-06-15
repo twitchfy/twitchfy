@@ -18,7 +18,7 @@
   "author": "PabloRNC",
   "license": "ISC",
   "dependencies": {
-    "@twitchapi/api-types": "^1.1.1",
+    "@twitchapi/api-types": "^1.1.2",
     "@twitchapi/helix": "^1.2.3",
     "@types/websocket": "^1.0.5",
     "websocket": "^1.0.34"
