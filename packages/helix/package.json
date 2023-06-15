@@ -12,6 +12,6 @@
   "dependencies": {
     "@twitchapi/api-types": "^1.0.11",
     "@types/node-fetch": "^2.6.2",
-    "node-fetch": "2.5"
+    "node-fetch": "^2.6.11"
   }
 }
