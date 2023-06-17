@@ -493,6 +493,7 @@ declare module "@twitchapi/chatbot" {
         public channels: ChannelManager
         public nick: string
         public noticeLog: boolean
+        public readyAt: Date | null
         public login(nick: string): void
         public destroy(): void
         private setupChannels(): Promise<void>
