@@ -80,7 +80,6 @@ export class ChatBotWs extends client {
     }
 
     /**
-     * @async
      * Used to get the ping of the websocket connection in ms.
      * @returns {number} Returns the ping of the websocket connnection's ping in ms.
      */
