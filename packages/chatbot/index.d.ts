@@ -362,6 +362,7 @@ declare module "@twitchapi/chatbot" {
         public connection: connection
         public login(): void
         public sendMessage(message: string): void
+        public getPing(): Promise<number>
         private startup(): void
 
 

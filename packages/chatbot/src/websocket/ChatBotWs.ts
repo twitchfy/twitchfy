@@ -79,6 +79,25 @@ export class ChatBotWs extends client {
         this.connection.send(message)
     }
 
+    public async getPing(): Promise<number>{
+
+        return new Promise((resolve, rejected) => {
+
+        this.connection.on("pong", (data) => {
+
+            const pongTimestamp = new Date();
+            const pingTimestamp = new Date(data.toString());
+
+            return resolve(pongTimestamp.getTime() - pingTimestamp.getTime())
+
+        })
+
+        this.connection.ping(Buffer.from(new Date().toString()))
+
+    })
+
+    }
+
 
     /**
      * @private
