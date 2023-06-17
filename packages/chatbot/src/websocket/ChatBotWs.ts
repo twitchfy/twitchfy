@@ -9,6 +9,7 @@ import { ClearChatTags } from "../interfaces/tags/ClearChatTags"
 import { ClearMessageTags } from "../interfaces/tags/ClearMessageTags"
 import { ChatBotUser } from "../structures/ChatBotUser"
 import { JoinedChannel } from "../structures/JoinedChannel"
+import { EventNames } from "../enums/EventNames"
 
 
 
@@ -124,7 +125,7 @@ export class ChatBotWs extends client {
             connection.send(`NICK ${this.nick}`)
 
 
-            this.chatbot.on("ready", () => {
+            this.chatbot.on(EventNames.Ready, () => {
 
                 for (const channel of this.chatbot.options.channels ?? []) {
                     
@@ -134,7 +135,7 @@ export class ChatBotWs extends client {
                 }
             })
             connection.on("message", async (message) => {
-                
+
                 if (message.type === "utf8") {
 
                     switch (parseCommand(message.utf8Data)?.command) {
