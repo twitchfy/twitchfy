@@ -134,6 +134,7 @@ export class ChatBotWs extends client {
                 }
             })
             connection.on("message", async (message) => {
+                
                 if (message.type === "utf8") {
 
                     switch (parseCommand(message.utf8Data)?.command) {
@@ -166,8 +167,8 @@ export class ChatBotWs extends client {
                         }
 
                         case "NOTICE": {
-                            if(this.chatbot.noticeLog){
 
+                            if(this.chatbot.noticeLog){
 
                                 const parameters = parseParameters(message.utf8Data, parseCommand(message.utf8Data))
 
