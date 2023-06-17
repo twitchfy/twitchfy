@@ -83,7 +83,7 @@ export class ChatBot extends EventEmitter {
     public noticeLog: boolean = false
 
     /**
-     * @description The timestamp, in JavaScript Date format, when the bot went online. The value is null if the connection hasn't already been estabilished.
+     * @description The timestamp, in JavaScript Date format, when the chatbot went online. This value is null if the connection hasn't already been estabilished.
      */
 
     public readyAt: Date | null
