@@ -664,6 +664,7 @@ declare module "@twitchapi/chatbot" {
         public isBroadcaster(): boolean
         public isVip(): boolean
         public isSub(): boolean
+        public isTurboSubscriber(): boolean
 
         public constructor(chatbot: ChatBot, tags: PrivMSGTags, channel: Channel)
     }

@@ -168,9 +168,18 @@ export class Chatter {
      * Check if the chatter is a channel's subscriber.
      * @returns {boolean} Returns a boolean whatever the chatter is a channel's subscriber.
      */
-    
+
     public isSub(): boolean {
         return this.subscriber
+    }
+
+    /**
+     * Check if the chatter is a Twitch turbo subscriber.
+     * @returns {boolean} Returns a boolean whatever the chatter is a Twitch turbo subscriber.
+     */
+
+    public isTurboSubscriber(): boolean {
+        return this.turbo   
     }
 
 }
