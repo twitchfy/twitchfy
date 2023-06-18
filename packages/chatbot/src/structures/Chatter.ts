@@ -156,9 +156,9 @@ export class Chatter {
     }
 
     /**
-    * Check if the chatter is a channel's vip.
-    * @returns {boolean} Returns a boolean whatever the chatter is a channel's vip.
-    */
+     * Check if the chatter is a channel's vip.
+     * @returns {boolean} Returns a boolean whatever the chatter is a channel's vip.
+     */
 
     public isVip(): boolean {
         return this.vip;
@@ -179,7 +179,7 @@ export class Chatter {
      */
 
     public isTurboSubscriber(): boolean {
-        return this.turbo   
+        return this.turbo
     }
 
 }
