@@ -659,6 +659,7 @@ declare module "@twitchapi/chatbot" {
         public timeout(options: TimeoutOptions): Promise<Ban>
         public fetch(): Promise<Chatter>
         public isBroadcaster(): boolean
+        public isVip(): boolean
 
         public constructor(chatbot: ChatBot, tags: PrivMSGTags, channel: Channel)
     }
