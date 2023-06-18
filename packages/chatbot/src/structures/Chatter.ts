@@ -147,6 +147,10 @@ export class Chatter {
         return new Chatter(this.chatbot, this.tags, await this.channel.fetch())
     }
 
+    /**
+     * Check if the chatter is the channel's broadcaster.
+     * @returns {boolean} Returns a boolean whatever the chatter is the channel's broadcaster or not.
+     */
     public isBroadcaster(): boolean {
         return this.badges.has("broadcaster");
     }
