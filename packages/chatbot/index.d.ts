@@ -662,6 +662,7 @@ declare module "@twitchapi/chatbot" {
         public fetch(): Promise<Chatter>
         public isBroadcaster(): boolean
         public isVip(): boolean
+        public isSub(): boolean
 
         public constructor(chatbot: ChatBot, tags: PrivMSGTags, channel: Channel)
     }
