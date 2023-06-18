@@ -146,4 +146,9 @@ export class Chatter {
 
         return new Chatter(this.chatbot, this.tags, await this.channel.fetch())
     }
+
+    public isBroadcaster(): boolean {
+        return this.badges.has("broadcaster");
+    }
+
 }
