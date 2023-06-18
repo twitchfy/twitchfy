@@ -95,6 +95,7 @@ export class Chatter {
      */
     public constructor(chatbot: ChatBot, tags: PrivMSGTags, channel: Channel){
 
+        this.tags = tags
         this.chatbot = chatbot
         this.channel = channel
         this.chat = channel.chat
