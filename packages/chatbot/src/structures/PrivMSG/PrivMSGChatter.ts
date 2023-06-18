@@ -150,4 +150,13 @@ export class PrivMSGChatter{
         return this.badges.has("broadcaster")
     }
 
+    /**
+    * Check if the chatter is a channel's vip.
+    * @returns {boolean} Returns a boolean whatever the chatter is a channel's vip.
+    */
+
+    public isVip(): boolean {
+        return this.vip;
+    }
+
 }
