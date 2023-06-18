@@ -142,8 +142,8 @@ export class PrivMSGChatter{
 
 
     /**
-    * Check if the chatter is the channel's broadcaster.
-    * @returns {boolean} Returns a boolean whatever the chatter is the channel's broadcaster or not.
+     * Check if the chatter is the channel's broadcaster.
+     * @returns {boolean} Returns a boolean whatever the chatter is the channel's broadcaster or not.
     */
 
     public isBroadcaster(): boolean {
@@ -151,8 +151,8 @@ export class PrivMSGChatter{
     }
 
     /**
-    * Check if the chatter is a channel's vip.
-    * @returns {boolean} Returns a boolean whatever the chatter is a channel's vip.
+     * Check if the chatter is a channel's vip.
+     * @returns {boolean} Returns a boolean whatever the chatter is a channel's vip.
     */
 
     public isVip(): boolean {
@@ -160,8 +160,8 @@ export class PrivMSGChatter{
     }
 
     /**
-    * Check if the chatter is a channel's subscriber.
-    * @returns {boolean} Returns a boolean whatever the chatter is a channel's subscriber.
+     * Check if the chatter is a channel's subscriber.
+     * @returns {boolean} Returns a boolean whatever the chatter is a channel's subscriber.
     */
     
     public isSub(): boolean {
