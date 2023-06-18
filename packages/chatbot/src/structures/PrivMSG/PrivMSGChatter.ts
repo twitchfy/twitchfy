@@ -99,7 +99,7 @@ export class PrivMSGChatter{
         this.login = this.displayName.toLowerCase()
         this.color = tags.color
         this.subscriber = tags.subscriber === "0" ? false: true
-        this.vip = tags.vip === "0" ? false: true
+        this.vip = tags.vip? true: false
         this.mod = tags.mod === "0" ? false: true
         this.turbo = tags.turbo === "0" ? false : true
         this.user = new PrivMSGUser(this.chatbot, tags)
