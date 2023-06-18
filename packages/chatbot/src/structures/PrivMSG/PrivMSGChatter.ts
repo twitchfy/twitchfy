@@ -90,6 +90,7 @@ export class PrivMSGChatter{
      */
     public constructor(chatbot: ChatBot, tags: PrivMSGTags, channel: PrivMSGChannel){
 
+        this.tags = tags
         this.chatbot = chatbot
         this.channel = channel
         this.badges = new PrivMSGBadges(tags)
