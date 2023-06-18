@@ -168,4 +168,13 @@ export class PrivMSGChatter{
         return this.subscriber
     }
 
+    /**
+     * Check if the chatter is a Twitch turbo subscriber.
+     * @returns {boolean} Returns a boolean whatever the chatter is a Twitch turbo subscriber.
+     */
+
+    public isTurboSubscriber(): boolean {
+        return this.turbo   
+    }
+
 }
