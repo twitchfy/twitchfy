@@ -2,3 +2,4 @@
 **/*.test.js
 **/dist/
 **/node_modules/
+/packages/pubsub/

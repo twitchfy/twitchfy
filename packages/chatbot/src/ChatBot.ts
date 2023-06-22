@@ -1,4 +1,4 @@
-import { EventEmitter } from "node:events"
+import { ChatBotEventEmitter } from "./structures/ChatBotEventEmitter"
 import { ChatBotCapabilities } from "./interfaces/ChatBotCapabilities"
 import { ChatBotOptions } from "./interfaces/ChatBotOptions"
 import { ChatBotWs } from "./websocket/ChatBotWs"
@@ -15,7 +15,7 @@ import { JoinedChannel } from "./structures/JoinedChannel"
  * @extends EventEmitter
  */
 
-export class ChatBot extends EventEmitter {
+export class ChatBot extends ChatBotEventEmitter {
 
     /**
      * @description The options of the ChatBot.

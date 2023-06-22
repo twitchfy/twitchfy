@@ -3,33 +3,28 @@ import { client, connection } from "websocket"
 import { ChannelResponse, ChatSettings as ChatSettingsResponse, User as UserResponse, AutoModSettings as AutoModSettingsType, Chatter as ChatterResponse, Ban as BanData } from "@twitchapi/api-types"
 import { AutoModSettingsOptions, HelixClient } from "@twitchapi/helix"
 
-
-declare module "node:events" {
+declare module "@twitchapi/chatbot" {
 
    
 
-    class EventEmitter {
-
-        on: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
-            (<S extends string | symbol>(event: Exclude<S, keyof ChatBot>, listener: (...args: any[]) => void) => this);
-        emit: (<K extends keyof ChatBotEvents>(event: K, ...args: ChatBotEvents[K]) => boolean) &
+   export class ChatBotEventEmitter extends EventEmitter{
+      
+    override on: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
+            (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => void) => this);
+    override emit: (<K extends keyof ChatBotEvents>(event: K, ...args: ChatBotEvents[K]) => boolean) &
             (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, ...args: any[]) => boolean);
 
-        off: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
+    override off: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
             (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => void) => this);
 
 
-        once: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
+    override once: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
             (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => void) => this);
 
-        removeAllListeners: (<K extends keyof ChatBotEvents>(event?: K) => this) &
+    override removeAllListeners: (<K extends keyof ChatBotEvents>(event?: K) => this) &
             (<S extends string | symbol>(event?: Exclude<S, keyof ChatBotEvents>) => this);
 
-    }
-
-}
-
-declare module "@twitchapi/chatbot" {
+   }
 
     export enum AnnouncementColor {
         "Blue" = "blue",
@@ -480,7 +475,7 @@ declare module "@twitchapi/chatbot" {
 
 
 
-    export class ChatBot extends EventEmitter {
+    export class ChatBot extends ChatBotEventEmitter {
         public options: ChatBotOptions
         public ws: ChatBotWs
         public readonly oauth: string
