@@ -1,6 +1,10 @@
 import { EventEmitter } from "node:events"
 import { ChatBotEvents } from "../interfaces/ChatBotEvents";
 
+/**
+ * Custom EventEmitter for ChatBotEvent
+ * @extends EventEmitter
+ */
 export class ChatBotEventEmitter extends EventEmitter{
 
     override on: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
