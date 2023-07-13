@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events"
 import { client, connection } from "websocket"
-import { ChannelResponse, ChatSettings as ChatSettingsResponse, User as UserResponse, AutoModSettings as AutoModSettingsType, Chatter as ChatterResponse, Ban as BanData } from "@twitchapi/api-types"
+import { ChannelResponse, ChatSettings as ChatSettingsResponse, User as UserResponse, AutoModSettings as AutoModSettingsType, Chatter as ChatterResponse, Ban as BanData, GetFollowers } from "@twitchapi/api-types"
 import { AutoModSettingsOptions, HelixClient } from "@twitchapi/helix"
 
 declare module "@twitchapi/chatbot" {
@@ -247,6 +247,9 @@ declare module "@twitchapi/chatbot" {
         public sendAnnouncement(message: string, color: AnnouncementColor): Promise<void>
         public join(): JoinedChannel
         public leave(): JoinedChannel
+        public getFollowerCount(): Promise<number>
+        public getFollowers(): Promise<Follower[]>
+        public getFollower(userID: string): Promise<Follower | null>
 
         public constructor(chatbot: ChatBot, name: string, id: string)
     }
@@ -538,6 +541,9 @@ declare module "@twitchapi/chatbot" {
         public join(): JoinedChannel
         public leave(): JoinedChannel
         public fetch(): Promise<Channel>
+        public getFollowerCount(): Promise<number>
+        public getFollowers(): Promise<Follower[]>
+        public getFollower(userID: string): Promise<Follower | null>
 
         constructor(chatbot: ChatBot, data: ChannelResponse, user: User)
 
@@ -619,6 +625,9 @@ declare module "@twitchapi/chatbot" {
         public join(): JoinedChannel
         public leave(): JoinedChannel
         public fetch(): Promise<Channel>
+        public getFollowerCount(): Promise<number>
+        public getFollowers(): Promise<Follower[]>
+        public getFollower(userID: string): Promise<Follower | null>
 
         public constructor(chatbot: ChatBot, id: string, name: string)
     }
@@ -690,6 +699,31 @@ declare module "@twitchapi/chatbot" {
         public ban(options?: BanOptions): Promise<Ban>
         public timeout(options: TimeoutOptions): Promise<Ban>
         public fetch(): Promise<Chatter>
+    }
+
+    export class Follower{
+   
+        public chatbot: ChatBot
+    
+        public user: FollowerUser
+    
+        public followedAt: Date
+    
+        public constructor(chatbot: ChatBot, data: GetFollowers)
+    }
+
+    export class FollowerUser{
+
+        public chatbot: ChatBot
+    
+        public login: string
+    
+        public displayName: string
+    
+        public id: string
+    
+    
+        public constructor(chatbot: ChatBot, id: string, login: string, displayName: string)
     }
 
 }
