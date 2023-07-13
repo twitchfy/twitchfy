@@ -26,12 +26,12 @@ export class User{
     public displayName: string
 
     /**
-     * @description The user type. It can be null if the user is a normal Twitch user.
+     * @description The user type. The value is null if the user is a normal one.
      */
     public type: string | null
 
     /**
-     * @description The broadcaster type. It can be an affiliate, a partner or a normal user.
+     * @description The broadcaster type. It can be an affiliate, a partner or a normal user, if is a normal user the value will be null.
      */
     public broadcasterType: string | null
 
@@ -51,7 +51,7 @@ export class User{
     public offlineImageURL: string
 
     /**
-     * @description The string that represents when the user was created.
+     * @description The Date that represents when the user was created.
      */
     public createdAt: Date
 
