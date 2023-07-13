@@ -510,7 +510,7 @@ declare module "@twitchapi/chatbot" {
         public description: string
         public avatarURL: string
         public offlineImageURL: string
-        public createdAt: string
+        public createdAt: Date
         public sendWhisper(message: string): Promise<void>
         public fetch(): Promise<User>
 
