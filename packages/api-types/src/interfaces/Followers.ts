@@ -4,6 +4,7 @@ export interface GetFollowers{
     user_id: string
     user_name: string
     user_login: string
+    followed_at: string
 }
 
 export interface GetFollowersResponse{
