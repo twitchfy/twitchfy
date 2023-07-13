@@ -19,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@twitchapi/api-types": "^1.1.5",
-    "@twitchapi/helix": "^1.2.6",
+    "@twitchapi/helix": "^1.2.7",
     "@types/websocket": "^1.0.5",
     "websocket": "^1.0.34"
   }
