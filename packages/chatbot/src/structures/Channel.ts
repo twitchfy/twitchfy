@@ -7,6 +7,7 @@ import { AnnouncementBody } from "@twitchapi/helix"
 import { Chat } from "./Chat"
 import { AutoMod } from "./AutoMod"
 import { JoinedChannel } from "./JoinedChannel"
+import { Follower } from "./Follower"
 
 /**
  * @class
@@ -175,5 +176,41 @@ export class Channel {
 
         return await this.chatbot.channels.fetch(this.id)
 
+    }
+
+    /**
+     * Get the number of followers of this channel.
+     * @returns {Promise<number>} Returns the number of followers that follow this channel.
+     */
+    public async getFollowerCount(): Promise<number>{
+
+        return await this.chatbot.helixClient.getChannelFollowerCount(this.id)
+
+    }
+
+    /**
+     * Retrieve all followers of the channel. If the chatbot is not a moderator of that channel, an empty array will be returned.
+     * @returns {Promise<Follower[]>} Returns an array that contains each follower of that channel.
+     */
+    public async getFollowers(): Promise<Follower[]>{
+
+        const followers = await this.chatbot.helixClient.getChannelFollowers(this.id)
+
+        return followers.map((x) => new Follower(this.chatbot, x))
+
+    }
+
+    /**
+     * 
+     * @param {string} userID The userID of the follower you want to get.
+     * @returns {Promise<Follower | null>} Returns the {@link Follower} if the user is following the channel, if not a nullish value will be returned.
+     */
+    public async getFollower(userID: string): Promise<Follower | null >{
+
+        const follower = await this.chatbot.helixClient.getChannelFollower(this.id, userID)
+
+        if(!follower) return null
+
+        return new Follower(this.chatbot, follower)
     }
 }
