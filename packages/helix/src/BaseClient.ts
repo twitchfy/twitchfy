@@ -150,7 +150,7 @@ export class BaseClient {
 
     public async getChannelFollowerCount(broadcaster_id: string, userToken?: string): Promise<number> {
 
-        const data =  await this.requestManager.get("/channels/followers", `broadcaster_id=${broadcaster_id}`, userToken) as GetFollowersResponse
+        const data = await this.requestManager.get("/channels/followers", `broadcaster_id=${broadcaster_id}`, userToken) as GetFollowersResponse
 
         return data.total;
 
@@ -160,6 +160,13 @@ export class BaseClient {
 
         return await handlePagination(this, "/channels/followers", `broadcaster_id=${broadcaster_id}&first=100`, "GET", userToken)
 
+    }
+
+    public async getChannelFollower(broadcaster_id: string, user_id: string, userToken?: string): Promise<GetFollowers>{
+
+        const data = await this.requestManager.get("/channels/followers", `broadcaster_id=${broadcaster_id}&user_id=${user_id}`, userToken) as GetFollowersResponse
+
+        return data.data[0]
     }
 
 }

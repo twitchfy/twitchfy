@@ -136,6 +136,7 @@ declare module "@twitchapi/helix" {
         public getChatters(broadcaster_id: string, moderator_id: string, userToken?: string) : Promise<Chatter[]>
         public getChannelFollowerCount(broadcaster_id: string, userToken?: string): Promise<number>
         public getChannelFollowers(broadcaster_id: string, userToken?: string): Promise<GetFollowers[]>
+        public getChannelFollower(broadcaster_id: string, user_id: string, userToken?: string): Promise<GetFollowers>
 
 
         public constructor(clientId: string, appToken?: string, userToken?: string)
