@@ -53,7 +53,7 @@ export class User{
     /**
      * @description The string that represents when the user was created.
      */
-    public createdAt: string
+    public createdAt: Date
 
     /**
      * @param chatbot 
@@ -69,7 +69,7 @@ export class User{
         this.description = data.description
         this.avatarURL = data.profile_image_url
         this.offlineImageURL = data.offline_image_url
-        this.createdAt = data.created_at
+        this.createdAt = new Date(data.created_at)
     }
 
     /**
