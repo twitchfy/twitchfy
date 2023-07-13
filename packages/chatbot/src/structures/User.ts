@@ -50,8 +50,6 @@ export class User{
      */
     public offlineImageURL: string
 
-    public viewCount: number
-
     /**
      * @description The string that represents when the user was created.
      */
@@ -71,7 +69,6 @@ export class User{
         this.description = data.description
         this.avatarURL = data.profile_image_url
         this.offlineImageURL = data.offline_image_url
-        this.viewCount = data.view_count
         this.createdAt = data.created_at
     }
 
