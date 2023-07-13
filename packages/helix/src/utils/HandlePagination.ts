@@ -9,16 +9,20 @@ export async function handlePagination(client: HelixClient, endpoint: string, pa
     if (method === "GET") {
         let pagination: Pagination | undefined;
 
+        let fetchParams = params;
+
         do {
-            const getData = await client.requestManager.get(endpoint, params, userToken);
+            const getData = await client.requestManager.get(endpoint, fetchParams, userToken);
             pagination = getData.pagination;
 
             for (const get of getData.data) {
                 data.push(get);
+
+                console.log(data.length)
             }
 
             if (pagination?.cursor) {
-                params = `${params}&after=${pagination.cursor}`;
+                fetchParams = `${params}&after=${pagination.cursor}`;
             }
         } while (pagination?.cursor);
 
