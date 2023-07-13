@@ -158,7 +158,7 @@ export class BaseClient {
 
     public async getChannelFollowers(broadcaster_id: string, userToken?: string): Promise<GetFollowers[]>{
 
-        return await handlePagination(this, "/channels/followers", `broadcaster_id=${broadcaster_id}`, "GET", userToken)
+        return await handlePagination(this, "/channels/followers", `broadcaster_id=${broadcaster_id}&first=100`, "GET", userToken)
 
     }
 
