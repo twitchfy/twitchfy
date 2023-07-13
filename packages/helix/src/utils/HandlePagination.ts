@@ -17,8 +17,6 @@ export async function handlePagination(client: HelixClient, endpoint: string, pa
 
             for (const get of getData.data) {
                 data.push(get);
-
-                console.log(data.length)
             }
 
             if (pagination?.cursor) {
