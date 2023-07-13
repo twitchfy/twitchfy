@@ -1,5 +1,5 @@
 import { RequestManager } from "./RequestManager";
-import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter } from "@twitchapi/api-types"
+import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers } from "@twitchapi/api-types"
 import { WhisperBody } from "./structures/WhisperBody";
 import { BanBody } from "./structures/BanBody";
 import { TimeoutBody } from "./structures/TimeoutBody";
@@ -146,6 +146,20 @@ export class BaseClient {
     public async getChatters(broadcaster_id: string, moderator_id: string, userToken?: string) : Promise<Chatter[]>{
 
         return await handlePagination(this, "/chat/chatters", `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, "GET", userToken)
+    }
+
+    public async getChannelFollowerCount(broadcaster_id: string, userToken?: string): Promise<number> {
+
+        const data =  await this.requestManager.get("/channels/followers", `broadcaster_id=${broadcaster_id}`, userToken) as GetFollowersResponse
+
+        return data.total;
+
+    }
+
+    public async getChannelFollowers(broadcaster_id: string, userToken?: string): Promise<GetFollowers[]>{
+
+        return await handlePagination(this, "/channels/followers", `broadcaster_id=${broadcaster_id}`, "GET", userToken)
+
     }
 
 }

@@ -1,4 +1,4 @@
-import { User, Channel, Ban, ChatSettings, GetBan, PostBanBody, PostBanData, PatchChatSettings, PostWhisperBody, AutoModSettings, PutAutoModSettings, Chatter } from "@twitchapi/api-types"
+import { User, Channel, Ban, ChatSettings, GetBan, PostBanBody, PostBanData, PatchChatSettings, PostWhisperBody, AutoModSettings, PutAutoModSettings, Chatter, GetFollowers } from "@twitchapi/api-types"
 import type { Response } from "node-fetch"
 
 declare module "@twitchapi/helix" {
@@ -134,6 +134,8 @@ declare module "@twitchapi/helix" {
         public getAutoModSettings(broadcaster_id: string, moderator_id: string, userToken?: string): Promise<AutoModSettings>
         public updateAutoModSettings(broadcaster_id: string, moderator_id: string, body: AutoModSettingsBody, userToken?: string) : Promise<AutoModSettings>
         public getChatters(broadcaster_id: string, moderator_id: string, userToken?: string) : Promise<Chatter[]>
+        public getChannelFollowerCount(broadcaster_id: string, userToken?: string): Promise<number>
+        public getChannelFollowers(broadcaster_id: string, userToken?: string): Promise<GetFollowers[]>
 
 
         public constructor(clientId: string, appToken?: string, userToken?: string)
