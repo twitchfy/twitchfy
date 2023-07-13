@@ -33,7 +33,7 @@ export class User{
     /**
      * @description The broadcaster type. It can be an affiliate, a partner or a normal user.
      */
-    public broadcasterType: string
+    public broadcasterType: string | null
 
     /**
      * @description The user's profile description.
