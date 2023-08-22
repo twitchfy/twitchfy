@@ -1,5 +1,5 @@
 import { RequestManager } from "./RequestManager";
-import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse } from "@twitchapi/api-types"
+import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse } from "@twitchapi/api-types"
 import { WhisperBody } from "./structures/WhisperBody";
 import { BanBody } from "./structures/BanBody";
 import { TimeoutBody } from "./structures/TimeoutBody";
@@ -169,12 +169,19 @@ export class BaseClient {
         return data.data[0]
     }
 
-    public async createClip(broadcaster_id: string, delay: boolean = false, userToken?: string) : Promise<PostCreateClip>{
+    public async createClip(broadcaster_id: string, delay: boolean = false, userToken?: string): Promise<PostCreateClip>{
 
         const data = await this.requestManager.postWithUserToken("/clips", `broadcaster_id=${broadcaster_id}&delay=${delay}`, null,  userToken) as PostCreateClipResponse
         
         return data.data[0]
 
+    }
+
+    public async getStream(user_id: string | null, user_login?: string): Promise<GetStream | null>{
+
+        const data = await this.requestManager.get("/streams", `${user_id? `user_id=${user_id}`: `user_login=${user_login}`}`) as GetStreamResponse
+
+        return data.data[0] ?? null
     }
 
 }
