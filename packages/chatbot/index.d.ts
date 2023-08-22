@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events"
 import { client, connection } from "websocket"
-import { ChannelResponse, ChatSettings as ChatSettingsResponse, User as UserResponse, AutoModSettings as AutoModSettingsType, Chatter as ChatterResponse, Ban as BanData, GetFollowers } from "@twitchapi/api-types"
+import { ChannelResponse, ChatSettings as ChatSettingsResponse, User as UserResponse, AutoModSettings as AutoModSettingsType, Chatter as ChatterResponse, Ban as BanData, GetFollowers, PostCreateClip } from "@twitchapi/api-types"
 import { AutoModSettingsOptions, HelixClient } from "@twitchapi/helix"
 
 declare module "@twitchapi/chatbot" {
@@ -258,6 +258,7 @@ declare module "@twitchapi/chatbot" {
         public getFollowerCount(): Promise<number>
         public getFollowers(): Promise<Follower[]>
         public getFollower(userID: string): Promise<Follower | null>
+        public createClip(delay?: boolean): Promise<CreatedClip>
 
         public constructor(chatbot: ChatBot, name: string, id: string)
     }
@@ -551,6 +552,7 @@ declare module "@twitchapi/chatbot" {
         public getFollowerCount(): Promise<number>
         public getFollowers(): Promise<Follower[]>
         public getFollower(userID: string): Promise<Follower | null>
+        public createClip(delay?: boolean): Promise<CreatedClip>
 
         constructor(chatbot: ChatBot, data: ChannelResponse, user: User)
 
@@ -635,6 +637,7 @@ declare module "@twitchapi/chatbot" {
         public getFollowerCount(): Promise<number>
         public getFollowers(): Promise<Follower[]>
         public getFollower(userID: string): Promise<Follower | null>
+        public createClip(delay?: boolean): Promise<CreatedClip>
 
         public constructor(chatbot: ChatBot, id: string, name: string)
     }
@@ -731,6 +734,14 @@ declare module "@twitchapi/chatbot" {
     
     
         public constructor(chatbot: ChatBot, id: string, login: string, displayName: string)
+    }
+
+    export class CreatedClip{
+
+        public chatbot: ChatBot
+        public id: string
+        public url: string
+        public constructor(chatbot: ChatBot, data: PostCreateClip)
     }
 
 }
