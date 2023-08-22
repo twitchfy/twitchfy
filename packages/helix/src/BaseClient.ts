@@ -1,5 +1,5 @@
 import { RequestManager } from "./RequestManager";
-import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers } from "@twitchapi/api-types"
+import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse } from "@twitchapi/api-types"
 import { WhisperBody } from "./structures/WhisperBody";
 import { BanBody } from "./structures/BanBody";
 import { TimeoutBody } from "./structures/TimeoutBody";
@@ -167,6 +167,14 @@ export class BaseClient {
         const data = await this.requestManager.get("/channels/followers", `broadcaster_id=${broadcaster_id}&user_id=${user_id}`, userToken) as GetFollowersResponse
 
         return data.data[0]
+    }
+
+    public async createClip(broadcaster_id: string, delay: boolean = false, userToken?: string) : Promise<PostCreateClip>{
+
+        const data = await this.requestManager.postWithUserToken("/clips", `broadcaster_id=${broadcaster_id}&delay=${delay}`, null,  userToken) as PostCreateClipResponse
+        
+        return data.data[0]
+
     }
 
 }
