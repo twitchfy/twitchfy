@@ -8,6 +8,7 @@ import { Chat } from "./Chat"
 import { AutoMod } from "./AutoMod"
 import { JoinedChannel } from "./JoinedChannel"
 import { Follower } from "./Follower"
+import { CreatedClip } from "./CreatedClip"
 
 /**
  * @class
@@ -212,5 +213,15 @@ export class Channel {
         if(!follower) return null
 
         return new Follower(this.chatbot, follower)
+    }
+
+    /**
+     * 
+     * @param {boolean} delay If true there will be a delay an the clip wouldn't finish when the request is sent instead it would finish instants later.
+     * @returns {Promise<CreatedClip>} Returns the {@link CreatedClip} object that contains the URL of the clip.
+     */
+    public async createClip(delay?: boolean){
+
+        return new CreatedClip(this.chatbot, await this.chatbot.helixClient.createClip(this.id, delay))
     }
 }
