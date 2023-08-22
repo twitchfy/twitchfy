@@ -41,7 +41,7 @@ export class Channel {
     public chatbot: ChatBot
 
     /**
-     * @description The unique id of the user.
+     * @description The unique id of the channel.
      */
 
     public id: string
