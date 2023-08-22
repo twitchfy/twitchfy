@@ -8,7 +8,7 @@ import { Chat } from "./Chat"
 import { AutoMod } from "./AutoMod"
 import { JoinedChannel } from "./JoinedChannel"
 import { Follower } from "./Follower"
-import { CreatedClip } from "./CreatedClip"
+import { StreamManager } from "./managers/StreamManager"
 
 /**
  * @class
@@ -95,6 +95,11 @@ export class Channel {
     public automod: AutoMod
 
     /**
+     * @description The {@link StreamManager} of the channel.
+     */
+    public stream: StreamManager
+
+    /**
      * 
      * @param data 
      * @param user 
@@ -116,6 +121,7 @@ export class Channel {
         this.tags = data.tags
         this.chat = new Chat(this.chatbot, this)
         this.automod = new AutoMod(this.chatbot, this)
+        this.stream = new StreamManager(this.chatbot, this)
 
     }
 
@@ -217,11 +223,13 @@ export class Channel {
 
     /**
      * 
-     * @param {boolean} delay If true there will be a delay an the clip wouldn't finish when the request is sent instead it would finish instants later.
-     * @returns {Promise<CreatedClip>} Returns the {@link CreatedClip} object that contains the URL of the clip.
+     * @returns {Promise<boolean>} Returns a boolean indicating if the channel is currently streaming or not.
      */
-    public async createClip(delay?: boolean){
 
-        return new CreatedClip(this.chatbot, await this.chatbot.helixClient.createClip(this.id, delay))
+    public async inStream() : Promise<Boolean>{
+
+        const stream = await this.stream.fetch()
+
+        return !!stream
     }
 }

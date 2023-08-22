@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events"
 import { client, connection } from "websocket"
-import { ChannelResponse, ChatSettings as ChatSettingsResponse, User as UserResponse, AutoModSettings as AutoModSettingsType, Chatter as ChatterResponse, Ban as BanData, GetFollowers, PostCreateClip } from "@twitchapi/api-types"
+import { ChannelResponse, ChatSettings as ChatSettingsResponse, User as UserResponse, AutoModSettings as AutoModSettingsType, Chatter as ChatterResponse, Ban as BanData, GetFollowers, PostCreateClip, GetStream } from "@twitchapi/api-types"
 import { AutoModSettingsOptions, HelixClient } from "@twitchapi/helix"
 
 declare module "@twitchapi/chatbot" {
@@ -251,6 +251,7 @@ declare module "@twitchapi/chatbot" {
         public chatbot: ChatBot
         public name: string
         public id: string
+        public stream: StreamManager
         public sendMessage(message: string): void
         public sendAnnouncement(message: string, color: AnnouncementColor): Promise<void>
         public join(): JoinedChannel
@@ -258,7 +259,8 @@ declare module "@twitchapi/chatbot" {
         public getFollowerCount(): Promise<number>
         public getFollowers(): Promise<Follower[]>
         public getFollower(userID: string): Promise<Follower | null>
-        public createClip(delay?: boolean): Promise<CreatedClip>
+        public inStream(): Promise<boolean>
+        
 
         public constructor(chatbot: ChatBot, name: string, id: string)
     }
@@ -544,6 +546,7 @@ declare module "@twitchapi/chatbot" {
         public bans: BanManager
         public chat: Chat
         public automod: AutoMod
+        public stream: StreamManager
         public sendMessage(message: string): void
         public sendAnnouncement(message: string, color: AnnouncementColor): Promise<void>
         public join(): JoinedChannel
@@ -552,7 +555,8 @@ declare module "@twitchapi/chatbot" {
         public getFollowerCount(): Promise<number>
         public getFollowers(): Promise<Follower[]>
         public getFollower(userID: string): Promise<Follower | null>
-        public createClip(delay?: boolean): Promise<CreatedClip>
+        public inStream(): Promise<boolean>
+        
 
         constructor(chatbot: ChatBot, data: ChannelResponse, user: User)
 
@@ -629,6 +633,7 @@ declare module "@twitchapi/chatbot" {
         public chatbot: ChatBot
         public id: string
         public name: string
+        public stream: StreamManager
         public sendMessage(message: string): void
         public sendAnnouncement(message: string, color: AnnouncementColor): Promise<void>
         public join(): JoinedChannel
@@ -637,7 +642,8 @@ declare module "@twitchapi/chatbot" {
         public getFollowerCount(): Promise<number>
         public getFollowers(): Promise<Follower[]>
         public getFollower(userID: string): Promise<Follower | null>
-        public createClip(delay?: boolean): Promise<CreatedClip>
+        public inStream(): Promise<boolean>
+        
 
         public constructor(chatbot: ChatBot, id: string, name: string)
     }
@@ -744,4 +750,39 @@ declare module "@twitchapi/chatbot" {
         public constructor(chatbot: ChatBot, data: PostCreateClip)
     }
 
+    export class Stream {
+
+        public chatbot: ChatBot
+        public broadcaster: Broadcaster
+        public id: string
+        public gameId: string
+        public gameName: string
+        public type: string
+        public title: string
+        public tags: string[]
+        public viewerCount: number
+        public startedAt: Date
+        public language: string
+        public thumbnailURL: string
+        public isMature: boolean
+        public constructor(chatbot: ChatBot, data: GetStream)
+    }
+
+    export class Broadcaster {
+        public chatbot: ChatBot
+        public login: string
+        public displayName: string
+        public id: string
+        public sendWhisper(message: string): Promise<void>
+        public fetch(): Promise<User>
+        public constructor(chatbot: ChatBot, id: string, login: string, displayName: string)
+    }
+
+    export class StreamManager{
+
+        public chatbot: ChatBot
+        public channel: Channel | PrivMSGChannel | ClearChatChannel
+        public fetch(): Promise<Stream | null>
+        public constructor(chatbot: ChatBot, channel: Channel | PrivMSGChannel | ClearChatChannel)
+    }
 }

@@ -4,7 +4,7 @@ import { AnnouncementColor } from "../../enums/AnnouncementColor"
 import { JoinedChannel } from "../JoinedChannel"
 import { Channel } from "../Channel"
 import { Follower } from "../Follower"
-import { CreatedClip } from "../CreatedClip"
+import { StreamManager } from "../managers/StreamManager"
 
 /**
  * @class
@@ -28,6 +28,11 @@ export class ClearChatChannel{
     public id: string
 
     /**
+     * @description The {@link StreamManager} of the channel.
+     */
+    public stream: StreamManager
+
+    /**
      * 
      * @param chatbot 
      * @param name 
@@ -38,6 +43,7 @@ export class ClearChatChannel{
         this.chatbot = chatbot
         this.name = name
         this.id = id
+        this.stream = new StreamManager(this.chatbot, this)
     }
 
 
@@ -137,13 +143,10 @@ export class ClearChatChannel{
         return new Follower(this.chatbot, follower)
     }
 
-    /**
-     * 
-     * @param {boolean} delay If true there will be a delay an the clip wouldn't finish when the request is sent instead it would finish instants later.
-     * @returns {Promise<CreatedClip>} Returns the {@link CreatedClip} object that contains the URL of the clip.
-     */
-    public async createClip(delay?: boolean){
+    public async inStream() : Promise<Boolean>{
 
-        return new CreatedClip(this.chatbot, await this.chatbot.helixClient.createClip(this.id, delay))
+        const stream = await this.stream.fetch()
+
+        return !!stream
     }
 }
