@@ -765,6 +765,7 @@ declare module "@twitchapi/chatbot" {
         public language: string
         public thumbnailURL: string
         public isMature: boolean
+        public createClip(delay?: boolean): Promise<CreatedClip>
         public constructor(chatbot: ChatBot, data: GetStream)
     }
 
