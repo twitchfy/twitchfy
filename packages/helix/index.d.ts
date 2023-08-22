@@ -137,7 +137,7 @@ declare module "@twitchapi/helix" {
         public getChannelFollowerCount(broadcaster_id: string, userToken?: string): Promise<number>
         public getChannelFollowers(broadcaster_id: string, userToken?: string): Promise<GetFollowers[]>
         public getChannelFollower(broadcaster_id: string, user_id: string, userToken?: string): Promise<GetFollowers>
-        public createClip(broadcaster_id: string, delay: boolean = false, userToken?: string) : Promise<PostCreateClip>
+        public createClip(broadcaster_id: string, delay: boolean, userToken?: string) : Promise<PostCreateClip>
 
 
         public constructor(clientId: string, appToken?: string, userToken?: string)
