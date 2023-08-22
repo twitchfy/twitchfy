@@ -1,6 +1,6 @@
 {
   "name": "@twitchapi/chatbot",
-  "version": "1.4.2",
+  "version": "1.4.4",
   "description": "A powerful node module to make your own twitch chatbot!",
   "main": "dist/index.js",
   "types": "index.d.ts",
