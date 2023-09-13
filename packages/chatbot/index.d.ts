@@ -731,14 +731,17 @@ declare module "@twitchapi/chatbot" {
     export class FollowerUser{
 
         public chatbot: ChatBot
-    
+
         public login: string
     
         public displayName: string
     
         public id: string
     
-    
+        public fetch(): Promise<User>
+
+        public sendWhisper(): Promise<void>
+
         public constructor(chatbot: ChatBot, id: string, login: string, displayName: string)
     }
 
