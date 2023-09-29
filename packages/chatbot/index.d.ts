@@ -391,7 +391,7 @@ declare module "@twitchapi/chatbot" {
 
         public fetch(channelIdentificator: string): Promise<Channel>;
 
-        public join(channelName: string): Promise<Channel>;
+        public join(channelName: string): JoinedChannel;
 
         public leave(channelName: string): void;
     }

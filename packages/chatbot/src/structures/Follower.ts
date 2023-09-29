@@ -28,4 +28,6 @@ export class Follower{
         this.followedAt = new Date(data.followed_at)
 
     }
+
+    
 }
