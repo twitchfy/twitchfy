@@ -148,7 +148,7 @@ export class ChatBotWs extends client {
 
                             this.chatbot.readyAt = new Date();
 
-                            return this.chatbot.emit("ready")
+                            return this.chatbot.emit("ready", this.chatbot)
 
                         }
 

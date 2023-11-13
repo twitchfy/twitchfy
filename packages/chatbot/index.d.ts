@@ -17,7 +17,6 @@ declare module "@twitchapi/chatbot" {
     override off: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
             (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => void) => this);
 
-
     override once: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
             (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => void) => this);
 
@@ -184,7 +183,7 @@ declare module "@twitchapi/chatbot" {
         CLEARMSG: [message: ClearMessage]
         JOIN: [channel: JoinedChannel]
         LEAVE: [channel: JoinedChannel]
-        ready: []
+        ready: [client: ChatBot]
     }
 
     export interface BadgeMetadata {
