@@ -20,7 +20,7 @@ This powerful node module allows you to customize your own Twitch Bot.
 
     import { ChatBot, EventNames } from "@twitchapi/chatbot"
 
-    const chatbot = new ChatBot({ capabilities: { membership: true, commands: true, tags: true }, clientID: "clientID", channels: ["mychannel"], oauth: "token" }) // You have to include the ChatBot capabilities, is recommended to include both three and the channels the bot will join at the start of the application.
+    const chatbot = new ChatBot({ capabilities: { membership: true, commands: true, tags: true }, clientID: "clientID", channels: ["mychannel"], oauth: "token", nick: "chatbotUsername" }) // You have to include the ChatBot capabilities, is recommended to include both three and the channels the bot will join at the start of the application.
 
     chatbot.on(EventNames.Ready, () => {
         console.log(`Welcome ${chatbot.user.login} to the ChatBot!`)
@@ -32,7 +32,7 @@ This powerful node module allows you to customize your own Twitch Bot.
         }
     })
 
-    chatbot.login("username") //you have to include the username of the user
+    chatbot.login()
     
    </p>
 </div>
