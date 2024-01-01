@@ -1,8 +1,8 @@
-import { PrivMSG } from "../structures/PrivMSG/PrivMSG"
-import { ClearChat } from "../structures/ClearChat/ClearChat"
-import { ClearMessage } from "../structures/ClearMessage/ClearMessage"
-import { JoinedChannel } from "../structures/JoinedChannel"
-import { ChatBot } from "../ChatBot"
+import { PrivMSG } from '../structures/PrivMSG/PrivMSG';
+import { ClearChat } from '../structures/ClearChat/ClearChat';
+import { ClearMessage } from '../structures/ClearMessage/ClearMessage';
+import { JoinedChannel } from '../structures/JoinedChannel';
+import { ChatBot } from '../ChatBot';
 
 /**
  * The events of the {@link ChatBot}.

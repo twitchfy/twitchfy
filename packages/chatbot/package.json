@@ -1,6 +1,6 @@
 {
   "name": "@twitchapi/chatbot",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "description": "A powerful node module to make your own twitch chatbot!",
   "main": "dist/index.js",
   "types": "index.d.ts",
@@ -19,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@twitchapi/api-types": "^1.1.5",
-    "@twitchapi/helix": "^1.2.12",
+    "@twitchapi/helix": "^1.2.13",
     "@types/websocket": "^1.0.5",
     "websocket": "^1.0.34"
   }

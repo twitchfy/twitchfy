@@ -1,4 +1,4 @@
 export interface PostAnnouncementBody{
     message: string
-    color: "blue" | "purple" | "orange" | "primary" | "green"
+    color: 'blue' | 'purple' | 'orange' | 'primary' | 'green'
 }

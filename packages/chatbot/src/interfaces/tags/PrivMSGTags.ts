@@ -1,5 +1,5 @@
-import { BadgeMetadata } from "../BadgeMetadata"
-import { Badges } from "../Badges"
+import { BadgeMetadata } from '../BadgeMetadata';
+import { Badges } from '../Badges';
 
 
 /**
@@ -7,23 +7,23 @@ import { Badges } from "../Badges"
  * @interface
  */
 export interface PrivMSGTags{
-    "badge-info": BadgeMetadata
+    'badge-info': BadgeMetadata
     badges: Badges
     bits?: string
     color: string
-    "display-name": string
+    'display-name': string
     id: string
     mod: string
-    "reply-parent-msg-id"?: string
-    "reply-parent-user-id"?: string
-    "reply-parent-user-login"?: string
-    "reply-parent-display-name"?: string
-    "reply-parent-msg-body"?: string
-    "room-id": string
+    'reply-parent-msg-id'?: string
+    'reply-parent-user-id'?: string
+    'reply-parent-user-login'?: string
+    'reply-parent-display-name'?: string
+    'reply-parent-msg-body'?: string
+    'room-id': string
     subscriber: string
-    "tmi-sent-ts": string
+    'tmi-sent-ts': string
     turbo: string
-    "user-id": string
-    "user-type": string
+    'user-id': string
+    'user-type': string
     vip: string
 }

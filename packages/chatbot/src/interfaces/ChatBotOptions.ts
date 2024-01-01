@@ -1,4 +1,4 @@
-import { ChatBotCapabilities } from "./ChatBotCapabilities";
+import { ChatBotCapabilities } from './ChatBotCapabilities';
 
 /**
  * The options for building the {@link ChatBot}.
@@ -6,7 +6,8 @@ import { ChatBotCapabilities } from "./ChatBotCapabilities";
  */
 export interface ChatBotOptions{
     clientID: string,
-    oauth: string
+    oauth: string,
+    nick: string
     capabilities?: ChatBotCapabilities
     channels?: string[]
     noticeLog?: boolean
