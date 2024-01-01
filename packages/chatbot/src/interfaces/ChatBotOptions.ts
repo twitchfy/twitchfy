@@ -1,4 +1,4 @@
-import { ChatBotCapabilities } from "./ChatBotCapabilities";
+import { ChatBotCapabilities } from './ChatBotCapabilities';
 
 /**
  * The options for building the {@link ChatBot}.
