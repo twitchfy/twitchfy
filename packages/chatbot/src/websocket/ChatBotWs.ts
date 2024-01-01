@@ -162,7 +162,7 @@ export class ChatBotWs extends client {
                             break;
                         }
 
-                        case "CLEARCHAT": {
+                        case "CLEARMSG": {
                             return this.chatbot.emit("CLEARMSG", new ClearMessage(this.chatbot, message.utf8Data, parseTags(message.utf8Data) as ClearMessageTags))
                             break;
                         }
