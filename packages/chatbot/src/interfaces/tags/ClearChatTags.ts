@@ -4,8 +4,8 @@
  */
 
 export interface ClearChatTags {
-    "room-id": string
-    "ban-duration"?: number
-    "target-user-id"?: string
-    "tmi-sent-ts": string
+    'room-id': string
+    'ban-duration'?: number
+    'target-user-id'?: string
+    'tmi-sent-ts': string
 }

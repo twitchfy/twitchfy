@@ -1,10 +1,10 @@
-import { AnnouncementColor } from "../enums/AnnouncementColor"
+import { AnnouncementColor } from '../enums/AnnouncementColor';
 
 export class AnnouncementBody{
-    public message: string
-    public color: AnnouncementColor
-    public constructor(message: string, color: AnnouncementColor){
-        this.message = message
-        this.color = color
-    }
+  public message: string;
+  public color: AnnouncementColor;
+  public constructor(message: string, color: AnnouncementColor){
+    this.message = message;
+    this.color = color;
+  }
 }

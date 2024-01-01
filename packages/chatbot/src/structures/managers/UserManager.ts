@@ -1,5 +1,5 @@
-import { User } from "../../structures/User";
-import { ChatBot } from "../../ChatBot";
+import { User } from '../../structures/User';
+import { ChatBot } from '../../ChatBot';
 
 
 /**
@@ -10,28 +10,28 @@ import { ChatBot } from "../../ChatBot";
 export class UserManager{
 
 
-    /**
+  /**
      * @description The current instance of the {@link ChatBot}.
      */
     
-    public chatbot: ChatBot
+  public chatbot: ChatBot;
 
-    /**
+  /**
      * 
      * @param chatbot
      */
 
-    public constructor(chatbot: ChatBot){
+  public constructor(chatbot: ChatBot){
         
-        this.chatbot = chatbot
-    }
+    this.chatbot = chatbot;
+  }
 
-    /**
+  /**
      * Use to get Twitch user information.
      * @param {string} userIdentificator The fetched user's name or id.
      * @returns {Promise<User>} Returns {@link User}.
      */
-    public async fetch(userIdentificator: string): Promise<User> {
-        return new User(this.chatbot, await this.chatbot.helixClient.getUser(userIdentificator))
-    }
+  public async fetch(userIdentificator: string): Promise<User> {
+    return new User(this.chatbot, await this.chatbot.helixClient.getUser(userIdentificator));
+  }
 }
