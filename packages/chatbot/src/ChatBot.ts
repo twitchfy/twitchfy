@@ -41,7 +41,7 @@ export class ChatBot extends ChatBotEventEmitter {
 
     /**
      * @readonly
-     * @description An array of {@link Channel} the bot has joined. This propery doesn't updates when a {@link Channel} is updated.
+     * @description An array of {@link JoinedChannel} the bot has joined. This propery doesn't updates when a {@link Channel} is updated.
      */
     public readonly joinedChannels: JoinedChannel[]
 
