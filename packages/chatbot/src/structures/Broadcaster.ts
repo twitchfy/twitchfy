@@ -29,11 +29,14 @@ export class Broadcaster{
      */
   public id: string;
 
+  
   /**
-     * 
-     * @param chatbot 
-     * @param data 
-     */
+    * 
+    * @param chatbot 
+    * @param id 
+    * @param login 
+    * @param displayName 
+    */
   public constructor(chatbot: ChatBot, id: string, login: string, displayName: string){
     this.chatbot = chatbot;
     this.login = login;

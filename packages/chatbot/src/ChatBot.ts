@@ -124,8 +124,6 @@ export class ChatBot extends ChatBotEventEmitter {
 
 
   /**
-     * 
-     * @param {string} nick The nick sent to the Twith IRC Server to login.
      * @returns {ChatBot} The current instance of the {@link ChatBot}.
      */
   public login() {

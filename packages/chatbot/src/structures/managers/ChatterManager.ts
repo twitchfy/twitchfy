@@ -28,7 +28,7 @@ export class ChatterManager{
   /**
      * 
      * @param chatbot 
-     * @param channel 
+     * @param chat
      */
 
   public constructor(chatbot: ChatBot, chat: Chat){
