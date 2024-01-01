@@ -177,11 +177,21 @@ export class BaseClient {
 
   }
 
-  public async getStream(user_id: string | null, user_login?: string): Promise<GetStream | null>{
+  public async getStream(userIdentificator: string): Promise<GetStream | null> {
 
-    const data = await this.requestManager.get('/streams', `${user_id? `user_id=${user_id}`: `user_login=${user_login}`}`) as GetStreamResponse;
+    if(isNaN(Number(userIdentificator))){
 
-    return data.data[0] ?? null;
+      const data = await this.requestManager.get('/streams', `user_login=${userIdentificator}`) as GetStreamResponse;
+
+      return data.data[0] ?? null;
+      
+    } else {
+      const data = await this.requestManager.get('/streams', `user_id=${userIdentificator}`) as GetStreamResponse;
+
+      return data.data[0] ?? null;
+    }
+
+    
   }
 
 }

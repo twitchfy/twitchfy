@@ -144,7 +144,7 @@ declare module '@twitchapi/helix' {
       public getChannelFollowers(broadcaster_id: string, userToken?: string): Promise<GetFollowers[]>
       public getChannelFollower(broadcaster_id: string, user_id: string, userToken?: string): Promise<GetFollowers>
       public createClip(broadcaster_id: string, delay: boolean, userToken?: string) : Promise<PostCreateClip>
-      public getStream(user_id: string | null, user_login?: string): Promise<GetStream | null>
+      public getStream(userIdentificator: string): Promise<GetStream | null>
 
 
       public constructor(clientId: string, appToken?: string, userToken?: string)
