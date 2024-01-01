@@ -102,6 +102,8 @@ export class ChatBot extends ChatBotEventEmitter {
 
     this.oauth = options.oauth;
 
+    this.nick = options.nick;
+
     this.capabilities = options.capabilities;
 
     this.helixClient = new HelixClient({ clientId: this.clientID, userToken: this.oauth });
@@ -126,11 +128,9 @@ export class ChatBot extends ChatBotEventEmitter {
      * @param {string} nick The nick sent to the Twith IRC Server to login.
      * @returns {ChatBot} The current instance of the {@link ChatBot}.
      */
-  public login(nick: string) {
+  public login() {
 
-    this.nick = nick;
-
-    this.ws = new ChatBotWs(this, nick, this.oauth).login();
+    this.ws = new ChatBotWs(this, this.nick, this.oauth).login();
 
     return this;
 

@@ -50,7 +50,8 @@ declare module '@twitchapi/chatbot' {
 
     export interface ChatBotOptions {
         clientID: string,
-        oauth: string
+        oauth: string,
+        nick: string
         capabilities?: ChatBotCapabilities
         channels?: string[]
         noticeLog?: boolean
@@ -309,8 +310,6 @@ declare module '@twitchapi/chatbot' {
         'tmi-sent-ts': string
     }
 
-
-
     export interface PrivMSGTags {
         'badge-info': BadgeMetadata
         badges: Badges
@@ -506,7 +505,7 @@ declare module '@twitchapi/chatbot' {
       public nick: string;
       public noticeLog: boolean;
       public readyAt: Date | null;
-      public login(nick: string): void
+      public login(): void
       public destroy(): void
       private setupChannels(): Promise<void>
 

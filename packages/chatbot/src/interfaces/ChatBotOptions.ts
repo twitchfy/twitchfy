@@ -6,7 +6,8 @@ import { ChatBotCapabilities } from './ChatBotCapabilities';
  */
 export interface ChatBotOptions{
     clientID: string,
-    oauth: string
+    oauth: string,
+    nick: string
     capabilities?: ChatBotCapabilities
     channels?: string[]
     noticeLog?: boolean
