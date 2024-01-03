@@ -10,3 +10,4 @@ export * from './interfaces/Pagination';
 export * from './interfaces/Followers';
 export * from './interfaces/Clip';
 export * from './interfaces/Stream';
+export * from './interfaces/EventSub';
