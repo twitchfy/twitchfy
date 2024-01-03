@@ -1,3 +1,3 @@
-import { BanUserResponse, PostCreateClipResponse } from '@twitchapi/api-types';
+import { BanUserResponse, PostCreateClipResponse, PostEventSubscriptionsResponse } from '@twitchapi/api-types';
 
-export type PostResponses = Promise<BanUserResponse | PostCreateClipResponse | void>
+export type PostResponses = Promise<BanUserResponse | PostCreateClipResponse |  PostEventSubscriptionsResponse |void>

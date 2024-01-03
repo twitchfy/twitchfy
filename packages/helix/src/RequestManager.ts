@@ -12,6 +12,7 @@ import type { PostResponses } from './types/PostResponses';
 import type { PatchResponses } from './types/PatchResponses';
 import type { PutResponses } from './types/PutResponses';
 import type { Error } from './interfaces/Error';
+import { SubscriptionOptions } from './interfaces/SubscriptionOptions';
 const baseURL = 'https://api.twitch.tv/helix';
 
 
@@ -49,7 +50,7 @@ export class RequestManager {
 
   }
 
-  public async postWithUserToken(endpoint: string, params: string, body: WhisperBody | BanBody | TimeoutBody | AnnouncementBody | null , userToken?: string): PostResponses {
+  public async postWithUserToken(endpoint: string, params: string, body: WhisperBody | BanBody | TimeoutBody | AnnouncementBody | SubscriptionOptions |null , userToken?: string): PostResponses {
     const res = await fetch(baseURL + endpoint + `?${params}`, { method: 'POST', headers: this.makeHeaders('user', userToken), body: JSON.stringify(body) });
         
     if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);

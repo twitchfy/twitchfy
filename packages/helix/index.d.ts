@@ -1,4 +1,4 @@
-import { User, Channel, Ban, ChatSettings, GetBan, PostBanBody, PostBanData, PatchChatSettings, PostWhisperBody, AutoModSettings, PutAutoModSettings, Chatter, GetFollowers, PostCreateClip, GetStream, GetChatSettingsResponse, UserResponse, GetBansResponse, ChannelResponse, GetAutoModSettingsResponse, GetFollowersResponse, GetStreamResponse, BanUserResponse, PostCreateClipResponse } from '@twitchapi/api-types';
+import { User, Channel, Ban, ChatSettings, GetBan, PostBanBody, PostBanData, PatchChatSettings, PostWhisperBody, AutoModSettings, PutAutoModSettings, Chatter, GetFollowers, PostCreateClip, GetStream, GetChatSettingsResponse, UserResponse, GetBansResponse, ChannelResponse, GetAutoModSettingsResponse, GetFollowersResponse, GetStreamResponse, BanUserResponse, PostCreateClipResponse, PostEventSubscriptionsResponse, PostEventSubscriptions } from '@twitchapi/api-types';
 import type { Response } from 'node-fetch';
 
 declare module '@twitchapi/helix' {
@@ -13,7 +13,7 @@ declare module '@twitchapi/helix' {
 
     export type GetResponses = Promise<GetChatSettingsResponse | UserResponse | ChannelResponse | GetBansResponse | GetAutoModSettingsResponse | GetFollowersResponse | GetStreamResponse>
 
-    export type PostResponses = Promise<BanUserResponse | PostCreateClipResponse>
+    export type PostResponses = Promise<BanUserResponse | PostCreateClipResponse | PostEventSubscriptionsResponse>
 
     export type PatchResponses = Promise<GetChatSettingsResponse>
 
@@ -74,6 +74,23 @@ declare module '@twitchapi/helix' {
         ethnicityOrReligion?: number
         sexBasedTerms?: number
     }
+
+    export interface SubscriptionTransport {
+      method: 'webhooks' | 'websocket'
+      callback?: string
+      secret?: string
+      session_id?: string
+  }
+
+
+  
+export interface SubscriptionOptions {
+  type: string
+  version: number
+  condition: object
+  transport: SubscriptionTransport
+  
+}
     
 
     export class ChatSettingsBody implements PatchChatSettings {
@@ -145,6 +162,7 @@ declare module '@twitchapi/helix' {
       public getChannelFollower(broadcaster_id: string, user_id: string, userToken?: string): Promise<GetFollowers>
       public createClip(broadcaster_id: string, delay: boolean, userToken?: string) : Promise<PostCreateClip>
       public getStream(userIdentificator: string): Promise<GetStream | null>
+      public subscribeToEventSub(options: SubscriptionOptions, userToken?: string): Promise<PostEventSubscriptions>
 
 
       public constructor(clientId: string, appToken?: string, userToken?: string)

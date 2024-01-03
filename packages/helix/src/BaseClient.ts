@@ -1,5 +1,5 @@
 import { RequestManager } from './RequestManager';
-import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse } from '@twitchapi/api-types';
+import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions } from '@twitchapi/api-types';
 import { WhisperBody } from './structures/WhisperBody';
 import { BanBody } from './structures/BanBody';
 import { TimeoutBody } from './structures/TimeoutBody';
@@ -7,6 +7,7 @@ import { AnnouncementBody } from './structures/AnnouncementBody';
 import { ChatSettingsBody } from './structures/ChatSettingsBody';
 import { AutoModSettingsBody } from './structures/AutoModSettingsBody';
 import { handlePagination } from './utils/HandlePagination';
+import { SubscriptionOptions } from './interfaces/SubscriptionOptions';
 
 
 
@@ -191,7 +192,15 @@ export class BaseClient {
       return data.data[0] ?? null;
     }
 
-    
+   
+  }
+
+  public async subscribeToEventSub(options: SubscriptionOptions, userToken?: string): Promise<PostEventSubscriptions>{
+
+    const data = await this.requestManager.postWithUserToken('/eventsub/subscriptions', '', options, userToken) as PostEventSubscriptionsResponse;
+
+    return data.data[0];
+
   }
 
 }
