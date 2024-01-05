@@ -140,7 +140,7 @@ declare module '@twitchapi/helix' {
     public clientId: string;
     public appToken: string;
     public userToken?: string;
-    public proxy?: stirng;
+    public proxy?: string;
     public requestManager: RequestManager;
     public getUser(userIdentificator: string, userToken?: string): Promise<User>
     public getUsers(usersIdentifications: string[], userToken?: string): Promise<User[]>
