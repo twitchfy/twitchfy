@@ -1,5 +1,21 @@
+
+# Development test
+
 **/*.test.ts
+
 **/*.test.js
+
+# Compilation
 **/dist/
-**/node_modules/
+
+# Node packages
+
+node_modules
+
+# Node
+
+package-lock.json
+
+# Sshhhhhhh you found an easter egg
 /packages/eventsub/
+

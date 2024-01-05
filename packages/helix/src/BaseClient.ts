@@ -8,22 +8,26 @@ import { ChatSettingsBody } from './structures/ChatSettingsBody';
 import { AutoModSettingsBody } from './structures/AutoModSettingsBody';
 import { handlePagination } from './utils/HandlePagination';
 import { SubscriptionOptions } from './interfaces/SubscriptionOptions';
+import { HelixClientOptions } from './interfaces/HelixClientOptions';
 
 
 
 
 export class BaseClient {
 
+  public clientId: string;
   public appToken: string;
   public userToken?: string;
-  public clientId: string;
+  public proxy?: string;
   public requestManager: RequestManager;
 
 
-  public constructor(clientId: string, appToken?: string, userToken?: string) {
-    this.clientId = clientId;
-    this.userToken = userToken;
-    this.appToken = appToken;
+  public constructor(options: HelixClientOptions) {
+    this.clientId = options.clientId;
+    this.userToken = options.userToken;
+    this.appToken = options.appToken;
+    this.proxy = options.proxy;
+
     this.requestManager = new RequestManager(this);
     this.requestManager.validateUserToken();
   }
