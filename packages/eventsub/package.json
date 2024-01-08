@@ -1,6 +1,6 @@
 {
   "name": "@twitchapi/eventsub",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "A powerful node module to interact with the EventSub on Twitch.",
   "main": "dist/index.js",
   "types": "index.d.ts",
