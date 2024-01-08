@@ -16,6 +16,3 @@ node_modules
 
 package-lock.json
 
-# Sshhhhhhh you found an easter egg
-/packages/eventsub/
-
