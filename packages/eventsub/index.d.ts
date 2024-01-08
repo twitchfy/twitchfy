@@ -31,7 +31,8 @@ declare module '@twitchapi/eventsub' {
       public helixClient: HelixClient;  
       public subscriptions: SubscriptionCollection; 
       public ws: EventSubWebsocket; 
-      public sessionID: string | null; 
+      public sessionID: string | null;
+      public setAuth(auth: string): this
       public constructor(client: Client, options: EventSubConnectionOptions)
     }
 
