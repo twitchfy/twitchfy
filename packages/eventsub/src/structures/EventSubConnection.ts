@@ -73,6 +73,7 @@ export class EventSubConnection extends EventSubEventEmitter{
   }
 
   public setAuth(auth: string){
+    
     this.auth = auth;
 
     return this;
