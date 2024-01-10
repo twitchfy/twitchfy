@@ -47,5 +47,15 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes> {
 
   }
 
+  public async delete() {
+
+    await this.connection.helixClient.deleteSubscription(this.id, this.auth);
+
+    this.connection.subscriptions.delete(this.id);
+
+    return;
+
+  }
+
 
 }
