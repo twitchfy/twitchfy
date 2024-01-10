@@ -64,6 +64,7 @@ declare module '@twitchapi/eventsub' {
       public connection: EventSubConnection;
       public auth: string; 
       public id: string; 
+      public nonce: string | null;
       public type: T;
       public status: string;
       public version: string; 

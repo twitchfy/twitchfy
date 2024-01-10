@@ -58,11 +58,11 @@ export class EventSubConnection extends EventSubEventEmitter{
 
   }
 
-  public async subscribe<T extends SubscriptionTypes>(subscriptionType: T, options: SubscriptionOptions[T], auth?: string){
+  public async subscribe<T extends SubscriptionTypes>(subscriptionType: T, options: SubscriptionOptions[T], nonce?: string, auth?: string){
  
     const data = await this.helixClient.subscribeToEventSub({ type: subscriptionType, version: SubscriptionVersions[subscriptionType], transport: { method: 'websocket', session_id: this.sessionID }, condition: options }, auth);
 
-    const subscription = new Subscription<T>(this, auth ?? this.auth, subscriptionType, data);
+    const subscription = new Subscription<T>(this, auth ?? this.auth, subscriptionType, nonce ?? null, data);
 
     this.subscriptions.set(subscription.id, subscription);
 

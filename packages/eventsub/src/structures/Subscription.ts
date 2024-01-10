@@ -13,6 +13,8 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes> {
 
   public id: string;
 
+  public nonce: string | null ;
+
   public type: T;
 
   public status: string;
@@ -26,12 +28,13 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes> {
   public readonly callbacks: SubscriptionCallbackManager<T>;
 
 
-  public constructor(connection: EventSubConnection, auth: string, subscriptionType: T, data: PostEventSubscriptions){
+  public constructor(connection: EventSubConnection, auth: string, subscriptionType: T, nonce: string | null , data: PostEventSubscriptions){
 
     this.connection = connection;
     this.auth = auth;
     this.type = subscriptionType;
     this.id = data.id;
+    this.nonce = nonce;
     this.status = data.status;
     this.version = data.version;
     this.options = data.condition as SubscriptionOptions[T];
