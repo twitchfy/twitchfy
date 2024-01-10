@@ -70,6 +70,7 @@ declare module '@twitchapi/eventsub' {
       public options: SubscriptionOptions[T]; 
       public createdAt: Date; 
       public readonly callbacks: SubscriptionCallbackManager<T>;
+      public onMessage(callback: SubscriptionCallback<T>)
       public delete(): Promise<void>
       public constructor(connection: EventSubConnection, auth: string, subscriptionType: T, data: PostEventSubscriptions)
     }
