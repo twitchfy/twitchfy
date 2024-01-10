@@ -2,6 +2,7 @@ import { Subscription } from './Subscription';
 import { EventSubConnection } from './EventSubConnection';
 import { SubscriptionMessages } from '../interfaces/SubscriptionMessages';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
+import { Events } from '../enums/Events';
 import { SubscriptionCallback } from '../types/SubscriptionCallback';
 
 export class SubscriptionCallbackManager<T extends SubscriptionTypes> {
@@ -18,7 +19,7 @@ export class SubscriptionCallbackManager<T extends SubscriptionTypes> {
 
     this.subscription = subscription;
 
-    this.callbacks = [];
+    this.callbacks = [(message: SubscriptionMessages[T]) => this.connection.emit(Events.SubscriptionMessage, message, this.subscription)];
   }
 
   public add(callback: SubscriptionCallback<T>): this {

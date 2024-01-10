@@ -58,8 +58,11 @@ declare module '@twitchapi/eventsub' {
 
     export interface EventSubEvents {
         connectionReady: [connection: EventSubConnection],
-        subscriptionCreate: [subscription: Subscription]
+        subscriptionCreate: [subscription: Subscription],
+        subscriptionMessage: [message: SubscriptionMessage, subscription: Subscription]
     }
+
+    export type SubscriptionMessage = ChannelFollowMessage | ChannelUpdateMessage | ChannelChatClearMessage | StreamOnlineMessage
 
     export class Subscription<T extends SubscriptionTypes = SubscriptionTypes> {
       public connection: EventSubConnection;
@@ -263,7 +266,8 @@ declare module '@twitchapi/eventsub' {
 
     export enum Events {
       ConnectionReady = 'connectionReady',
-      SubscriptionCreate = 'subscriptionCreate'
+      SubscriptionCreate = 'subscriptionCreate',
+      SubscriptionMessage = 'subscriptionMessage'
    }
 
 }
