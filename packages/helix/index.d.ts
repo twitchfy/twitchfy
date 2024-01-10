@@ -166,7 +166,7 @@ declare module '@twitchapi/helix' {
     public createClip(broadcaster_id: string, delay: boolean, userToken?: string): Promise<PostCreateClip>
     public getStream(userIdentificator: string): Promise<GetStream | null>
     public subscribeToEventSub(options: SubscriptionOptions, userToken?: string): Promise<PostEventSubscriptions>
-
+    public deleteSubscription(id: string, userToken?: string) : Promise<void>
 
     public constructor(options: HelixClientOptions)
   }

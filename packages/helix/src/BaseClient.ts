@@ -207,4 +207,10 @@ export class BaseClient {
 
   }
 
+  public async deleteSubscription(id: string, userToken?: string) : Promise<void>{
+
+    await this.requestManager.deleteWithUserToken('/eventsub/subscriptions', `id=${id}`, userToken);
+
+  }
+
 }
