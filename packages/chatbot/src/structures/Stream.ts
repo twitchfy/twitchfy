@@ -79,6 +79,7 @@ export class Stream {
     this.chatbot = chatbot;
     this.broadcaster = new Broadcaster(this.chatbot, data.user_id, data.user_login, data.user_name);
     this.id = data.id;
+    this.gameName = data.game_name;
     this.gameId = data.game_id;
     this.type = data.type;
     this.title = data.title;
