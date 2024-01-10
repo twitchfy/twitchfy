@@ -1,5 +1,18 @@
+
+# Development test
+
 **/*.test.ts
+
 **/*.test.js
+
+# Compilation
 **/dist/
-**/node_modules/
-/packages/pubsub/
+
+# Node packages
+
+node_modules
+
+# Node
+
+package-lock.json
+

@@ -1,5 +1,5 @@
 import { RequestManager } from './RequestManager';
-import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse } from '@twitchapi/api-types';
+import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions } from '@twitchapi/api-types';
 import { WhisperBody } from './structures/WhisperBody';
 import { BanBody } from './structures/BanBody';
 import { TimeoutBody } from './structures/TimeoutBody';
@@ -7,22 +7,27 @@ import { AnnouncementBody } from './structures/AnnouncementBody';
 import { ChatSettingsBody } from './structures/ChatSettingsBody';
 import { AutoModSettingsBody } from './structures/AutoModSettingsBody';
 import { handlePagination } from './utils/HandlePagination';
+import { SubscriptionOptions } from './interfaces/SubscriptionOptions';
+import { HelixClientOptions } from './interfaces/HelixClientOptions';
 
 
 
 
 export class BaseClient {
 
+  public clientId: string;
   public appToken: string;
   public userToken?: string;
-  public clientId: string;
+  public proxy?: string;
   public requestManager: RequestManager;
 
 
-  public constructor(clientId: string, appToken?: string, userToken?: string) {
-    this.clientId = clientId;
-    this.userToken = userToken;
-    this.appToken = appToken;
+  public constructor(options: HelixClientOptions) {
+    this.clientId = options.clientId;
+    this.userToken = options.userToken;
+    this.appToken = options.appToken;
+    this.proxy = options.proxy;
+
     this.requestManager = new RequestManager(this);
     this.requestManager.validateUserToken();
   }
@@ -191,7 +196,21 @@ export class BaseClient {
       return data.data[0] ?? null;
     }
 
-    
+   
+  }
+
+  public async subscribeToEventSub(options: SubscriptionOptions, userToken?: string): Promise<PostEventSubscriptions>{
+
+    const data = await this.requestManager.postWithUserToken('/eventsub/subscriptions', '', options, userToken) as PostEventSubscriptionsResponse;
+
+    return data.data[0];
+
+  }
+
+  public async deleteSubscription(id: string, userToken?: string) : Promise<void>{
+
+    await this.requestManager.deleteWithUserToken('/eventsub/subscriptions', `id=${id}`, userToken);
+
   }
 
 }

@@ -12,15 +12,15 @@ declare module '@twitchapi/chatbot' {
    export class ChatBotEventEmitter extends EventEmitter{
       
      override on: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
-            (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => void) => this);
+            (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => Promise<void> | void) => this);
      override emit: (<K extends keyof ChatBotEvents>(event: K, ...args: ChatBotEvents[K]) => boolean) &
             (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, ...args: any[]) => boolean);
 
      override off: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
-            (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => void) => this);
+            (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => Promise<void> | void) => this);
 
      override once: (<K extends keyof ChatBotEvents>(event: K, listener: (...args: ChatBotEvents[K]) => void) => this) &
-            (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => void) => this);
+            (<S extends string | symbol>(event: Exclude<S, keyof ChatBotEvents>, listener: (...args: any[]) => Promise<void> | void) => this);
 
      override removeAllListeners: (<K extends keyof ChatBotEvents>(event?: K) => this) &
             (<S extends string | symbol>(event?: Exclude<S, keyof ChatBotEvents>) => this);
