@@ -32,6 +32,7 @@ declare module '@twitchapi/eventsub' {
       public subscriptions: SubscriptionCollection; 
       public ws: EventSubWebsocket; 
       public sessionID: string | null;
+      public subscribe<T extends SubscriptionTypes>(subscriptionType: T, options: SubscriptionOptions[T], nonce?: string, auth?: string): Promise<Subscription<T>>
       public setAuth(auth: string): this
       public constructor(client: Client, options: EventSubConnectionOptions)
     }
