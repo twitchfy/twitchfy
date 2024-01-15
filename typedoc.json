@@ -1,0 +1,5 @@
+{
+    "out": "./docs",
+    "entryPoints": ["packages/chatbot/src/index.ts"],
+    "readme": "./README.md"
+}
