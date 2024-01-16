@@ -1,23 +1,21 @@
-# @TWITCHAPI/CHATBOT
+# TWITCHAPI/CHATBOT
 
-<hr>
+***
 
 This powerful node module allows you to customize your own Twitch Bot.
 
-<h3><strong>FIRST STEPS</strong></h3>
+### **FIRST STEPS**
 
-<hr>
+***
 
-<div>
-  <p>First of all you have to create a new <a href="https://dev.twitch.tv/console">Twitch Developer Application</a>. Later you have to <a href="https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#implicit-grant-flow">generate a user access token</a> with the account you want to make a bot and include the scopes <strong>chat:edit</strong> and <strong>chat:read</strong> to be able to read and send messages. You can also include other scopes that are needed to be able to execute some actions like ban users, delete messages, etc...<br>Then you can build your own <strong>TWITCH BOT</strong></p>
-</div>
+First of all you have to create a new [Twitch Developer Application](https://dev.twitch.tv/console). Later you have to [generate a user access token](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#implicit-grant-flow) with the account you want to make a bot and include the scopes **chat:edit** and **chat:read** to be able to read and send messages. You can also include other scopes that are needed to be able to execute some actions like ban users, delete messages, etc...
 
-<h3>EXAMPLE CODE<h3>
-<div>
-   <p>This is an example about how to build your first bot and make a dice command!</p>
-   <br>
-   <p>
+Then you can build your own **TWITCH BOT**
 
+### **EXAMPLE CODE**
+###### This is an example about how to build your first bot and make a dice command!
+
+    ```js
     import { ChatBot, EventNames } from "@twitchapi/chatbot"
 
     const chatbot = new ChatBot({ capabilities: { membership: true, commands: true, tags: true }, clientID: "clientID", channels: ["mychannel"], oauth: "token", nick: "chatbotUsername" }) // You have to include the ChatBot capabilities, is recommended to include both three and the channels the bot will join at the start of the application.
@@ -33,15 +31,9 @@ This powerful node module allows you to customize your own Twitch Bot.
     })
 
     chatbot.login()
+    ```
     
-   </p>
-</div>
-<div>
 
+You can search for the package's documentation in https://pablornc.github.io/twitchapi/
 
- You can search for the package's documentation in https://pablornc.github.io/twitchapi/
-
- You are free of making a pull request in the <a href="https://pablornc.github.io/twitchapi/">official github repository</a>!
-
-
-</div>
+You are free of making a pull request in the [official github repository](https://github.com/PabloRNC/twitchapi)!
