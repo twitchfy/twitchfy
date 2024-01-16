@@ -52,3 +52,4 @@ export { CreatedClip } from './structures/CreatedClip';
 export { StreamManager } from './structures/managers/StreamManager';
 export { Stream } from './structures/Stream';
 export { Broadcaster } from './structures/Broadcaster';
+export { AutoModSettingsOptions } from '@twitchapi/helix';
