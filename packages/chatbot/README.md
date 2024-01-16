@@ -4,7 +4,7 @@
 
 This powerful node module allows you to customize your own Twitch Bot.
 
-### **FIRST STEPS** </h3>
+### **FIRST STEPS**
 
 ***
 
