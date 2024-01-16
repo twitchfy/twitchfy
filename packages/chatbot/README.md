@@ -37,6 +37,3 @@ Then you can build your own **TWITCH BOT**
 You can search for the package's documentation in https://pablornc.github.io/twitchapi/
 
 You are free of making a pull request in the [official github repository](https://github.com/PabloRNC/twitchapi)!
-
-
-</div>
