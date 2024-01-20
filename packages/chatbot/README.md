@@ -16,15 +16,15 @@ Then you can build your own **TWITCH BOT**
 ###### This is an example about how to build your first bot and make a dice command!
 
     ```js
-    import { ChatBot, EventNames } from "@twitchapi/chatbot"
+    import { ChatBot, Events } from "@twitchapi/chatbot"
 
     const chatbot = new ChatBot({ capabilities: { membership: true, commands: true, tags: true }, clientID: "clientID", channels: ["mychannel"], oauth: "token", nick: "chatbotUsername" }) // You have to include the ChatBot capabilities, is recommended to include both three and the channels the bot will join at the start of the application.
 
-    chatbot.on(EventNames.Ready, () => {
+    chatbot.on(Events.Ready, () => {
         console.log(`Welcome ${chatbot.user.login} to the ChatBot!`)
     })
 
-    chatbot.on(EventNames.PrivMsg, (message) => {
+    chatbot.on(Events.PrivMsg, (message) => {
         if(message.content === "!dice"){
             return message.reply(`The dice point to the number ${Math.floor(Math.random() * 6)}`)
         }
