@@ -1,6 +1,6 @@
 export { ChatBot } from './ChatBot';
 export { AnnouncementColor } from './enums/AnnouncementColor';
-export { EventNames } from './enums/EventNames';
+export { Events } from './enums/Events';
 export { ChatBotEvents } from './interfaces/ChatBotEvents';
 export { BanManager } from './structures/managers/BanManager';
 export { ChannelManager } from './structures/managers/ChannelManager';

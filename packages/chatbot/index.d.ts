@@ -37,7 +37,7 @@ declare module '@twitchapi/chatbot' {
         'Default' = 'primary'
     }
 
-    export enum EventNames {
+    export enum Events {
         'Ready' = 'ready',
         'PrivMsg' = 'PRIVMSG',
         'ClearMsg' = 'CLEARMSG',

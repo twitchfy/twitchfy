@@ -1,6 +1,6 @@
 {
   "name": "@twitchapi/chatbot",
-  "version": "1.4.10",
+  "version": "1.4.11",
   "description": "A powerful node module to make your own twitch chatbot!",
   "main": "dist/index.js",
   "types": "index.d.ts",
@@ -13,13 +13,13 @@
   },
   "homepage": "https://pablornc.github.io/twitchapi/",
   "scripts": {
+    "docs": "typedoc --plugin typedoc-plugin-markdown",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "PabloRNC",
   "license": "ISC",
   "dependencies": {
     "@twitchapi/api-types": "^1.1.5",
-    "@twitchapi/eventsub": "^1.0.0-beta.8",
     "@twitchapi/helix": "^1.2.13",
     "@types/websocket": "^1.0.5",
     "websocket": "^1.0.34"
