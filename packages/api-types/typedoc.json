@@ -1,0 +1,4 @@
+{
+    "out": "../../website/docs/api-types",
+    "entryPoints": ["./src/index.ts"]
+}

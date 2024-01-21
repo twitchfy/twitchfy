@@ -4,6 +4,7 @@
   "description": "A node module containing the Twitch Api types",
   "main": "dist/index.js",
   "scripts": {
+    "docs": "typedoc --plugin typedoc-plugin-markdown",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "PabloRNC",
