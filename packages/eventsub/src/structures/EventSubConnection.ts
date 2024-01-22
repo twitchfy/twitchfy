@@ -6,8 +6,8 @@ import { Subscription } from './Subscription';
 import { SubscriptionCollection } from './SubscriptionCollection';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
 import { Events } from '../enums/Events';
-import { SubscriptionOptions } from '../interfaces/SubscriptionOptions';
 import { EventSubConnectionOptions } from '../interfaces/EventSubConnectionOptions';
+import { SubscriptionOptions } from '../interfaces/SubscriptionOptions';
 import { SubscriptionVersions } from '../util/SubscriptionVersions';
 
 
@@ -58,17 +58,43 @@ export class EventSubConnection extends EventSubEventEmitter{
 
   }
 
-  public async subscribe<T extends SubscriptionTypes>(subscriptionType: T, options: SubscriptionOptions[T], nonce?: string, auth?: string){
- 
-    const data = await this.helixClient.subscribeToEventSub({ type: subscriptionType, version: SubscriptionVersions[subscriptionType], transport: { method: 'websocket', session_id: this.sessionID }, condition: options }, auth);
+  public async subscribe<T extends SubscriptionTypes>(options: SubscriptionOptions<T>): Promise<Subscription<T>>{
 
-    const subscription = new Subscription<T>(this, auth ?? this.auth, subscriptionType, nonce ?? null, data);
+    const { type, options: subscriptionOptions, auth } = options;
+ 
+    const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersions[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions }, auth);
+
+    const subscription = new Subscription<T>(this, options, data);
 
     this.subscriptions.set(subscription.id, subscription);
 
     this.emit(Events.SubscriptionCreate, subscription);
 
     return subscription;
+
+
+  }
+
+  public async subscribeAll<T extends SubscriptionTypes>(options: SubscriptionOptions<T>[]): Promise<Subscription<T>[]>{
+
+    const subscriptions: Subscription<T>[] = [];
+
+    for(const sub of options){
+      
+      const { type, options: subscriptionOptions, auth } = sub;
+ 
+      const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersions[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions }, auth);
+
+      const subscription = new Subscription(this, sub, data);
+
+      this.subscriptions.set(subscription.id, subscription);
+
+      this.emit(Events.SubscriptionCreate, subscription);
+
+      subscriptions.push(subscription);
+    }
+
+    return subscriptions;
 
   }
 
