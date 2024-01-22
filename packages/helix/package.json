@@ -3,7 +3,7 @@
   "version": "1.3.3",
   "description": "A powerful node module to interact with twitch api",
   "main": "dist/index.js",
-  "types": "index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "docs": "typedoc --plugin typedoc-plugin-markdown",
     "test": "echo \"Error: no test specified\" && exit 1"
