@@ -1,12 +1,9 @@
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
-import { ChannelUpdateOptions } from './options/ChannelUpdateOptions';
-import { ChannelFollowOptions } from './options/ChannelFollowOptions';
-import { ChannelChatClearOptions } from './options/ChannelChatClearOptions';
-import { StreamOnlineOptions } from './options/StreamOnlineOptions';
+import { SubscriptionTypeOptions } from './SubscriptionTypeOptions';
 
-export interface SubscriptionOptions {
-    [SubscriptionTypes.ChannelFollow] : ChannelFollowOptions
-    [SubscriptionTypes.ChannelUpdate] : ChannelUpdateOptions
-    [SubscriptionTypes.ChannelChatClear]: ChannelChatClearOptions
-    [SubscriptionTypes.StreamOnline]: StreamOnlineOptions
+export interface SubscriptionOptions<T extends SubscriptionTypes = SubscriptionTypes> {
+    type: T
+    options: SubscriptionTypeOptions[T]
+    nonce?: string
+    auth?: string
 }

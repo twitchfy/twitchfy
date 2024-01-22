@@ -2,6 +2,7 @@ import { PostEventSubscriptions } from '@twitchapi/api-types';
 import { SubscriptionCallbackManager } from './SubscriptionCallbackManager';
 import { EventSubConnection } from './EventSubConnection';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
+import { SubscriptionTypeOptions } from '../interfaces/SubscriptionTypeOptions';
 import { SubscriptionOptions } from '../interfaces/SubscriptionOptions';
 import { SubscriptionCallback } from '../types/SubscriptionCallback';
 
@@ -21,23 +22,23 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes> {
 
   public version: string;
 
-  public options: SubscriptionOptions[T];
+  public options: SubscriptionTypeOptions[T];
 
   public createdAt: Date;
 
   public readonly callbacks: SubscriptionCallbackManager<T>;
 
 
-  public constructor(connection: EventSubConnection, auth: string, subscriptionType: T, nonce: string | null , data: PostEventSubscriptions){
+  public constructor(connection: EventSubConnection, options: SubscriptionOptions<T> , data: PostEventSubscriptions){
 
     this.connection = connection;
-    this.auth = auth;
-    this.type = subscriptionType;
+    this.auth = options.auth ?? connection.auth;
+    this.type = options.type;
     this.id = data.id;
-    this.nonce = nonce;
+    this.nonce = options.nonce;
     this.status = data.status;
     this.version = data.version;
-    this.options = data.condition as SubscriptionOptions[T];
+    this.options = data.condition as SubscriptionTypeOptions[T];
     this.createdAt = new Date(data.created_at);
     this.callbacks = new SubscriptionCallbackManager(connection, this);
 
