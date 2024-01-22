@@ -3,7 +3,7 @@
   "version": "1.4.12",
   "description": "A powerful node module to make your own twitch chatbot!",
   "main": "dist/index.js",
-  "types": "index.d.ts",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/PabloRNC/twitchapi"

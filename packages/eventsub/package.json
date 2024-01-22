@@ -3,7 +3,7 @@
   "version": "1.0.0-beta.8",
   "description": "A powerful node module to interact with the EventSub on Twitch.",
   "main": "dist/index.js",
-  "types": "index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "docs": "typedoc --plugin typedoc-plugin-markdown",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,6 +1,5 @@
 node_modules
 dist
-packages/pubsub
 docs
 **/*.test.ts
 **/*.test.js
