@@ -7,4 +7,5 @@ export interface SubscriptionOptionsIndex{
     [SubscriptionTypes.ChannelUpdate]: SubscriptionOptions<SubscriptionTypes.ChannelUpdate>
     [SubscriptionTypes.ChannelFollow]: SubscriptionOptions<SubscriptionTypes.ChannelFollow>
     [SubscriptionTypes.StreamOnline]: SubscriptionOptions<SubscriptionTypes.StreamOnline>
+    [SubscriptionTypes.ChannelAdBreakBegin]: SubscriptionOptions<SubscriptionTypes.ChannelAdBreakBegin>
 }
