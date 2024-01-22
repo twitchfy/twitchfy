@@ -76,7 +76,7 @@ export class EventSubConnection extends EventSubEventEmitter{
 
   }
 
-  public async subscribeAll<T extends SubscriptionTypes>(options: SubscriptionOptionsIndex[T][]): Promise<Subscription<T>[]>{
+  public async subscribeAll<T extends SubscriptionTypes>(...options: SubscriptionOptionsIndex[T][]): Promise<Subscription<T>[]>{
 
     const subscriptions: Subscription<SubscriptionTypes>[] = [];
 
