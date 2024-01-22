@@ -8,6 +8,7 @@ import { SubscriptionTypes } from '../enums/SubscriptionTypes';
 import { Events } from '../enums/Events';
 import { EventSubConnectionOptions } from '../interfaces/EventSubConnectionOptions';
 import { SubscriptionOptions } from '../interfaces/SubscriptionOptions';
+import { SubscriptionOptionsIndex } from '../interfaces/SubscriptionOptionsIndex';
 import { SubscriptionVersions } from '../util/SubscriptionVersions';
 
 
@@ -75,9 +76,9 @@ export class EventSubConnection extends EventSubEventEmitter{
 
   }
 
-  public async subscribeAll<T extends SubscriptionTypes>(options: SubscriptionOptions<T>[]): Promise<Subscription<T>[]>{
+  public async subscribeAll<T extends SubscriptionTypes>(options: SubscriptionOptionsIndex[T][]): Promise<Subscription<T>[]>{
 
-    const subscriptions: Subscription<T>[] = [];
+    const subscriptions: Subscription<SubscriptionTypes>[] = [];
 
     for(const sub of options){
       
@@ -94,7 +95,7 @@ export class EventSubConnection extends EventSubEventEmitter{
       subscriptions.push(subscription);
     }
 
-    return subscriptions;
+    return subscriptions as Subscription<T>[];
 
   }
 
