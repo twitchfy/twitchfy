@@ -3,5 +3,6 @@ export enum SubscriptionTypes {
     ChannelFollow = 'channel.follow',
     ChannelChatClear = 'channel.chat.clear',
     StreamOnline = 'stream.online',
-    ChannelAdBreakBegin = 'channel.ad_break.begin'
+    ChannelAdBreakBegin = 'channel.ad_break.begin',
+    ChannelChatClearUserMessages = 'channel.chat.clear_user_messages'
 }

@@ -3,6 +3,7 @@ import { ChannelFollowEvent } from './ChannelFollow/ChannelFollowEvent';
 import { ChannelChatClearEvent } from './ChannelChatClear/ChannelChatClearEvent';
 import { StreamOnlineEvent } from './StreamOnline/StreamOnlineEvent';
 import { ChannelAdBreakBeginEvent } from './ChannelAdBreakBegin/ChannelAdBreakBeginEvent';
+import { ChannelChatClearUserMessagesEvent } from './ChannelChatClearUserMessages/ChannelChatClearUserMessagesEvent';
 import { SubscriptionTypes } from '../../../../enums/SubscriptionTypes';
 
 export interface SubscriptionEvents {
@@ -10,5 +11,6 @@ export interface SubscriptionEvents {
     [SubscriptionTypes.ChannelUpdate]: ChannelUpdateEvent;
     [SubscriptionTypes.ChannelChatClear]: ChannelChatClearEvent;
     [SubscriptionTypes.StreamOnline]: StreamOnlineEvent;
-    [SubscriptionTypes.ChannelAdBreakBegin]: ChannelAdBreakBeginEvent
+    [SubscriptionTypes.ChannelAdBreakBegin]: ChannelAdBreakBeginEvent;
+    [SubscriptionTypes.ChannelChatClearUserMessages]: ChannelChatClearUserMessagesEvent
 }
