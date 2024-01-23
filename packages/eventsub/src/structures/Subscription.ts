@@ -51,6 +51,10 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes> {
 
   }
 
+  public checkSubscriptionType<U extends T>(type: U): this is Subscription<U> {
+    return this.type === type;
+  }
+
   public async delete() {
 
     await this.connection.helixClient.deleteSubscription(this.id, this.auth);
