@@ -3,6 +3,7 @@ import { ChannelFollowMessage } from '../structures/messages/ChannelFollow/Chann
 import { ChannelChatClearMessage } from '../structures/messages/ChannelChatClear/ChannelChatClearMessage';
 import { StreamOnlineMessage } from '../structures/messages/StreamOnline/StreamOnlineMessage';
 import { ChannelAdBreakBeginMessage } from '../structures/messages/ChannelAdBreakBegin/ChannelAdBreakBeginMessage';
+import { ChannelChatClearUserMessagesMessage } from '../structures/messages/ChannelChatClearUserMessages/ChannelChatClearUserMessages';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
 
 export interface SubscriptionMessages {
@@ -11,4 +12,5 @@ export interface SubscriptionMessages {
     [SubscriptionTypes.ChannelChatClear]: ChannelChatClearMessage
     [SubscriptionTypes.StreamOnline]: StreamOnlineMessage
     [SubscriptionTypes.ChannelAdBreakBegin]: ChannelAdBreakBeginMessage
+    [SubscriptionTypes.ChannelChatClearUserMessages]: ChannelChatClearUserMessagesMessage
 }

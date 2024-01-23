@@ -4,6 +4,7 @@ import { ChannelFollowMessage } from '../structures/messages/ChannelFollow/Chann
 import { ChannelChatClearMessage } from '../structures/messages/ChannelChatClear/ChannelChatClearMessage';
 import { StreamOnlineMessage } from '../structures/messages/StreamOnline/StreamOnlineMessage';
 import { ChannelAdBreakBeginMessage } from '../structures/messages/ChannelAdBreakBegin/ChannelAdBreakBeginMessage';
+import { ChannelChatClearUserMessagesMessage } from '../structures/messages/ChannelChatClearUserMessages/ChannelChatClearUserMessages';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
 import { BaseNotification } from '../interfaces/messages/Notification/BaseNotification';
 
@@ -86,6 +87,21 @@ export function notificationHandler(connection: EventSubConnection, notification
 
     subscription.callbacks.execute(new ChannelAdBreakBeginMessage(connection, subscription, payload.event));
 
+  }
+
+    break;
+
+  case SubscriptionTypes.ChannelChatClearUserMessages : {
+
+    setNotificationType<SubscriptionTypes.ChannelChatClearUserMessages>(notification);
+
+    const payload = notification.payload;
+
+    const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelChatClearUserMessages>(payload.subscription.id);
+
+    if(!subscription) return;
+
+    subscription.callbacks.execute(new ChannelChatClearUserMessagesMessage(connection, subscription, payload.event));
   }
 
   }

@@ -3,6 +3,7 @@ import { ChannelFollowOptions } from './options/ChannelFollowOptions';
 import { ChannelChatClearOptions } from './options/ChannelChatClearOptions';
 import { StreamOnlineOptions } from './options/StreamOnlineOptions';
 import { ChannelAdBreakBeginOptions } from './options/ChannelAdBreakBeginOptions';
+import { ChannelChatClearUserMessagesOptions } from './options/ChannelChatClearUserMessagesOptions';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
 
 export interface SubscriptionTypeOptions {
@@ -11,4 +12,5 @@ export interface SubscriptionTypeOptions {
     [SubscriptionTypes.ChannelChatClear]: ChannelChatClearOptions
     [SubscriptionTypes.StreamOnline]: StreamOnlineOptions
     [SubscriptionTypes.ChannelAdBreakBegin]: ChannelAdBreakBeginOptions
+    [SubscriptionTypes.ChannelChatClearUserMessages]: ChannelChatClearUserMessagesOptions
 }
