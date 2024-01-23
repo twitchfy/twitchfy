@@ -3,6 +3,7 @@ import { ChannelUpdateMessage } from '../structures/messages/ChannelUpdate/Chann
 import { ChannelFollowMessage } from '../structures/messages/ChannelFollow/ChannelFollowMessage';
 import { ChannelChatClearMessage } from '../structures/messages/ChannelChatClear/ChannelChatClearMessage';
 import { StreamOnlineMessage } from '../structures/messages/StreamOnline/StreamOnlineMessage';
+import { ChannelAdBreakBeginMessage } from '../structures/messages/ChannelAdBreakBegin/ChannelAdBreakBeginMessage';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
 import { BaseNotification } from '../interfaces/messages/Notification/BaseNotification';
 
@@ -69,6 +70,22 @@ export function notificationHandler(connection: EventSubConnection, notification
     if(!subscription) return;
 
     subscription.callbacks.execute(new StreamOnlineMessage(connection, subscription, payload.event));
+  }
+
+    break;
+
+  case SubscriptionTypes.ChannelAdBreakBegin : {
+
+    setNotificationType<SubscriptionTypes.ChannelAdBreakBegin>(notification);
+
+    const payload = notification.payload;
+
+    const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelAdBreakBegin>(payload.subscription.id);
+
+    if(!subscription) return;
+
+    subscription.callbacks.execute(new ChannelAdBreakBeginMessage(connection, subscription, payload.event));
+
   }
 
   }
