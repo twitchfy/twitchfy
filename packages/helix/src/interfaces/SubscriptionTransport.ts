@@ -1,5 +1,5 @@
 export interface SubscriptionTransport {
-    method: 'webhooks' | 'websocket'
+    method: 'webhook' | 'websocket'
     callback?: string
     secret?: string
     session_id?: string
