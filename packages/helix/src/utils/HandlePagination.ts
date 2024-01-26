@@ -1,7 +1,8 @@
 import { GetFollowersResponse, Pagination } from '@twitchapi/api-types';
 import { HelixClient } from '../HelixClient';
+import { RequestOptions } from '../interfaces/RequestOptions';
 
-export async function handlePagination(client: HelixClient, endpoint: string, params: string, method: 'GET', userToken?: string) {
+export async function handlePagination(client: HelixClient, endpoint: string, params: string, method: 'GET', userToken?: string, requestOptions?: RequestOptions) {
     
   const data = [];
 
@@ -13,7 +14,7 @@ export async function handlePagination(client: HelixClient, endpoint: string, pa
     let fetchParams = params;
 
     do {
-      const getData = await client.requestManager.get(endpoint, fetchParams, userToken) as GetFollowersResponse;
+      const getData = await client.requestManager.get(endpoint, fetchParams, userToken, requestOptions) as GetFollowersResponse;
       pagination = getData.pagination;
 
       for (const get of getData.data) {
