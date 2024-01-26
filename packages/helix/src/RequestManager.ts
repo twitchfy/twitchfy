@@ -13,6 +13,7 @@ import type { PatchResponses } from './types/PatchResponses';
 import type { PutResponses } from './types/PutResponses';
 import type { Error } from './interfaces/Error';
 import { SubscriptionOptions } from './interfaces/SubscriptionOptions';
+import { RequestOptions } from './interfaces/RequestOptions';
 
 
 
@@ -31,8 +32,8 @@ export class RequestManager {
   }
 
 
-  public async get(endpoint: string, params: string, userToken?: string) : GetResponses {
-    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'GET', headers: this.makeHeaders(userToken || this.client.userToken ? 'user' : 'app', userToken) });
+  public async get(endpoint: string, params: string, userToken?: string, requestOptions?: RequestOptions) : GetResponses {
+    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'GET', headers: this.makeHeaders(requestOptions, userToken) });
 
     if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
 
@@ -40,21 +41,21 @@ export class RequestManager {
     return await res.json();
   }
 
-  public async deleteWithUserToken(endpoint: string, params: string, userToken?: string) {
+  public async deleteWithUserToken(endpoint: string, params: string, userToken?: string, requestOptions?: RequestOptions) {
     if (userToken) {
-      const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'DELETE', headers: this.makeHeaders('user', userToken) });
+      const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'DELETE', headers: this.makeHeaders(requestOptions, userToken) });
 
       if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
     } else {
-      const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'DELETE', headers: this.makeHeaders('user') });
+      const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'DELETE', headers: this.makeHeaders(requestOptions) });
 
       if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
     }
 
   }
 
-  public async postWithUserToken(endpoint: string, params: string, body: WhisperBody | BanBody | TimeoutBody | AnnouncementBody | SubscriptionOptions |null , userToken?: string): PostResponses {
-    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'POST', headers: this.makeHeaders('user', userToken), body: JSON.stringify(body) });
+  public async postWithUserToken(endpoint: string, params: string, body: WhisperBody | BanBody | TimeoutBody | AnnouncementBody | SubscriptionOptions | null, userToken?: string, requestOptions?: RequestOptions): PostResponses {
+    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'POST', headers: this.makeHeaders(requestOptions, userToken), body: JSON.stringify(body) });
         
     if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
 
@@ -62,8 +63,8 @@ export class RequestManager {
     return await res.json();
   }
 
-  public async patchWithUserToken(endpoint: string, params: string, body: ChatSettingsBody, userToken?: string): PatchResponses {
-    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PATCH', headers: this.makeHeaders('user', userToken), body: JSON.stringify(body)});
+  public async patchWithUserToken(endpoint: string, params: string, body: ChatSettingsBody, userToken?: string, requestOptions?: RequestOptions): PatchResponses {
+    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PATCH', headers: this.makeHeaders(requestOptions, userToken), body: JSON.stringify(body)});
 
 
     if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
@@ -71,9 +72,9 @@ export class RequestManager {
     return await res.json();
   }
 
-  public async putWithUserToken(endpoint: string, params: string, body?: AutoModSettingsBody, userToken?: string) : PutResponses {
+  public async putWithUserToken(endpoint: string, params: string, body?: AutoModSettingsBody, userToken?: string, requestOptions?: RequestOptions) : PutResponses {
 
-    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PUT', headers: this.makeHeaders('user', userToken), body: JSON.stringify(body)});
+    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PUT', headers: this.makeHeaders(requestOptions , userToken), body: JSON.stringify(body)});
 
     if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
 
@@ -83,16 +84,17 @@ export class RequestManager {
   }
 
   public async validateUserToken(){
-    const res = await fetch('https://id.twitch.tv/oauth2/validate', { headers: this.makeHeaders('user')});
+
+    const res = await fetch('https://id.twitch.tv/oauth2/validate', { headers: this.makeHeaders()});
 
     if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
   }
 
-  private makeHeaders(token: 'app' | 'user', userToken?: string) {
-    if (token === 'app') {
-      return { 'Authorization': `Bearer ${this.client.appToken}`, 'Client-Id': this.client.clientId, 'Content-Type': 'application/json' };
-    } else {
-      return { 'Authorization': `Bearer ${userToken ?? this.client.userToken}`, 'Client-Id': this.client.clientId, 'Content-Type': 'application/json' };
-    }
+  private makeHeaders(requestOptions?: RequestOptions, userToken?: string) {
+
+    const token = requestOptions?.useTokenType ? requestOptions?.useTokenType === 'user' ? userToken || this.client.userToken || this.client.appToken : this.client.appToken : userToken || this.client.userToken || this.client.appToken;
+
+    return { 'Authorization': `Bearer ${token}`, 'Client-Id': this.client.clientId, 'Content-Type': 'application/json' };
+    
   }
 }
