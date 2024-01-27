@@ -1,10 +1,10 @@
 import { Message as WSMessage } from 'websocket';
-import { notificationHandler } from './notificationHandler';
-import { Message } from '../types/Message';
+import { notificationHandler } from '../../util/notificationHandler';
+import { Message } from '../../types/Message';
 import { EventSubWebsocket } from '../structures/EventSubWebsocket';
 import { WelcomeMessage } from '../interfaces/messages/Welcome/WelcomeMessage';
-import { BaseNotification } from '../interfaces/messages/Notification/BaseNotification';
-import { Events } from '../enums/Events';
+import { BaseNotification } from '../../interfaces/messages/Notification/BaseNotification';
+import { Events } from '../../enums/Events';
 
 export function messageHandler(websocket: EventSubWebsocket, message: WSMessage) {
 
@@ -30,7 +30,7 @@ export function messageHandler(websocket: EventSubWebsocket, message: WSMessage)
         
       setMessageType<BaseNotification>(parsedMessage);
 
-      notificationHandler(websocket.connection, parsedMessage);
+      notificationHandler(websocket.connection, parsedMessage.payload);
         
     }
     }

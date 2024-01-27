@@ -1,15 +1,15 @@
 import { Base } from '../Base';
 import { Subscription } from '../../Subscription';
-import { EventSubConnection } from '../../EventSubConnection';
 import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
+import { ConnectionTypes } from '../../../types/ConnectionTypes';
 
-export class ChannelUpdateCategory extends Base<SubscriptionTypes.ChannelUpdate> {
+export class ChannelUpdateCategory<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelUpdate, K> {
     
   public id: string;
 
   public name: string;
 
-  public constructor(connection: EventSubConnection, subscription: Subscription<SubscriptionTypes.ChannelUpdate>, id: string, name: string){
+  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.ChannelUpdate, K>, id: string, name: string){
 
     super(connection, subscription);
 

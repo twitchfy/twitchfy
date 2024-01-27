@@ -1,20 +1,20 @@
 import { ChannelFollowUser } from './ChannelFollowUser';
+import { ChannelFollowBroadcaster } from './ChannelFollowBroadcaster';
 import { Base } from '../Base';
 import { Subscription } from '../../Subscription';
 import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { EventSubConnection } from '../../EventSubConnection';
 import { ChannelFollowEvent } from '../../../interfaces/messages/Notification/events/ChannelFollow/ChannelFollowEvent';
-import { ChannelFollowBroadcaster } from './ChannelFollowBroadcaster';
+import { ConnectionTypes } from '../../../types/ConnectionTypes';
 
-export class ChannelFollowMessage extends Base<SubscriptionTypes.ChannelFollow>{
+export class ChannelFollowMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelFollow, K>{
 
-  public broadcaster: ChannelFollowBroadcaster;
+  public broadcaster: ChannelFollowBroadcaster<K>;
 
-  public follower: ChannelFollowUser;
+  public follower: ChannelFollowUser<K>;
 
   public followedAt: Date;
 
-  public constructor(connection: EventSubConnection, subscription: Subscription<SubscriptionTypes.ChannelFollow>, data: ChannelFollowEvent){
+  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.ChannelFollow, K>, data: ChannelFollowEvent){
 
     super(connection, subscription);
 

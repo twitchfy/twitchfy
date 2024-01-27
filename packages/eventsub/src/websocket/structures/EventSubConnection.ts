@@ -1,18 +1,18 @@
 import { HelixClient } from '@twitchapi/helix';
-import { Client } from './Client';
-import { EventSubEventEmitter } from './EventSubEventEmitter';
+import { Client } from '../../structures/Client';
 import { EventSubWebsocket } from './EventSubWebsocket';
-import { Subscription } from './Subscription';
-import { SubscriptionCollection } from './SubscriptionCollection';
-import { SubscriptionTypes } from '../enums/SubscriptionTypes';
-import { Events } from '../enums/Events';
+import { Subscription } from '../../structures/Subscription';
+import { SubscriptionCollection } from '../../structures/SubscriptionCollection';
+import { EventSubEventEmitter } from '../../structures/EventSubEventEmitter';
+import { SubscriptionTypes } from '../../enums/SubscriptionTypes';
+import { Events } from '../../enums/Events';
 import { EventSubConnectionOptions } from '../interfaces/EventSubConnectionOptions';
-import { SubscriptionOptions } from '../interfaces/SubscriptionOptions';
-import { SubscriptionOptionsIndex } from '../interfaces/SubscriptionOptionsIndex';
-import { SubscriptionVersions } from '../util/SubscriptionVersions';
+import { SubscriptionOptions } from '../../interfaces/SubscriptionOptions';
+import { SubscriptionOptionsIndex } from '../../interfaces/SubscriptionOptionsIndex';
+import { SubscriptionVersions } from '../../util/SubscriptionVersions';
 
 
-export class EventSubConnection extends EventSubEventEmitter{
+export class EventSubConnection extends EventSubEventEmitter<EventSubConnection>{
 
   public client: Client;
 
@@ -24,7 +24,7 @@ export class EventSubConnection extends EventSubEventEmitter{
 
   public helixClient: HelixClient;
 
-  public subscriptions: SubscriptionCollection;
+  public subscriptions: SubscriptionCollection<EventSubConnection>;
 
   public ws: EventSubWebsocket;
 
@@ -44,7 +44,7 @@ export class EventSubConnection extends EventSubEventEmitter{
 
     this.helixClient = new HelixClient({ clientId: options.clientID, userToken: options.auth, ...options.helix });
 
-    this.subscriptions = new SubscriptionCollection();
+    this.subscriptions = new SubscriptionCollection<EventSubConnection>();
 
     this.ws = new EventSubWebsocket(this);
 
@@ -59,13 +59,13 @@ export class EventSubConnection extends EventSubEventEmitter{
 
   }
 
-  public async subscribe<T extends SubscriptionTypes>(options: SubscriptionOptions<T>): Promise<Subscription<T>>{
+  public async subscribe<T extends SubscriptionTypes>(options: SubscriptionOptions<T>): Promise<Subscription<T, EventSubConnection>>{
 
     const { type, options: subscriptionOptions, auth } = options;
  
     const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersions[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions }, auth);
 
-    const subscription = new Subscription<T>(this, options, data);
+    const subscription = new Subscription<T, EventSubConnection>(this, options, data);
 
     this.subscriptions.set(subscription.id, subscription);
 
@@ -76,9 +76,9 @@ export class EventSubConnection extends EventSubEventEmitter{
 
   }
 
-  public async subscribeAll<T extends SubscriptionTypes>(...options: SubscriptionOptionsIndex[T][]): Promise<Subscription<T>[]>{
+  public async subscribeAll<T extends SubscriptionTypes>(...options: SubscriptionOptionsIndex[T][]): Promise<Subscription<T, EventSubConnection>[]>{
 
-    const subscriptions: Subscription<SubscriptionTypes>[] = [];
+    const subscriptions: Subscription<SubscriptionTypes, EventSubConnection>[] = [];
 
     for(const sub of options){
       
@@ -86,7 +86,7 @@ export class EventSubConnection extends EventSubEventEmitter{
  
       const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersions[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions }, auth);
 
-      const subscription = new Subscription(this, sub, data);
+      const subscription = new Subscription<SubscriptionTypes, EventSubConnection>(this, sub, data);
 
       this.subscriptions.set(subscription.id, subscription);
 
@@ -95,7 +95,7 @@ export class EventSubConnection extends EventSubEventEmitter{
       subscriptions.push(subscription);
     }
 
-    return subscriptions as Subscription<T>[];
+    return subscriptions as Subscription<T, EventSubConnection>[];
 
   }
 

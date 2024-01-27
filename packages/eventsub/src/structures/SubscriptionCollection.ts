@@ -2,15 +2,16 @@
 
 import { Subscription } from './Subscription';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
+import { ConnectionTypes } from '../types/ConnectionTypes';
 
 
-export class SubscriptionCollection<T extends SubscriptionTypes = SubscriptionTypes> extends Map<string, Subscription<T>> {
+export class SubscriptionCollection<K extends ConnectionTypes = ConnectionTypes, T extends SubscriptionTypes = SubscriptionTypes> extends Map<string, Subscription<T, K>> {
 
-  override get<K extends T>(key: string): Subscription<K> | undefined {
+  override get<U extends T>(key: string): Subscription<U, K> | undefined {
     return super.get(key) as any;
   }
 
-  override set<K extends T>(key: string, value: Subscription<K>): this {
+  override set<U extends T>(key: string, value: Subscription<U, K>): this {
     return super.set(key, value) as any;
   }
 }
