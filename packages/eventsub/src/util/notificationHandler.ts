@@ -1,4 +1,3 @@
-import { EventSubConnection } from '../structures/EventSubConnection';
 import { ChannelUpdateMessage } from '../structures/messages/ChannelUpdate/ChannelUpdateMessage';
 import { ChannelFollowMessage } from '../structures/messages/ChannelFollow/ChannelFollowMessage';
 import { ChannelChatClearMessage } from '../structures/messages/ChannelChatClear/ChannelChatClearMessage';
@@ -6,18 +5,16 @@ import { StreamOnlineMessage } from '../structures/messages/StreamOnline/StreamO
 import { ChannelAdBreakBeginMessage } from '../structures/messages/ChannelAdBreakBegin/ChannelAdBreakBeginMessage';
 import { ChannelChatClearUserMessagesMessage } from '../structures/messages/ChannelChatClearUserMessages/ChannelChatClearUserMessages';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
-import { BaseNotification } from '../interfaces/messages/Notification/BaseNotification';
+import { BasePayload } from '../interfaces/messages/Notification/BasePayload';
+import { ConnectionTypes } from '../types/ConnectionTypes';
 
-export function notificationHandler(connection: EventSubConnection, notification: BaseNotification){
+export function notificationHandler(connection: ConnectionTypes, payload: BasePayload<SubscriptionTypes>){
 
-
-  switch(notification.payload.subscription.type){
+  switch(payload.subscription.type){
 
   case SubscriptionTypes.ChannelFollow : {
    
-    setNotificationType<SubscriptionTypes.ChannelFollow>(notification);
-
-    const payload = notification.payload;
+    setPayloadType<SubscriptionTypes.ChannelFollow>(payload);
 
     const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelFollow>(payload.subscription.id);
 
@@ -31,9 +28,7 @@ export function notificationHandler(connection: EventSubConnection, notification
 
   case SubscriptionTypes.ChannelUpdate : {
 
-    setNotificationType<SubscriptionTypes.ChannelUpdate>(notification);
-
-    const payload = notification.payload;
+    setPayloadType<SubscriptionTypes.ChannelUpdate>(payload);
 
     const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelUpdate>(payload.subscription.id);
 
@@ -47,9 +42,7 @@ export function notificationHandler(connection: EventSubConnection, notification
 
   case SubscriptionTypes.ChannelChatClear : {
 
-    setNotificationType<SubscriptionTypes.ChannelChatClear>(notification);
-
-    const payload = notification.payload;
+    setPayloadType<SubscriptionTypes.ChannelChatClear>(payload);
 
     const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelChatClear>(payload.subscription.id);
 
@@ -62,9 +55,7 @@ export function notificationHandler(connection: EventSubConnection, notification
 
   case SubscriptionTypes.StreamOnline : {
 
-    setNotificationType<SubscriptionTypes.StreamOnline>(notification);
-
-    const payload = notification.payload;
+    setPayloadType<SubscriptionTypes.StreamOnline>(payload);
 
     const subscription = connection.subscriptions.get<SubscriptionTypes.StreamOnline>(payload.subscription.id);
 
@@ -77,9 +68,7 @@ export function notificationHandler(connection: EventSubConnection, notification
 
   case SubscriptionTypes.ChannelAdBreakBegin : {
 
-    setNotificationType<SubscriptionTypes.ChannelAdBreakBegin>(notification);
-
-    const payload = notification.payload;
+    setPayloadType<SubscriptionTypes.ChannelAdBreakBegin>(payload);
 
     const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelAdBreakBegin>(payload.subscription.id);
 
@@ -93,9 +82,7 @@ export function notificationHandler(connection: EventSubConnection, notification
 
   case SubscriptionTypes.ChannelChatClearUserMessages : {
 
-    setNotificationType<SubscriptionTypes.ChannelChatClearUserMessages>(notification);
-
-    const payload = notification.payload;
+    setPayloadType<SubscriptionTypes.ChannelChatClearUserMessages>(payload);
 
     const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelChatClearUserMessages>(payload.subscription.id);
 
@@ -108,4 +95,5 @@ export function notificationHandler(connection: EventSubConnection, notification
 
 }
 
-function setNotificationType<T extends SubscriptionTypes>(notification: BaseNotification): asserts notification is BaseNotification<T> {}
+function setPayloadType<T extends SubscriptionTypes>(notification: BasePayload): asserts notification is BasePayload<T> {}
+

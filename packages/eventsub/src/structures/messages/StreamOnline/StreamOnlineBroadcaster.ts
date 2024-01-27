@@ -1,12 +1,12 @@
 import { BaseBroadcaster } from '../BaseBroadcaster';
-import { EventSubConnection } from '../../EventSubConnection';
 import { Subscription } from '../../Subscription';
 import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
+import { ConnectionTypes } from '../../../types/ConnectionTypes';
 
 
-export class StreamOnlineBroadcaster extends BaseBroadcaster<SubscriptionTypes.StreamOnline>{
+export class StreamOnlineBroadcaster<K extends ConnectionTypes = ConnectionTypes> extends BaseBroadcaster<SubscriptionTypes.StreamOnline, K>{
 
-  public constructor(connection: EventSubConnection, subscription: Subscription<SubscriptionTypes.StreamOnline>, id: string, login: string, displayName: string){
+  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.StreamOnline, K>, id: string, login: string, displayName: string){
         
     super(connection, subscription, id, login, displayName);
   }

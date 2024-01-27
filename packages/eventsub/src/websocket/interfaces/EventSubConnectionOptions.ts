@@ -1,4 +1,4 @@
-import { HelixOptions } from './HelixOptions';
+import { HelixOptions } from '../../interfaces/HelixOptions';
 
 export interface EventSubConnectionOptions { 
     clientID: string

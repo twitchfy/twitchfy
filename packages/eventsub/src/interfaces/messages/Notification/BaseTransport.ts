@@ -1,4 +1,8 @@
 export interface BaseTransport {
-    method: 'websocket'
-    session_id: string
+    method: 'websocket' | 'webhook'
+    session_id?: string
+    callback?: string
+    secret?: string
+    connected_at?: string
+    disconnected_at?: string
 }

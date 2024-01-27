@@ -2,24 +2,24 @@
 
 import { EventEmitter } from 'node:events';
 import { EventSubEvents } from '../interfaces/EventSubEvents';
+import { ConnectionTypes } from '../types/ConnectionTypes';
 
-export class EventSubEventEmitter extends EventEmitter{
+export type FixArray<T> = T extends [...infer X] ? X[] : any[];
 
-  override on: (<K extends keyof EventSubEvents>(event: K, listener: (...args: EventSubEvents[K]) => void) => this) &
-            (<S extends string | symbol>(event: Exclude<S, keyof EventSubEvents>, listener: (...args: any[]) => Promise<void> | void) => this);
-  override emit: (<K extends keyof EventSubEvents>(event: K, ...args: EventSubEvents[K]) => boolean) &
-            (<S extends string | symbol>(event: Exclude<S, keyof EventSubEvents>, ...args: any[]) => boolean);
-
-  override off: (<K extends keyof EventSubEvents>(event: K, listener: (...args: EventSubEvents[K]) => void) => this) &
-            (<S extends string | symbol>(event: Exclude<S, keyof EventSubEvents>, listener: (...args: any[]) => Promise<void> | void) => this);
-
-  override once: (<K extends keyof EventSubEvents>(event: K, listener: (...args: EventSubEvents[K]) => void) => this) &
-            (<S extends string | symbol>(event: Exclude<S, keyof EventSubEvents>, listener: (...args: any[]) => Promise<void> | void) => this);
-
-  override removeAllListeners: (<K extends keyof EventSubEvents>(event?: K) => this) &
-            (<S extends string | symbol>(event?: Exclude<S, keyof EventSubEvents>) => this);
-
-  public constructor(){
+export class EventSubEventEmitter<T extends ConnectionTypes = ConnectionTypes> extends EventEmitter {
+  public constructor() {
     super();
+  }
+
+  override on<K extends keyof EventSubEvents<T>>(event: K, listener: EventSubEvents<T>[K]): this {
+
+    return super.on(event, listener);
+
+  }
+
+  override emit<K extends keyof EventSubEvents<T>>(event: K, ...args: Parameters<EventSubEvents[K]>): boolean {
+
+    return super.emit(event, ...args);
+
   }
 }

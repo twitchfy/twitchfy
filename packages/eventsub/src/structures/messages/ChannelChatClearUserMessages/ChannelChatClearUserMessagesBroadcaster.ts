@@ -1,12 +1,12 @@
 import { BaseBroadcaster } from '../BaseBroadcaster';
-import { EventSubConnection } from '../../EventSubConnection';
 import { Subscription } from '../../Subscription';
 import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
+import { ConnectionTypes } from '../../../types/ConnectionTypes';
 
 
-export class ChannelChatClearUserMessagesBroadcaster extends BaseBroadcaster<SubscriptionTypes.ChannelChatClearUserMessages> {
+export class ChannelChatClearUserMessagesBroadcaster<K extends ConnectionTypes = ConnectionTypes> extends BaseBroadcaster<SubscriptionTypes.ChannelChatClearUserMessages, K> {
 
-  public constructor(connection: EventSubConnection, subscription: Subscription<SubscriptionTypes.ChannelChatClearUserMessages>, id: string, login: string, displayName: string){
+  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.ChannelChatClearUserMessages, K>, id: string, login: string, displayName: string){
 
     super(connection, subscription, id, login, displayName);
 

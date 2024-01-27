@@ -1,14 +1,15 @@
 import { PostEventSubscriptions } from '@twitchapi/api-types';
 import { SubscriptionCallbackManager } from './SubscriptionCallbackManager';
-import { EventSubConnection } from './EventSubConnection';
 import { SubscriptionTypes } from '../enums/SubscriptionTypes';
 import { SubscriptionTypeOptions } from '../interfaces/SubscriptionTypeOptions';
 import { SubscriptionOptions } from '../interfaces/SubscriptionOptions';
 import { SubscriptionCallback } from '../types/SubscriptionCallback';
+import { ConnectionTypes } from '../types/ConnectionTypes';
+import { WebhookConnection } from '../webhook/structures/WebhookConnection';
 
-export class Subscription<T extends SubscriptionTypes = SubscriptionTypes> {
+export class Subscription<T extends SubscriptionTypes = SubscriptionTypes, K extends ConnectionTypes = ConnectionTypes> {
 
-  public connection: EventSubConnection;
+  public connection: K;
 
   public auth: string;
 
@@ -26,13 +27,15 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes> {
 
   public createdAt: Date;
 
-  public readonly callbacks: SubscriptionCallbackManager<T>;
+  public readonly secret: K extends WebhookConnection ? string: never;
+
+  public readonly callbacks: SubscriptionCallbackManager<T, K>;
 
 
-  public constructor(connection: EventSubConnection, options: SubscriptionOptions<T> , data: PostEventSubscriptions){
+  public constructor(connection: K, options: SubscriptionOptions<T> , data: PostEventSubscriptions, secret?: K extends WebhookConnection ? string : never){
 
     this.connection = connection;
-    this.auth = options.auth ?? connection.auth;
+    this.auth = options.auth ?? connection?.auth;
     this.type = options.type;
     this.id = data.id;
     this.nonce = options.nonce;
@@ -40,18 +43,19 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes> {
     this.version = data.version;
     this.options = data.condition as SubscriptionTypeOptions[T];
     this.createdAt = new Date(data.created_at);
+    this.secret = secret;
     this.callbacks = new SubscriptionCallbackManager(connection, this);
 
   }
 
 
-  public onMessage(callback: SubscriptionCallback<T>){
+  public onMessage(callback: SubscriptionCallback<T, K>){
 
     this.callbacks.add(callback);
 
   }
 
-  public checkSubscriptionType<U extends T>(type: U): this is Subscription<U> {
+  public checkSubscriptionType<U extends T>(type: U): this is Subscription<U, K> {
     return this.type === type;
   }
 
