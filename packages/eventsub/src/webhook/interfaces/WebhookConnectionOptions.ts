@@ -7,4 +7,5 @@ export interface WebhookConnectionOptions {
     helix?: HelixOptions
     subscriptionRoute?: string
     startServer?: boolean
+    mantainSubscriptions?: boolean
 }
