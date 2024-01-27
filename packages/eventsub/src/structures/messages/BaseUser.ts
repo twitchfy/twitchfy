@@ -1,9 +1,9 @@
 import { Base } from './Base';
-import { EventSubConnection } from '../EventSubConnection';
 import { Subscription } from '../Subscription';
 import { SubscriptionTypes } from '../../enums/SubscriptionTypes';
+import { ConnectionTypes } from '../../types/ConnectionTypes';
 
-export class BaseUser<T extends SubscriptionTypes> extends Base<T> {
+export class BaseUser<T extends SubscriptionTypes, K extends ConnectionTypes = ConnectionTypes> extends Base<T, K> {
 
   public id: string;
 
@@ -11,7 +11,7 @@ export class BaseUser<T extends SubscriptionTypes> extends Base<T> {
 
   public displayName: string;
 
-  public constructor(connection: EventSubConnection, subscription: Subscription<T>, id: string, login: string, displayName: string){
+  public constructor(connection: K, subscription: Subscription<T, K>, id: string, login: string, displayName: string){
 
     super(connection, subscription);
 

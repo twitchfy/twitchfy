@@ -2,24 +2,24 @@ import { ChannelUpdateBroadcaster } from './ChannelUpdateBroadcaster';
 import { ChannelUpdateCategory } from './ChannelUpdateCategory';
 import { Base } from '../Base';
 import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { EventSubConnection } from '../../../structures/EventSubConnection';
 import { Subscription } from '../../../structures/Subscription';
 import { ChannelUpdateEvent } from '../../../interfaces/messages/Notification/events/ChannelUpdate/ChannelUpdateEvent';
+import { ConnectionTypes } from '../../../types/ConnectionTypes';
 
 
-export class ChannelUpdateMessage extends Base<SubscriptionTypes.ChannelUpdate>{
+export class ChannelUpdateMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelUpdate, K>{
 
-  public broadcaster: ChannelUpdateBroadcaster;
+  public broadcaster: ChannelUpdateBroadcaster<K>;
 
   public title: string;
 
   public language: string;
 
-  public category: ChannelUpdateCategory;
+  public category: ChannelUpdateCategory<K>;
 
   public labels: string;
 
-  public constructor(connection: EventSubConnection, subscription: Subscription<SubscriptionTypes.ChannelUpdate>, data: ChannelUpdateEvent){
+  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.ChannelUpdate, K>, data: ChannelUpdateEvent){
 
     super(connection, subscription);
 

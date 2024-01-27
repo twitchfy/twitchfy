@@ -1,18 +1,18 @@
 import { ChannelChatClearUserMessagesBroadcaster } from './ChannelChatClearUserMessagesBroadcaster';
 import { ChannelChatClearUserMessagesUser } from './ChannelChatClearUserMessagesUser';
 import { Base } from '../Base';
-import { EventSubConnection } from '../../EventSubConnection';
 import { Subscription } from '../../Subscription';
 import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
 import { ChannelChatClearUserMessagesEvent } from '../../../interfaces/messages/Notification/events/ChannelChatClearUserMessages/ChannelChatClearUserMessagesEvent';
+import { ConnectionTypes } from '../../../types/ConnectionTypes';
 
-export class ChannelChatClearUserMessagesMessage extends Base<SubscriptionTypes.ChannelChatClearUserMessages> {
+export class ChannelChatClearUserMessagesMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelChatClearUserMessages, K> {
 
-  public broadcaster: ChannelChatClearUserMessagesBroadcaster;
+  public broadcaster: ChannelChatClearUserMessagesBroadcaster<K>;
     
-  public user: ChannelChatClearUserMessagesUser;
+  public user: ChannelChatClearUserMessagesUser<K>;
 
-  public constructor(connection: EventSubConnection, subscription: Subscription<SubscriptionTypes.ChannelChatClearUserMessages>, data: ChannelChatClearUserMessagesEvent){
+  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.ChannelChatClearUserMessages, K>, data: ChannelChatClearUserMessagesEvent){
 
     super(connection, subscription);
 
