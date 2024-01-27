@@ -2,6 +2,7 @@ import { Express, urlencoded, json } from 'express';
 import { parseRoute } from './parseRoute';
 import { verifySignature } from './verifySignature';
 import { WebhookConnection } from '../structures/WebhookConnection';
+import { Body } from '../interfaces/Body';
 
 export function makeMiddlewares(connection: WebhookConnection, server: Express){
   
@@ -9,28 +10,27 @@ export function makeMiddlewares(connection: WebhookConnection, server: Express){
   server.use(json());
 
 
-  server.use(`${parseRoute(connection.subscriptionRoute)}/:id`, (req, res, next) => {
+  server.post(`${parseRoute(connection.subscriptionRoute)}`, (req, res, next) => {
 
-    if(!req.headers['twitch-eventsub-message-signature']) return next();
+    if(!req.headers['twitch-eventsub-message-signature']) return res.sendStatus(401);
 
-    if(req.method !== 'POST') return next();
+    const body = req.body as Body;
 
-    const { id } = req.params;
+    const subscription = connection.subscriptions.get(body.subscription.id);
 
-    const body = req.body;
-
-    const subscription = connection.subscriptions.get(id);
-
-    if(!subscription) return next();
+    if(!subscription) return res.sendStatus(401);
 
     if(!verifySignature(req, subscription.secret)) return res.sendStatus(401);
 
     if(req.headers['twitch-eventsub-message-type'] === 'webhook_callback_verification'){
-      res.set('Content-Type', 'text/plain').status(200).send(body.challenge as { challenge: string });
+
+      res.set('Content-Type', 'text/plain').status(200).send((body as Body<'webhook_callback_verification'>).challenge);
 
       subscription.status = 'enabled';
 
       connection.subscriptions.set(subscription.id, subscription);
+
+      return;
     }
 
     res.locals.webhookConnection = connection;

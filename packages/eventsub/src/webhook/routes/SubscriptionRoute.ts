@@ -6,7 +6,7 @@ import { notificationHandler } from '../../util/notificationHandler';
 
 const router = Router();
 
-router.post('/:id', (req: Request, res) => {
+router.post('/', (req: Request, res) => {
 
   const connection = res.locals.webhookConnection;
 
