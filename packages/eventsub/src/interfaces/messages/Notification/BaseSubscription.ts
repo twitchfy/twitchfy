@@ -1,5 +1,5 @@
 import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { SubscriptionVersions } from '../../../interfaces/SubscriptionVersions';
+import { SubscriptionVersions } from '../../SubscriptionVersions';
 import { SubscriptionTypeOptions } from '../../../interfaces/SubscriptionTypeOptions';
 import { BaseTransport } from './BaseTransport';
 
