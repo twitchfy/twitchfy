@@ -1,3 +1,5 @@
+import { Pagination } from './Pagination';
+
 export interface PostEventSubscriptions {
     id: string
     status: string
@@ -12,6 +14,14 @@ export interface PostEventSubscriptions {
 export interface PostEventSubscriptionsResponse {
     data: PostEventSubscriptions[]
     total: number
+    total_cost: number
+    max_total_cost: number
+}
+
+export interface GetEventSubscriptions {
+    data: PostEventSubscriptions[]
+    total: number
+    pagination: Pagination
     total_cost: number
     max_total_cost: number
 }
