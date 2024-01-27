@@ -10,6 +10,7 @@ import { handlePagination } from './utils/HandlePagination';
 import { SubscriptionOptions } from './interfaces/SubscriptionOptions';
 import { HelixClientOptions } from './interfaces/HelixClientOptions';
 import { RequestOptions } from './interfaces/RequestOptions';
+import { GetSubscriptionFilter } from './interfaces/GetSubscriptionsFilter';
 
 
 
@@ -149,7 +150,7 @@ export class BaseClient {
 
   public async getChatters(broadcaster_id: string, moderator_id: string, userToken?: string, requestOptions?: RequestOptions) : Promise<Chatter[]>{
 
-    return await handlePagination(this, '/chat/chatters', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, 'GET', userToken, requestOptions);
+    return await handlePagination(this, '/chat/chatters', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, 'GET', userToken, requestOptions) as Chatter[];
   }
 
   public async getChannelFollowerCount(broadcaster_id: string, userToken?: string, requestOptions?: RequestOptions): Promise<number> {
@@ -162,7 +163,7 @@ export class BaseClient {
 
   public async getChannelFollowers(broadcaster_id: string, userToken?: string, requestOptions?: RequestOptions): Promise<GetFollowers[]>{
 
-    return await handlePagination(this, '/channels/followers', `broadcaster_id=${broadcaster_id}&first=100`, 'GET', userToken, requestOptions);
+    return await handlePagination(this, '/channels/followers', `broadcaster_id=${broadcaster_id}&first=100`, 'GET', userToken, requestOptions) as GetFollowers[];
 
   }
 
@@ -209,6 +210,12 @@ export class BaseClient {
   public async deleteSubscription(id: string, userToken?: string, requestOptions?: RequestOptions) : Promise<void>{
 
     await this.requestManager.deleteWithUserToken('/eventsub/subscriptions', `id=${id}`, userToken, requestOptions);
+
+  }
+
+  public async getSubscriptions(filter?: GetSubscriptionFilter, userToken?: string, requestOptions?: RequestOptions){
+
+    return await handlePagination(this, '/eventsub/subscriptions', `${filter ? filter.status ? `status=${filter.status}` : filter.type ? `type=${filter.type}` : `user_id=${filter.user_id}` : ''}`, 'GET', userToken, requestOptions) as PostEventSubscriptions[]; 
 
   }
 
