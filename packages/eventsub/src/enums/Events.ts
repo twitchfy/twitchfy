@@ -1,5 +1,5 @@
 export enum Events {
-   ConnectionReady = 'connectionReady',
-   SubscriptionCreate = 'subscriptionCreate',
-   SubscriptionMessage = 'subscriptionMessage'
+    ConnectionReady = 'connectionReady',
+    SubscriptionCreate = 'subscriptionCreate',
+    SubscriptionMessage = 'subscriptionMessage'
 }
