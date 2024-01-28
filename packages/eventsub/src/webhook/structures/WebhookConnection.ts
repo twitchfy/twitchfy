@@ -128,6 +128,8 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
     if(this.mantainSubscriptions) {
 
       for(const data of subscriptions){
+
+        if((data.transport as { callback: string }).callback !== this.baseURL + this.subscriptionRoute) continue;
       
         const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, { type: data.type as SubscriptionTypes, auth: this.auth, options: data.condition as any }, data);
 
