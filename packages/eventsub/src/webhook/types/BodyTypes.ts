@@ -1,0 +1,1 @@
+export type BodyTypes = 'notification' | 'webhook_callback_verification' | 'revocation'
