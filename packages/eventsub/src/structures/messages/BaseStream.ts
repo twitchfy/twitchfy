@@ -1,8 +1,6 @@
-import { Base } from './Base';
-import { Subscription } from '../Subscription';
-import { SubscriptionTypes } from '../../enums/SubscriptionTypes';
-import { StreamTypes } from '../../types/StreamTypes';
-import { ConnectionTypes } from '../../types/ConnectionTypes';
+import { Base, Subscription } from '..';
+import { SubscriptionTypes } from '../../enums';
+import { StreamTypes, ConnectionTypes } from '../../types';
 
 export class BaseStream<T extends SubscriptionTypes, K extends ConnectionTypes = ConnectionTypes> extends Base<T, K> {
 

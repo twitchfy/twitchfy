@@ -1,4 +1,4 @@
-import { BaseNotification } from '../interfaces/messages/Notification/BaseNotification';
-import { WelcomeMessage } from '../websocket/interfaces/messages/Welcome/WelcomeMessage';
+import { BaseNotification } from '../interfaces';
+import { WelcomeMessage } from '../ws';
 
 export type Message = WelcomeMessage | BaseNotification;

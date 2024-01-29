@@ -1,7 +1,6 @@
-import { BaseRequester } from '../BaseRequester';
-import { Subscription } from '../../Subscription';
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { ConnectionTypes } from '../../../types/ConnectionTypes';
+import { BaseRequester, Subscription } from '../..';
+import { SubscriptionTypes } from '../../../enums';
+import { ConnectionTypes } from '../../../types';
 
 export class ChannelAdBreakBeginRequester<K extends ConnectionTypes = ConnectionTypes> extends BaseRequester<SubscriptionTypes.ChannelAdBreakBegin, K> {
 

@@ -1,8 +1,6 @@
-import { BaseStream } from '../BaseStream';
-import { Subscription } from '../../Subscription';
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { StreamTypes } from '../../../types/StreamTypes';
-import { ConnectionTypes } from '../../../types/ConnectionTypes';
+import { BaseStream, Subscription } from '../..';
+import { SubscriptionTypes } from '../../../enums';
+import { StreamTypes, ConnectionTypes } from '../../../types';
 
 export class StreamOnlineStream<K extends ConnectionTypes = ConnectionTypes> extends BaseStream<SubscriptionTypes.StreamOnline, K>{
 

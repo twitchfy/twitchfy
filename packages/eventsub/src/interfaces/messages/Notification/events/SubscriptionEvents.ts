@@ -1,10 +1,5 @@
-import { ChannelUpdateEvent } from './ChannelUpdate/ChannelUpdateEvent';
-import { ChannelFollowEvent } from './ChannelFollow/ChannelFollowEvent';
-import { ChannelChatClearEvent } from './ChannelChatClear/ChannelChatClearEvent';
-import { StreamOnlineEvent } from './StreamOnline/StreamOnlineEvent';
-import { ChannelAdBreakBeginEvent } from './ChannelAdBreakBegin/ChannelAdBreakBeginEvent';
-import { ChannelChatClearUserMessagesEvent } from './ChannelChatClearUserMessages/ChannelChatClearUserMessagesEvent';
-import { SubscriptionTypes } from '../../../../enums/SubscriptionTypes';
+import { ChannelUpdateEvent, ChannelFollowEvent, ChannelChatClearEvent, ChannelAdBreakBeginEvent, ChannelChatClearUserMessagesEvent, StreamOnlineEvent } from '.';
+import { SubscriptionTypes } from '../../../../enums';
 
 export interface SubscriptionEvents {
     [SubscriptionTypes.ChannelFollow]: ChannelFollowEvent;

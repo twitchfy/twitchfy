@@ -1,6 +1,6 @@
 import { client, connection } from 'websocket';
-import { EventSubConnection } from './EventSubConnection';
-import { messageHandler } from '../util/messageHandler';
+import { EventSubConnection } from '.';
+import { messageHandler } from '../util';
 
 export class EventSubWebsocket extends client {
 

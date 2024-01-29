@@ -1,4 +1,4 @@
-export const SubscriptionVersions = {
+export const SubscriptionVersionsObject = {
   'channel.update': '2',
   'channel.follow': '2',
   'channel.chat.clear': '1',

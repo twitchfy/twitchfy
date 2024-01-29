@@ -3,20 +3,13 @@
 
 import { Express } from 'express';
 import { HelixClient } from '@twitchapi/helix';
-import { WebhookConnectionOptions } from '../interfaces/WebhookConnectionOptions';
-import { makeMiddlewares } from '../util/makeMiddlewares';
-import { generateSecret } from '../util/generateSecret';
-import { parseRoute } from '../util/parseRoute';
-import SubscriptionRouter from '../routes/SubscriptionRoute';
-import { Client } from '../../structures/Client';
-import { SubscriptionCollection } from '../../structures/SubscriptionCollection';
-import { EventSubEventEmitter } from '../../structures/EventSubEventEmitter';
-import { Subscription } from '../../structures/Subscription';
-import { SubscriptionTypes } from '../../enums/SubscriptionTypes';
-import { Events } from '../../enums/Events';
-import { SubscriptionOptions } from '../../interfaces/SubscriptionOptions';
-import { SubscriptionOptionsIndex } from '../../interfaces/SubscriptionOptionsIndex';
-import { SubscriptionVersions } from '../../util/SubscriptionVersions';
+import { WebhookConnectionOptions } from '../interfaces';
+import { makeMiddlewares, generateSecret, parseRoute } from '../util';
+import { SubscriptionRouter } from '../routes';
+import { Client, SubscriptionCollection, EventSubEventEmitter, Subscription } from '../../structures';
+import { SubscriptionTypes, Events } from '../../enums';
+import { SubscriptionOptions, SubscriptionOptionsIndex } from '../../interfaces';
+import { SubscriptionVersionsObject } from '../../util';
 import { PostEventSubscriptions } from '@twitchapi/api-types';
 
 
@@ -75,7 +68,7 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
     const secret = generateSecret();
  
-    const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersions[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret }, condition: subscriptionOptions }, auth, { useTokenType: 'app' });
+    const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret }, condition: subscriptionOptions }, auth, { useTokenType: 'app' });
 
     const subscription = new Subscription<T, WebhookConnection>(this, options, data, secret);
 
@@ -98,7 +91,7 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
       const secret = generateSecret();
  
-      const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersions[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret }, condition: subscriptionOptions }, auth , { useTokenType: 'app' });
+      const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret }, condition: subscriptionOptions }, auth , { useTokenType: 'app' });
 
       const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, sub, data, secret);
 

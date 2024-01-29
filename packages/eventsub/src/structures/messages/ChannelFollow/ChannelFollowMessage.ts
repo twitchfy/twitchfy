@@ -1,10 +1,7 @@
-import { ChannelFollowUser } from './ChannelFollowUser';
-import { ChannelFollowBroadcaster } from './ChannelFollowBroadcaster';
-import { Base } from '../Base';
-import { Subscription } from '../../Subscription';
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { ChannelFollowEvent } from '../../../interfaces/messages/Notification/events/ChannelFollow/ChannelFollowEvent';
-import { ConnectionTypes } from '../../../types/ConnectionTypes';
+import { ChannelFollowUser, ChannelFollowBroadcaster, Base, Subscription } from '../..';
+import { SubscriptionTypes } from '../../../enums';
+import { ChannelFollowEvent } from '../../../interfaces';
+import { ConnectionTypes } from '../../../types';
 
 export class ChannelFollowMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelFollow, K>{
 

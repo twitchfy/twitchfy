@@ -1,10 +1,7 @@
-import { StreamOnlineStream } from './StreamOnlineStream';
-import { StreamOnlineBroadcaster } from './StreamOnlineBroadcaster';
-import { Base } from '../Base';
-import { Subscription } from '../../Subscription';
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { StreamOnlineEvent } from '../../../interfaces/messages/Notification/events/StreamOnline/StreamOnlineEvent';
-import { ConnectionTypes } from '../../../types/ConnectionTypes';
+import { StreamOnlineStream, StreamOnlineBroadcaster, Base, Subscription } from '../..';
+import { SubscriptionTypes } from '../../../enums';
+import { StreamOnlineEvent } from '../../../interfaces';
+import { ConnectionTypes } from '../../../types';
 
 
 export class StreamOnlineMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.StreamOnline, K>{

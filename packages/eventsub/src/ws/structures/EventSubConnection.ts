@@ -1,15 +1,10 @@
 import { HelixClient } from '@twitchapi/helix';
-import { Client } from '../../structures/Client';
-import { EventSubWebsocket } from './EventSubWebsocket';
-import { Subscription } from '../../structures/Subscription';
-import { SubscriptionCollection } from '../../structures/SubscriptionCollection';
-import { EventSubEventEmitter } from '../../structures/EventSubEventEmitter';
-import { SubscriptionTypes } from '../../enums/SubscriptionTypes';
-import { Events } from '../../enums/Events';
-import { EventSubConnectionOptions } from '../interfaces/EventSubConnectionOptions';
-import { SubscriptionOptions } from '../../interfaces/SubscriptionOptions';
-import { SubscriptionOptionsIndex } from '../../interfaces/SubscriptionOptionsIndex';
-import { SubscriptionVersions } from '../../util/SubscriptionVersions';
+import { EventSubWebsocket } from '.';
+import { Client, Subscription, SubscriptionCollection, EventSubEventEmitter } from '../../structures';
+import { SubscriptionTypes, Events } from '../../enums';
+import { EventSubConnectionOptions } from '../interfaces';
+import { SubscriptionOptions, SubscriptionOptionsIndex } from '../../interfaces';
+import { SubscriptionVersionsObject } from '../../util';
 
 
 export class EventSubConnection extends EventSubEventEmitter<EventSubConnection>{
@@ -63,7 +58,7 @@ export class EventSubConnection extends EventSubEventEmitter<EventSubConnection>
 
     const { type, options: subscriptionOptions, auth } = options;
  
-    const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersions[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions }, auth);
+    const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions }, auth);
 
     const subscription = new Subscription<T, EventSubConnection>(this, options, data);
 
@@ -84,7 +79,7 @@ export class EventSubConnection extends EventSubEventEmitter<EventSubConnection>
       
       const { type, options: subscriptionOptions, auth } = sub;
  
-      const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersions[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions }, auth);
+      const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions }, auth);
 
       const subscription = new Subscription<SubscriptionTypes, EventSubConnection>(this, sub, data);
 

@@ -1,5 +1,5 @@
-import { SubscriptionTypes } from '../enums/SubscriptionTypes';
-import { SubscriptionTypeOptions } from './SubscriptionTypeOptions';
+import { SubscriptionTypeOptions } from '.';
+import { SubscriptionTypes } from '../enums';
 
 export interface SubscriptionOptions<T extends SubscriptionTypes = SubscriptionTypes> {
     type: T

@@ -1,7 +1,7 @@
-import { SubscriptionMessage } from '../../types/SubscriptionMessage';
-import { WebhookConnection } from '../structures/WebhookConnection';
-import { Subscription } from '../../structures/Subscription';
-import { SubscriptionTypes } from '../../enums/SubscriptionTypes';
+import { SubscriptionMessage } from '../../types/';
+import { WebhookConnection } from '../structures';
+import { Subscription } from '../../structures';
+import { SubscriptionTypes } from '../../enums';
 
 export interface WebsocketEventSubEvents {
     connectionReady: [connection: WebhookConnection],

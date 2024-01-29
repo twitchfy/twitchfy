@@ -1,12 +1,12 @@
 import { Router, Request } from 'express';
-import { BasePayload } from '../../interfaces/messages/Notification/BasePayload';
-import { SubscriptionTypes } from '../../enums/SubscriptionTypes';
-import { notificationHandler } from '../../util/notificationHandler';
+import { BasePayload } from '../../interfaces';
+import { SubscriptionTypes } from '../../enums';
+import { notificationHandler } from '../../util';
 
 
-const router = Router();
+export const SubscriptionRouter = Router();
 
-router.post('/', (req: Request, res) => {
+SubscriptionRouter.post('/', (req: Request, res) => {
 
   const connection = res.locals.webhookConnection;
 
@@ -25,7 +25,6 @@ router.post('/', (req: Request, res) => {
 
 });
 
-export default router;
 
 declare module 'http' {
     interface IncomingHttpHeaders {

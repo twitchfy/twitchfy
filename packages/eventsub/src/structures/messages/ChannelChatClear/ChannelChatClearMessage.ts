@@ -1,9 +1,7 @@
-import { ChannelChatClearBroadcaster } from './ChannelChatClearBroadcaster';
-import { Base } from '../Base';
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { Subscription } from '../../../structures/Subscription';
-import { ChannelChatClearEvent } from '../../../interfaces/messages/Notification/events/ChannelChatClear/ChannelChatClearEvent';
-import { ConnectionTypes } from '../../../types/ConnectionTypes';
+import { ChannelChatClearBroadcaster, Base, Subscription } from '../..';
+import { SubscriptionTypes } from '../../../enums';
+import { ChannelChatClearEvent } from '../../../interfaces';
+import { ConnectionTypes } from '../../../types';
 
 export class ChannelChatClearMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelChatClear, K>{
 
