@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { EventEmitter } from 'node:events';
-import { WebsocketEventSubEvents } from '../interfaces/WebhookEventSubEvents';
+import { WebsocketEventSubEvents } from '../interfaces';
 
 export class WebhookEventSubEventEmitter extends EventEmitter{
 

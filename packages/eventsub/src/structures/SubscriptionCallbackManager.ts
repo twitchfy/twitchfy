@@ -1,9 +1,7 @@
-import { Subscription } from './Subscription';
-import { SubscriptionMessages } from '../interfaces/SubscriptionMessages';
-import { SubscriptionTypes } from '../enums/SubscriptionTypes';
-import { Events } from '../enums/Events';
-import { SubscriptionCallback } from '../types/SubscriptionCallback';
-import { ConnectionTypes } from '../types/ConnectionTypes';
+import { Subscription } from '.';
+import { SubscriptionMessages } from '../interfaces';
+import { SubscriptionTypes, Events } from '../enums';
+import { SubscriptionCallback, ConnectionTypes } from '../types';
 
 
 export class SubscriptionCallbackManager<T extends SubscriptionTypes, K extends ConnectionTypes = ConnectionTypes> {

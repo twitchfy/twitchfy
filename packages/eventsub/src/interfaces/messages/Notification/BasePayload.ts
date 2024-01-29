@@ -1,6 +1,5 @@
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { SubscriptionEvents } from './events/SubscriptionEvents';
-import { BaseSubscription } from './BaseSubscription';
+import { BaseSubscription, SubscriptionEvents } from '.';
+import { SubscriptionTypes } from '../../../enums';
 
 export interface BasePayload<T extends SubscriptionTypes = SubscriptionTypes> {
     subscription: BaseSubscription<T>

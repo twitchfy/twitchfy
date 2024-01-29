@@ -1,7 +1,6 @@
-import { SubscriptionMessage } from '../types/SubscriptionMessage';
-import { ConnectionTypes } from '../types/ConnectionTypes';
-import { Subscription } from '../structures/Subscription';
-import { SubscriptionTypes } from '../enums/SubscriptionTypes';
+import { SubscriptionMessage, ConnectionTypes } from '../types';
+import { Subscription } from '../structures';
+import { SubscriptionTypes } from '../enums';
 
 export interface EventSubEvents<K extends ConnectionTypes = ConnectionTypes> {
     connectionReady: (...args: [connection: K]) => void,

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Subscription } from './Subscription';
-import { SubscriptionTypes } from '../enums/SubscriptionTypes';
-import { ConnectionTypes } from '../types/ConnectionTypes';
+import { Subscription } from '.';
+import { SubscriptionTypes } from '../enums';
+import { ConnectionTypes } from '../types';
 
 
 export class SubscriptionCollection<K extends ConnectionTypes = ConnectionTypes, T extends SubscriptionTypes = SubscriptionTypes> extends Map<string, Subscription<T, K>> {

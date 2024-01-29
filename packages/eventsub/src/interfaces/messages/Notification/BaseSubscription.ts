@@ -1,7 +1,6 @@
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { SubscriptionVersions } from '../../SubscriptionVersions';
-import { SubscriptionTypeOptions } from '../../../interfaces/SubscriptionTypeOptions';
-import { BaseTransport } from './BaseTransport';
+import { BaseTransport } from '.';
+import { SubscriptionVersions, SubscriptionTypeOptions } from '../..';
+import { SubscriptionTypes } from '../../../enums/';
 
 export interface BaseSubscription<T extends SubscriptionTypes> {
 

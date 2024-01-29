@@ -1,10 +1,10 @@
 import { Message as WSMessage } from 'websocket';
-import { notificationHandler } from '../../util/notificationHandler';
-import { Message } from '../../types/Message';
-import { EventSubWebsocket } from '../structures/EventSubWebsocket';
-import { WelcomeMessage } from '../interfaces/messages/Welcome/WelcomeMessage';
-import { BaseNotification } from '../../interfaces/messages/Notification/BaseNotification';
-import { Events } from '../../enums/Events';
+import { notificationHandler } from '../../util';
+import { Message } from '../../types';
+import { EventSubWebsocket } from '../structures';
+import { WelcomeMessage } from '../interfaces';
+import { BaseNotification } from '../../interfaces';
+import { Events } from '../../enums';
 
 export function messageHandler(websocket: EventSubWebsocket, message: WSMessage) {
 

@@ -1,10 +1,7 @@
-import { ChannelUpdateBroadcaster } from './ChannelUpdateBroadcaster';
-import { ChannelUpdateCategory } from './ChannelUpdateCategory';
-import { Base } from '../Base';
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { Subscription } from '../../../structures/Subscription';
-import { ChannelUpdateEvent } from '../../../interfaces/messages/Notification/events/ChannelUpdate/ChannelUpdateEvent';
-import { ConnectionTypes } from '../../../types/ConnectionTypes';
+import { ChannelUpdateBroadcaster, ChannelUpdateCategory, Base, Subscription } from '../..';
+import { SubscriptionTypes } from '../../../enums';
+import { ChannelUpdateEvent } from '../../../interfaces';
+import { ConnectionTypes } from '../../../types';
 
 
 export class ChannelUpdateMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelUpdate, K>{

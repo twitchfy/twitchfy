@@ -1,4 +1,4 @@
-import { WebhookConnection } from '../webhook/structures/WebhookConnection';
-import { EventSubConnection } from '../websocket/structures/EventSubConnection';
+import { WebhookConnection } from '../webhook';
+import { EventSubConnection } from '../ws';
 
-export type ConnectionTypes = EventSubConnection | WebhookConnection
+export type ConnectionTypes = EventSubConnection | WebhookConnection;

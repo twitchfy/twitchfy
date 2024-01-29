@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { EventEmitter } from 'node:events';
-import { EventSubEvents } from '../interfaces/EventSubEvents';
-import { ConnectionTypes } from '../types/ConnectionTypes';
+import { EventSubEvents } from '../interfaces';
+import { ConnectionTypes } from '../types';
 
 export type FixArray<T> = T extends [...infer X] ? X[] : any[];
 

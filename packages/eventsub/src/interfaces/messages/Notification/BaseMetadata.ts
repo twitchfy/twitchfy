@@ -1,5 +1,5 @@
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { SubscriptionVersions } from '../../../interfaces/SubscriptionVersions';
+import { SubscriptionTypes } from '../../../enums';
+import { SubscriptionVersions } from '../..';
 
 export interface BaseMetadata<T extends SubscriptionTypes>{
 

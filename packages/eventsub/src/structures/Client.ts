@@ -1,8 +1,6 @@
 import { Express } from 'express';
-import { EventSubConnection } from '../websocket/structures/EventSubConnection';
-import { EventSubConnectionOptions } from '../websocket/interfaces/EventSubConnectionOptions';
-import { WebhookConnectionOptions } from '../webhook/interfaces/WebhookConnectionOptions';
-import { WebhookConnection } from '../webhook/structures/WebhookConnection';
+import { EventSubConnection, EventSubConnectionOptions } from '../ws';
+import { WebhookConnectionOptions, WebhookConnection } from '../webhook';
 
 export class Client {
 

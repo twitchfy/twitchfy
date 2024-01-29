@@ -1,7 +1,6 @@
-import { BaseBroadcaster } from '../BaseBroadcaster';
-import { Subscription } from '../../Subscription';
-import { SubscriptionTypes } from '../../../enums/SubscriptionTypes';
-import { ConnectionTypes } from '../../../types/ConnectionTypes';
+import { BaseBroadcaster, Subscription } from '../..';
+import { SubscriptionTypes } from '../../../enums';
+import { ConnectionTypes } from '../../../types';
 
 
 export class StreamOnlineBroadcaster<K extends ConnectionTypes = ConnectionTypes> extends BaseBroadcaster<SubscriptionTypes.StreamOnline, K>{
