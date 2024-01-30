@@ -5,5 +5,5 @@ import type { SubscriptionTypes } from '../enums';
 export interface EventSubEvents<K extends ConnectionTypes = ConnectionTypes> {
     connectionReady: (...args: [connection: K]) => void,
     subscriptionCreate: (...args: [subscription: Subscription<SubscriptionTypes, K>]) => void,
-    subscriptionMessage: (...args: [message: SubscriptionMessage, subscription: Subscription<SubscriptionTypes, K>]) => void
+    subscriptionMessage: (...args: [message: SubscriptionMessage<K>, subscription: Subscription<SubscriptionTypes, K>]) => void
 }
