@@ -1,7 +1,10 @@
-import { ChannelAdBreakBeginBroadcaster, ChannelAdBreakBeginRequester, Base, Subscription } from '../..';
-import { ChannelAdBreakBeginEvent } from '../../../interfaces';
-import { SubscriptionTypes } from '../../../enums';
-import { ConnectionTypes } from '../../../types';
+import { ChannelAdBreakBeginBroadcaster } from './ChannelAdBreakBeginBroadcaster';
+import { ChannelAdBreakBeginRequester } from './ChannelAdBreakBeginRequester'; 
+import {  Base } from '../Base';
+import type { Subscription } from '../../Subscription';
+import type { ChannelAdBreakBeginEvent } from '../../../interfaces';
+import type { SubscriptionTypes } from '../../../enums';
+import type { ConnectionTypes } from '../../../types';
 
 export class ChannelAdBreakBeginMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelAdBreakBegin, K> {
    

@@ -1,5 +1,5 @@
-import { WelcomeMessageMetadata } from '.';
-import { WelcomeMessagePayload } from '.';
+import type { WelcomeMessageMetadata } from './WelcomeMessageMetadata';
+import type { WelcomeMessagePayload } from './WelcomeMessagePayload';
 
 export interface WelcomeMessage {
     metadata: WelcomeMessageMetadata

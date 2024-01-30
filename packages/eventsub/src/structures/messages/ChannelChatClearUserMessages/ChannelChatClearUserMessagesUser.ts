@@ -1,6 +1,7 @@
-import { BaseUser, Subscription } from '../..';
-import { SubscriptionTypes } from '../../../enums';
-import { ConnectionTypes } from '../../../types';
+import { BaseUser } from '../BaseUser';
+import type { Subscription } from '../../Subscription';
+import type { SubscriptionTypes } from '../../../enums';
+import type { ConnectionTypes } from '../../../types';
 
 export class ChannelChatClearUserMessagesUser<K extends ConnectionTypes = ConnectionTypes> extends BaseUser<SubscriptionTypes.ChannelChatClearUserMessages, K> {
 

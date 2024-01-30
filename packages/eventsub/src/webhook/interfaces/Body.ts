@@ -1,5 +1,5 @@
-import { BodySubscription } from '.';
-import { BodyTypes } from '../types';
+import type { BodySubscription } from './BodySubscription';
+import type { BodyTypes } from '../types';
 
 export interface Body<T extends BodyTypes = BodyTypes>{
     challenge: T extends 'webhook_callback_verification' ?  string : never

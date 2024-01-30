@@ -1,6 +1,7 @@
-import { Router, Request } from 'express';
-import { BasePayload } from '../../interfaces';
-import { SubscriptionTypes } from '../../enums';
+import type { Request } from 'express';
+import { Router } from 'express';
+import type { BasePayload } from '../../interfaces';
+import type { SubscriptionTypes } from '../../enums';
 import { notificationHandler } from '../../util';
 
 

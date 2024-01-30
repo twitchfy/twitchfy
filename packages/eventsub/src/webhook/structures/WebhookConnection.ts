@@ -1,17 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Express } from 'express';
+import type { Express } from 'express';
 import { HelixClient } from '@twitchapi/helix';
-import { WebhookConnectionOptions } from '../interfaces';
+import { EventEmitter } from 'node:events';
+import type { PostEventSubscriptions } from '@twitchapi/api-types';
+import type { WebhookConnectionOptions } from '../interfaces';
 import { makeMiddlewares, generateSecret, parseRoute } from '../util';
 import { SubscriptionRouter } from '../routes';
-import { Client, SubscriptionCollection, EventSubEventEmitter, Subscription } from '../../structures';
-import { SubscriptionTypes, Events } from '../../enums';
-import { SubscriptionOptions, SubscriptionOptionsIndex } from '../../interfaces';
+import { SubscriptionCollection, Subscription, type Client } from '../../structures';
+import { Events, type SubscriptionTypes } from '../../enums';
+import type { SubscriptionOptions, SubscriptionOptionsIndex, EventSubEvents } from '../../interfaces';
 import { SubscriptionVersionsObject } from '../../util';
-import { PostEventSubscriptions } from '@twitchapi/api-types';
+import type { ConnectionTypes } from '../../types';
 
+class EventSubEventEmitter<T extends ConnectionTypes = ConnectionTypes> extends EventEmitter {
+  public constructor() {
+    super();
+  }
+
+  override on<K extends keyof EventSubEvents<T>>(event: K, listener: EventSubEvents<T>[K]): this {
+
+    return super.on(event, listener);
+
+  }
+
+  override emit<K extends keyof EventSubEvents<T>>(event: K, ...args: Parameters<EventSubEvents[K]>): boolean {
+
+    return super.emit(event, ...args);
+
+  }
+}
 
 export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
@@ -68,7 +87,7 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
     const secret = generateSecret();
  
-    const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret }, condition: subscriptionOptions }, auth, { useTokenType: 'app' });
+    const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret }, condition: subscriptionOptions }, auth, { useTokenType: 'app' });
 
     const subscription = new Subscription<T, WebhookConnection>(this, options, data, secret);
 
@@ -164,6 +183,8 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
     const chunk = chunks[index];
 
     for(const subscription of chunk){
+
+      if((subscription.transport as { callback: string }).callback !== connection.baseURL + connection.subscriptionRoute) continue;
 
       connection.helixClient.deleteSubscription(subscription.id);
 

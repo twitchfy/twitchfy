@@ -1,6 +1,6 @@
-import { ChannelUpdateMessage, ChannelFollowMessage, ChannelChatClearMessage, StreamOnlineMessage, ChannelAdBreakBeginMessage, ChannelChatClearUserMessagesMessage } from '../structures';
-import { SubscriptionTypes } from '../enums';
-import { ConnectionTypes } from '../types';
+import type { ChannelUpdateMessage, ChannelFollowMessage, ChannelChatClearMessage, StreamOnlineMessage, ChannelAdBreakBeginMessage, ChannelChatClearUserMessagesMessage } from '../structures';
+import type { SubscriptionTypes } from '../enums';
+import type { ConnectionTypes } from '../types';
 
 export interface SubscriptionMessages<K extends ConnectionTypes = ConnectionTypes> {
     [SubscriptionTypes.ChannelFollow]: ChannelFollowMessage<K>

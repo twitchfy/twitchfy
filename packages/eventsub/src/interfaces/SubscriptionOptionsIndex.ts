@@ -1,5 +1,5 @@
-import { SubscriptionOptions } from '.';
-import { SubscriptionTypes } from '../enums';
+import type { SubscriptionOptions } from './SubscriptionOptions';
+import type { SubscriptionTypes } from '../enums';
 
 
 export interface SubscriptionOptionsIndex {
