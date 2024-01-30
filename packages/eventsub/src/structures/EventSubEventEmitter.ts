@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { EventEmitter } from 'node:events';
-import { EventSubEvents } from '../interfaces';
-import { ConnectionTypes } from '../types';
-
-export type FixArray<T> = T extends [...infer X] ? X[] : any[];
+import type { EventSubEvents } from '../interfaces';
+import type { ConnectionTypes } from '../types';
 
 export class EventSubEventEmitter<T extends ConnectionTypes = ConnectionTypes> extends EventEmitter {
   public constructor() {

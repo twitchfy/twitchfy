@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
 export function verifySignature(req: Request, secret: string){

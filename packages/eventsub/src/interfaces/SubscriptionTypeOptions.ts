@@ -1,5 +1,5 @@
-import { ChannelUpdateOptions, ChannelFollowOptions, ChannelChatClearOptions, StreamOnlineOptions, ChannelAdBreakBeginOptions, ChannelChatClearUserMessagesOptions } from '.';
-import { SubscriptionTypes } from '../enums';
+import type { ChannelUpdateOptions, ChannelFollowOptions, ChannelChatClearOptions, StreamOnlineOptions, ChannelAdBreakBeginOptions, ChannelChatClearUserMessagesOptions } from './options';
+import type { SubscriptionTypes } from '../enums';
 
 export interface SubscriptionTypeOptions {
     [SubscriptionTypes.ChannelFollow] : ChannelFollowOptions

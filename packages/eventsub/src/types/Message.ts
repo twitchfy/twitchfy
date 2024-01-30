@@ -1,4 +1,4 @@
-import { BaseNotification } from '../interfaces';
-import { WelcomeMessage } from '../ws';
+import type { BaseNotification } from '../interfaces';
+import type { WelcomeMessage } from '../ws';
 
 export type Message = WelcomeMessage | BaseNotification;

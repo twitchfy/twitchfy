@@ -1,7 +1,9 @@
-import { Express, urlencoded, json } from 'express';
-import { parseRoute, verifySignature } from '.';
-import { WebhookConnection } from '../structures';
-import { Body } from '../interfaces';
+import type { Express} from 'express';
+import { urlencoded, json } from 'express';
+import { parseRoute } from './parseRoute';
+import { verifySignature } from './verifySignature';
+import type { WebhookConnection } from '../structures';
+import type { Body } from '../interfaces';
 
 export function makeMiddlewares(connection: WebhookConnection, server: Express){
   

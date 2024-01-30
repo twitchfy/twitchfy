@@ -1,4 +1,4 @@
-import { SubscriptionTypes } from '../enums';
+import type { SubscriptionTypes } from '../enums';
 
 export interface SubscriptionVersions {
     [SubscriptionTypes.ChannelFollow]: '2'

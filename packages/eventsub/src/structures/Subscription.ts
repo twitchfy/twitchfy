@@ -1,9 +1,9 @@
-import { PostEventSubscriptions } from '@twitchapi/api-types';
-import { SubscriptionCallbackManager } from '.';
-import { SubscriptionTypes } from '../enums';
-import { SubscriptionTypeOptions, SubscriptionOptions } from '../interfaces';
-import { SubscriptionCallback, ConnectionTypes } from '../types';
-import { WebhookConnection } from '../webhook';
+import type { PostEventSubscriptions } from '@twitchapi/api-types';
+import { SubscriptionCallbackManager } from './SubscriptionCallbackManager';
+import type { SubscriptionTypes } from '../enums';
+import type { SubscriptionTypeOptions, SubscriptionOptions } from '../interfaces';
+import type { SubscriptionCallback, ConnectionTypes } from '../types';
+import type { WebhookConnection } from '../webhook';
 
 export class Subscription<T extends SubscriptionTypes = SubscriptionTypes, K extends ConnectionTypes = ConnectionTypes> {
 

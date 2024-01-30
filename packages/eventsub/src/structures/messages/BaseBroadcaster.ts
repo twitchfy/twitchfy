@@ -1,6 +1,7 @@
-import { Base, Subscription } from '..';
-import { SubscriptionTypes } from '../../enums';
-import { ConnectionTypes } from '../../types';
+import { Base } from './Base';
+import type { Subscription } from '../Subscription';
+import type { SubscriptionTypes } from '../../enums';
+import type { ConnectionTypes } from '../../types';
 
 export class BaseBroadcaster<T extends SubscriptionTypes, K extends ConnectionTypes = ConnectionTypes> extends Base<T, K> {
 

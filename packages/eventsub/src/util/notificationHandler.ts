@@ -1,7 +1,7 @@
 import { ChannelUpdateMessage, ChannelFollowMessage, ChannelChatClearMessage, StreamOnlineMessage, ChannelAdBreakBeginMessage, ChannelChatClearUserMessagesMessage } from '../structures';
 import { SubscriptionTypes } from '../enums';
-import { BasePayload } from '../interfaces';
-import { ConnectionTypes } from '../types';
+import type { BasePayload } from '../interfaces';
+import type { ConnectionTypes } from '../types';
 
 export function notificationHandler(connection: ConnectionTypes, payload: BasePayload<SubscriptionTypes>){
 

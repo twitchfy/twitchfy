@@ -1,4 +1,4 @@
-import { StreamTypes } from '../../../../../types';
+import type { StreamTypes } from '../../../../../types';
 
 export interface StreamOnlineEvent {
     id: string

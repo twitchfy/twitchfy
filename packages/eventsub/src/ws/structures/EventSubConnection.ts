@@ -1,12 +1,30 @@
 import { HelixClient } from '@twitchapi/helix';
-import { EventSubWebsocket } from '.';
-import { Client, Subscription, SubscriptionCollection, EventSubEventEmitter } from '../../structures';
-import { SubscriptionTypes, Events } from '../../enums';
-import { EventSubConnectionOptions } from '../interfaces';
-import { SubscriptionOptions, SubscriptionOptionsIndex } from '../../interfaces';
+import { EventEmitter } from 'node:events';
+import { EventSubWebsocket } from './EventSubWebsocket';
+import { Subscription, SubscriptionCollection, type Client } from '../../structures';
+import { Events, type SubscriptionTypes } from '../../enums';
+import type { EventSubConnectionOptions } from '../interfaces';
+import type { SubscriptionOptions, SubscriptionOptionsIndex, EventSubEvents } from '../../interfaces';
 import { SubscriptionVersionsObject } from '../../util';
+import type { ConnectionTypes } from '../../types';
 
+class EventSubEventEmitter<T extends ConnectionTypes = ConnectionTypes> extends EventEmitter {
+  public constructor() {
+    super();
+  }
 
+  override on<K extends keyof EventSubEvents<T>>(event: K, listener: EventSubEvents<T>[K]): this {
+
+    return super.on(event, listener);
+
+  }
+
+  override emit<K extends keyof EventSubEvents<T>>(event: K, ...args: Parameters<EventSubEvents[K]>): boolean {
+
+    return super.emit(event, ...args);
+
+  }
+}
 export class EventSubConnection extends EventSubEventEmitter<EventSubConnection>{
 
   public client: Client;
