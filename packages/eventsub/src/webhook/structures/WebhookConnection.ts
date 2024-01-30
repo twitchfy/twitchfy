@@ -184,6 +184,8 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
 
     for(const subscription of chunk){
 
+      if((subscription.transport as { callback: string }).callback !== connection.baseURL + connection.subscriptionRoute) continue;
+
       connection.helixClient.deleteSubscription(subscription.id);
 
     }
