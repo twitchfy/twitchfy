@@ -1,3 +1,4 @@
+import type { ManagementCallbacks } from './ManagementCallbacks';
 import type { HelixOptions } from '../../interfaces';
 
 export interface WebhookConnectionOptions {
@@ -8,4 +9,5 @@ export interface WebhookConnectionOptions {
     subscriptionRoute?: string
     startServer?: boolean
     mantainSubscriptions?: boolean
+    callbacks?: ManagementCallbacks
 }
