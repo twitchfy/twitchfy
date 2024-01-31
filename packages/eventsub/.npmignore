@@ -3,3 +3,4 @@
 tsconfig.json
 src/
 typedoc.json
+**/subscriptions.json
