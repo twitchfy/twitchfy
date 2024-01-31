@@ -1,6 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import type { done as DoneFunction } from './doneFunction';
 import type { WebhookConnection } from '../structures';
 import type { SubscriptionJSON } from '../interfaces';
 import type { SubscriptionTypes } from '../../enums';
@@ -16,7 +17,9 @@ export async function createCallback(subscription: Subscription<SubscriptionType
 
   if(data[subscription.id]) return;
 
-  data[subscription.id] = subscription.secret;
+  const { secret, nonce } = subscription;
+
+  data[subscription.id] = { secret, nonce };
 
   await writeFile(path, JSON.stringify(data));
 
@@ -37,7 +40,7 @@ export async function deleteCallback(id: string){
 
 }
 
-export async function getCallback(id: string): Promise<string | null>{
+export async function getCallback(id: string, done: typeof DoneFunction): Promise<ReturnType<typeof DoneFunction> | null> {
 
   if(!existsSync(path)) return null;
 
@@ -45,6 +48,8 @@ export async function getCallback(id: string): Promise<string | null>{
 
   if(!data) return null;
 
-  return data[id] || null;
+  if(!data[id]) return null;
+
+  return done(data[id].secret, data[id].nonce);
 
 }
