@@ -5,8 +5,8 @@ import type { Express } from 'express';
 import { HelixClient } from '@twitchapi/helix';
 import { EventEmitter } from 'node:events';
 import type { PostEventSubscriptions } from '@twitchapi/api-types';
-import type { WebhookConnectionOptions } from '../interfaces';
-import { makeMiddlewares, generateSecret, parseRoute } from '../util';
+import type { ManagementCallbacks, WebhookConnectionOptions } from '../interfaces';
+import { makeMiddlewares, generateSecret, parseRoute, createCallback, deleteCallback, getCallback } from '../util';
 import { SubscriptionRouter } from '../routes';
 import { SubscriptionCollection, Subscription, type Client } from '../../structures';
 import { Events, type SubscriptionTypes } from '../../enums';
@@ -52,6 +52,8 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
   public mantainSubscriptions: boolean;
 
+  public callbacks: ManagementCallbacks;
+
   public readonly subscriptionRoute: string;
   
 
@@ -77,6 +79,8 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
     this.mantainSubscriptions = typeof options.mantainSubscriptions === 'boolean' ? options.mantainSubscriptions : true;
 
+    this.callbacks = options.callbacks || { create: createCallback, delete: deleteCallback, get: getCallback };
+
     this.server = server;
 
   }
@@ -90,6 +94,8 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
     const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret }, condition: subscriptionOptions }, auth, { useTokenType: 'app' });
 
     const subscription = new Subscription<T, WebhookConnection>(this, options, data, secret);
+
+    await this.callbacks.create(subscription);
 
     this.subscriptions.set(subscription.id, subscription);
 
@@ -113,6 +119,8 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
       const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret }, condition: subscriptionOptions }, auth , { useTokenType: 'app' });
 
       const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, sub, data, secret);
+
+      await this.callbacks.create(subscription);
 
       this.subscriptions.set(subscription.id, subscription);
 
@@ -141,9 +149,18 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
       for(const data of subscriptions){
 
-        if((data.transport as { callback: string }).callback !== this.baseURL + this.subscriptionRoute) continue;
+        const savedSubscription = await this.callbacks.get(data.id);
+
+        if(!savedSubscription) continue;
+
+        if((data.transport as { callback: string }).callback !== this.baseURL + this.subscriptionRoute){
+          
+          this.callbacks.delete(data.id);
+
+          continue;
+        }
       
-        const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, { type: data.type as SubscriptionTypes, auth: this.auth, options: data.condition as any }, data);
+        const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, { type: data.type as SubscriptionTypes, auth: this.auth, options: data.condition as any }, data, savedSubscription);
 
         this.subscriptions.set(subscription.id, subscription);
 
@@ -184,7 +201,11 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
 
     for(const subscription of chunk){
 
-      if((subscription.transport as { callback: string }).callback !== connection.baseURL + connection.subscriptionRoute) continue;
+      const savedSubscription = connection.callbacks.get(subscription.id);
+
+      if(!savedSubscription) continue;
+
+      connection.callbacks.delete(subscription.id);
 
       connection.helixClient.deleteSubscription(subscription.id);
 

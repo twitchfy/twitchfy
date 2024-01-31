@@ -3,7 +3,7 @@ import { SubscriptionCallbackManager } from './SubscriptionCallbackManager';
 import type { SubscriptionTypes } from '../enums';
 import type { SubscriptionTypeOptions, SubscriptionOptions } from '../interfaces';
 import type { SubscriptionCallback, ConnectionTypes } from '../types';
-import type { WebhookConnection } from '../webhook';
+import { WebhookConnection } from '../webhook';
 
 export class Subscription<T extends SubscriptionTypes = SubscriptionTypes, K extends ConnectionTypes = ConnectionTypes> {
 
@@ -62,6 +62,8 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes, K ext
     await this.connection.helixClient.deleteSubscription(this.id, this.auth);
 
     this.connection.subscriptions.delete(this.id);
+
+    if(this.connection instanceof WebhookConnection) this.connection.callbacks.delete(this.id);
 
     return;
 
