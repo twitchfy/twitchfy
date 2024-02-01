@@ -135,7 +135,11 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
   private async startup() {
 
-    const subscriptions = await this.helixClient.getSubscriptions({ status: 'enabled' });
+    const subscriptions = (await this.helixClient.getSubscriptions({ status: 'enabled' })).filter((subscription) => {
+
+      return (subscription.transport as { callback: string }).callback === this.baseURL + this.subscriptionRoute;
+
+    });
 
     if(this.mantainSubscriptions) {
 
@@ -164,6 +168,31 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
     this.emit(Events.ConnectionReady, this);
 
   }
+
+  public async dropAllSubscriptions(filter: boolean = true){
+
+    if(filter){
+
+
+      for(const subscription of this.subscriptions.values()){
+
+        this.subscriptions.delete(subscription.id);
+
+        await subscription.delete();
+
+
+      }
+
+    }else{
+
+      const subscriptions = await this.helixClient.getSubscriptions({ status: 'enabled' });
+
+      await processChunks(this, chunkArray(subscriptions, 30));
+    }
+
+    return;
+
+  }
 }
 
 function chunkArray(array: PostEventSubscriptions[], chunkSize: number) {
@@ -184,7 +213,7 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
 
     for(const subscription of chunk){
 
-      if((subscription.transport as { callback: string }).callback !== connection.baseURL + connection.subscriptionRoute) continue;
+      if(connection.subscriptions.get(subscription.id)) connection.subscriptions.delete(subscription.id);
 
       connection.helixClient.deleteSubscription(subscription.id);
 
