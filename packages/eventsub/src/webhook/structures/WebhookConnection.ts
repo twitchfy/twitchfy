@@ -137,7 +137,9 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
     const subscriptions = (await this.helixClient.getSubscriptions({ status: 'enabled' })).filter((subscription) => {
 
-      return (subscription.transport as { callback: string }).callback === this.baseURL + this.subscriptionRoute;
+      const transport = subscription.transport as { callback: string, method: string };
+
+      return transport.callback === this.baseURL + this.subscriptionRoute && transport.method === 'webhook';
 
     });
 
@@ -173,7 +175,6 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
     if(filter){
 
-
       for(const subscription of this.subscriptions.values()){
 
         this.subscriptions.delete(subscription.id);
@@ -185,7 +186,13 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
     }else{
 
-      const subscriptions = await this.helixClient.getSubscriptions({ status: 'enabled' });
+      const subscriptions = (await this.helixClient.getSubscriptions({ status: 'enabled' })).filter((subscription) => {
+
+        const transport = subscription.transport as { callback: string, method: string };
+
+        return transport.method === 'webhook';
+
+      });
 
       await processChunks(this, chunkArray(subscriptions, 30));
     }
