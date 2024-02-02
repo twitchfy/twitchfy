@@ -1,6 +1,6 @@
-import { ChatBot } from '../ChatBot';
+import type { ChatBot } from '../ChatBot';
 import { FollowerUser } from './FollowerUser';
-import { GetFollowers } from '@twitchapi/api-types';
+import type { GetFollowers } from '@twitchapi/api-types';
 
 export class Follower{
    

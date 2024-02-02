@@ -1,7 +1,8 @@
-import { ChatBot } from '../ChatBot';
-import { Channel } from './Channel';
-import { AutoModSettings as AutoModSettingsData } from '@twitchapi/api-types';
-import { AutoModSettingsBody, AutoModSettingsOptions } from '@twitchapi/helix';
+import type { ChatBot } from '../ChatBot';
+import type { Channel } from './Channel';
+import type { AutoModSettings as AutoModSettingsData } from '@twitchapi/api-types';
+import type { AutoModSettingsOptions } from '@twitchapi/helix';
+import { AutoModSettingsBody } from '@twitchapi/helix';
 
 /**
  * @class

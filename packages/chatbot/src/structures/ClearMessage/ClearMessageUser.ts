@@ -1,6 +1,6 @@
-import { ClearMessageTags } from '../../interfaces/tags/ClearMessageTags';
-import { ChatBot } from '../../ChatBot';
-import { User } from '../../structures/User';
+import type { ClearMessageTags } from '../../interfaces/tags/ClearMessageTags';
+import type { ChatBot } from '../../ChatBot';
+import type { User } from '../../structures/User';
 
 /**
  * @class

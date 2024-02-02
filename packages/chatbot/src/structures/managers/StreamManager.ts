@@ -1,7 +1,7 @@
-import { Channel } from '../Channel';
-import { ChatBot } from '../../ChatBot';
-import { PrivMSGChannel } from '../PrivMSG/PrivMSGChannel';
-import { ClearChatChannel } from '../ClearChat/ClearChatChannel';
+import type { Channel } from '../Channel';
+import type { ChatBot } from '../../ChatBot';
+import type { PrivMSGChannel } from '../PrivMSG/PrivMSGChannel';
+import type { ClearChatChannel } from '../ClearChat/ClearChatChannel';
 import { Stream } from '../Stream';
 
 /**

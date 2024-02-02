@@ -1,5 +1,5 @@
-import { GetStream } from '@twitchapi/api-types';
-import { ChatBot } from '../ChatBot';
+import type { GetStream } from '@twitchapi/api-types';
+import type { ChatBot } from '../ChatBot';
 import { Broadcaster } from './Broadcaster';
 import { CreatedClip } from './CreatedClip';
 

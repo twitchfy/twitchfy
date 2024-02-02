@@ -1,6 +1,6 @@
-import { ChatBot } from '../../ChatBot';
-import { ClearChatTags } from '../../interfaces/tags/ClearChatTags';
-import { User } from '../../structures/User';
+import type { ChatBot } from '../../ChatBot';
+import type { ClearChatTags } from '../../interfaces/tags/ClearChatTags';
+import type { User } from '../../structures/User';
 import { WhisperBody } from '@twitchapi/helix';
 
 /**

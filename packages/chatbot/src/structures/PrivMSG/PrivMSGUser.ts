@@ -1,6 +1,6 @@
-import { ChatBot } from '../../ChatBot';
-import { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
-import { User } from '../User';
+import type { ChatBot } from '../../ChatBot';
+import type { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
+import type { User } from '../User';
 import { WhisperBody } from '@twitchapi/helix';
 
 

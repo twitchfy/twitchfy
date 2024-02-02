@@ -1,5 +1,5 @@
 import { Channel } from '../Channel';
-import { ChatBot } from '../../ChatBot';
+import type { ChatBot } from '../../ChatBot';
 import { User } from '../User';
 import { JoinedChannel } from '../JoinedChannel';
 

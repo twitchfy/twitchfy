@@ -1,5 +1,5 @@
-import { ClearChatTags } from '../../interfaces/tags/ClearChatTags';
-import { ChatBot } from '../../ChatBot';
+import type { ClearChatTags } from '../../interfaces/tags/ClearChatTags';
+import type { ChatBot } from '../../ChatBot';
 import { ClearChatUser } from './ClearChatUser';
 import { ClearChatChannel } from './ClearChatChannel';
 import { parseCommand } from '../../utils/ChatBotMessageParser';

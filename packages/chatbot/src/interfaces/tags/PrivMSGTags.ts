@@ -1,5 +1,5 @@
-import { BadgeMetadata } from '../BadgeMetadata';
-import { Badges } from '../Badges';
+import type { BadgeMetadata } from '../BadgeMetadata';
+import type { Badges } from '../Badges';
 
 
 /**

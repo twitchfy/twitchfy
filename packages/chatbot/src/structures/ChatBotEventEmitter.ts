@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { EventEmitter } from 'node:events';
-import { ChatBotEvents } from '../interfaces/ChatBotEvents';
+import type { ChatBotEvents } from '../interfaces/ChatBotEvents';
 
 /**
  * Custom EventEmitter for ChatBotEvent

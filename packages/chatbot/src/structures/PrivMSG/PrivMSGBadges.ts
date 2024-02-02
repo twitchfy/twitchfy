@@ -1,5 +1,5 @@
-import { Badges } from '../../interfaces/Badges';
-import { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
+import type { Badges } from '../../interfaces/Badges';
+import type { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
 
 /**
  * @class

@@ -1,7 +1,7 @@
-import { ChatBot } from '../ChatBot';
-import { Chatter } from '@twitchapi/api-types';
+import type { ChatBot } from '../ChatBot';
+import type { Chatter } from '@twitchapi/api-types';
 import { WhisperBody } from '@twitchapi/helix';
-import { User } from './User';
+import type { User } from './User';
 
 /**
  * @class

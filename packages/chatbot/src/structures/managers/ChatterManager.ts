@@ -1,7 +1,7 @@
-import { ChatBot } from '../../ChatBot';
+import type { ChatBot } from '../../ChatBot';
 import { UncompleteChatter } from '../../structures/UncompleteChatter';
-import { Channel } from '../../structures/Channel';
-import { Chat } from '../../structures/Chat';
+import type { Channel } from '../../structures/Channel';
+import type { Chat } from '../../structures/Chat';
 
 /**
  * @class

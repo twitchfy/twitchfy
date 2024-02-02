@@ -1,8 +1,8 @@
 import { Ban } from '../Ban';
-import { ChatBot } from '../../ChatBot';
-import { Channel } from '../../structures/Channel';
-import { BanOptions } from '../../interfaces/BanOptions';
-import { TimeoutOptions } from '../../interfaces/TimeoutOptions';
+import type { ChatBot } from '../../ChatBot';
+import type { Channel } from '../../structures/Channel';
+import type { BanOptions } from '../../interfaces/BanOptions';
+import type { TimeoutOptions } from '../../interfaces/TimeoutOptions';
 import { BanBody, TimeoutBody } from '@twitchapi/helix';
 
 

@@ -1,8 +1,8 @@
-import { ChatBot } from '../../ChatBot';
+import type { ChatBot } from '../../ChatBot';
 import { AnnouncementBody } from '@twitchapi/helix';
-import { AnnouncementColor } from '../../enums/AnnouncementColor';
-import { JoinedChannel } from '../JoinedChannel';
-import { Channel } from '../Channel';
+import type { AnnouncementColor } from '../../enums/AnnouncementColor';
+import type { JoinedChannel } from '../JoinedChannel';
+import type { Channel } from '../Channel';
 import { Follower } from '../Follower';
 import { StreamManager } from '../managers/StreamManager';
 

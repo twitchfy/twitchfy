@@ -1,6 +1,6 @@
 import { ChatSettings } from '../../structures/ChatSettings';
-import { ChatBot } from '../../ChatBot';
-import { Chat } from '../../structures/Chat';
+import type { ChatBot } from '../../ChatBot';
+import type { Chat } from '../../structures/Chat';
 
 /**
  * Represent the ChatSettingsManager of a channel.
