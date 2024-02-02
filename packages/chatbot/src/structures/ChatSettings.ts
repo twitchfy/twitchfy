@@ -1,8 +1,8 @@
-import { ChatBot } from '../ChatBot';
-import { Channel } from './Channel';
-import { ChatSettingsOptions } from '../interfaces/ChatSettingsOptions';
+import type { ChatBot } from '../ChatBot';
+import type { Channel } from './Channel';
+import type { ChatSettingsOptions } from '../interfaces/ChatSettingsOptions';
 import { ChatSettingsBody } from '@twitchapi/helix';
-import { ChatSettings as ChatSettingsResponse } from '@twitchapi/api-types';
+import type { ChatSettings as ChatSettingsResponse } from '@twitchapi/api-types';
 
 /**
  * Represents the chat settings of a channel.

@@ -1,6 +1,6 @@
 import { ChatSettingsBody } from '@twitchapi/helix';
-import { ChatBot } from '../ChatBot';
-import { Channel } from './Channel';
+import type { ChatBot } from '../ChatBot';
+import type { Channel } from './Channel';
 import { ChatSettings } from './ChatSettings';
 import { ChatSettingsManager } from './managers/ChatSettingsManager';
 import { ChatterManager } from './managers/ChatterManager';

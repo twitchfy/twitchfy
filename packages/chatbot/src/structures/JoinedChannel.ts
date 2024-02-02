@@ -1,4 +1,4 @@
-import { ChatBot } from '../ChatBot';
+import type { ChatBot } from '../ChatBot';
 
 export class JoinedChannel {
     

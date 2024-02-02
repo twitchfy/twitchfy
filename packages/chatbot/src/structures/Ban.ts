@@ -1,6 +1,6 @@
-import { ChatBot } from '../ChatBot';
+import type { ChatBot } from '../ChatBot';
 import { BanUser } from './BanUser';
-import { Ban as BanData } from '@twitchapi/api-types';
+import type { Ban as BanData } from '@twitchapi/api-types';
 
 /**
  * @class

@@ -1,12 +1,12 @@
-import { User } from '../structures/User';
-import { ChatBot } from '../ChatBot';
-import { Channel as ChannelResponse } from '@twitchapi/api-types';
+import type { User } from '../structures/User';
+import type { ChatBot } from '../ChatBot';
+import type { Channel as ChannelResponse } from '@twitchapi/api-types';
 import { BanManager } from './managers/BanManager';
-import { AnnouncementColor } from '../enums/AnnouncementColor';
+import type { AnnouncementColor } from '../enums/AnnouncementColor';
 import { AnnouncementBody } from '@twitchapi/helix';
 import { Chat } from './Chat';
 import { AutoMod } from './AutoMod';
-import { JoinedChannel } from './JoinedChannel';
+import type { JoinedChannel } from './JoinedChannel';
 import { Follower } from './Follower';
 import { StreamManager } from './managers/StreamManager';
 

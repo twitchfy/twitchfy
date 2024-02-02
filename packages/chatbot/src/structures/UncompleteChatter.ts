@@ -1,11 +1,11 @@
-import { Chatter } from '@twitchapi/api-types';
-import { ChatBot } from '../ChatBot';
-import { Channel } from './Channel';
+import type { Chatter } from '@twitchapi/api-types';
+import type { ChatBot } from '../ChatBot';
+import type { Channel } from './Channel';
 import { UncompleteChatterUser } from './UncompleteChatterUser';
-import { BanOptions } from '../interfaces/BanOptions';
-import { TimeoutOptions } from '../interfaces/TimeoutOptions';
+import type { BanOptions } from '../interfaces/BanOptions';
+import type { TimeoutOptions } from '../interfaces/TimeoutOptions';
 import { TimeoutBody, BanBody } from '@twitchapi/helix';
-import { Chat } from './Chat';
+import type { Chat } from './Chat';
 import { Ban } from './Ban';
 
 /**

@@ -1,8 +1,8 @@
-import { ChatBot } from '../../ChatBot';
-import { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
+import type { ChatBot } from '../../ChatBot';
+import type { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
 import { PrivMSGRepliedMessageChatter } from './PrivMSGRepliedMessageChatter';
 import { PrivMSGUser } from './PrivMSGUser';
-import { PrivMSGChannel } from './PrivMSGChannel';
+import type { PrivMSGChannel } from './PrivMSGChannel';
 
 /**
  * @class

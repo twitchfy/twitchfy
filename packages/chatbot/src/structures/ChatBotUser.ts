@@ -1,6 +1,6 @@
-import { ChatBot } from '../ChatBot';
+import type { ChatBot } from '../ChatBot';
 import { User } from './User';
-import { User as UserResponse } from '@twitchapi/api-types';
+import type { User as UserResponse } from '@twitchapi/api-types';
 
 /**
  * Represents the Twitch's user of the ChatBot.

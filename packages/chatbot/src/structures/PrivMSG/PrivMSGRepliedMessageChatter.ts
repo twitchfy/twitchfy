@@ -1,10 +1,10 @@
-import { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
-import { ChatBot } from '../../ChatBot';
+import type { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
+import type { ChatBot } from '../../ChatBot';
 import { BanBody, TimeoutBody} from '@twitchapi/helix';
-import { BanOptions } from '../../interfaces/BanOptions';
-import { TimeoutOptions } from '../../interfaces/TimeoutOptions';
+import type { BanOptions } from '../../interfaces/BanOptions';
+import type { TimeoutOptions } from '../../interfaces/TimeoutOptions';
 import { PrivMSGUser } from '../PrivMSG/PrivMSGUser';
-import { PrivMSGChannel } from './PrivMSGChannel';
+import type { PrivMSGChannel } from './PrivMSGChannel';
 import { Chatter } from '../Chatter';
 import { Ban } from '../Ban';
 

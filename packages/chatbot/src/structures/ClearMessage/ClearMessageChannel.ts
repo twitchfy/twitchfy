@@ -1,6 +1,6 @@
-import { JoinedChannel } from '../JoinedChannel';
-import { ChatBot } from '../../ChatBot';
-import { Channel } from '../Channel';
+import type { JoinedChannel } from '../JoinedChannel';
+import type { ChatBot } from '../../ChatBot';
+import type { Channel } from '../Channel';
 
 
 /**

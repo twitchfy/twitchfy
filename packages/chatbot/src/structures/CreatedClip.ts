@@ -1,5 +1,5 @@
-import { PostCreateClip } from '@twitchapi/api-types';
-import { ChatBot } from '../ChatBot';
+import type { PostCreateClip } from '@twitchapi/api-types';
+import type { ChatBot } from '../ChatBot';
 
 export class CreatedClip{
 

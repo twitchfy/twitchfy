@@ -1,7 +1,7 @@
-import { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
+import type { PrivMSGTags } from '../../interfaces/tags/PrivMSGTags';
 import { PrivMSGRepliedMessage } from './PrivMSGRepliedMessage';
 import { parseCommand, parseMessage } from '../../utils/ChatBotMessageParser';
-import { ChatBot } from '../../ChatBot';
+import type { ChatBot } from '../../ChatBot';
 import { PrivMSGUser } from './PrivMSGUser';
 import { PrivMSGChannel } from './PrivMSGChannel';
 import { PrivMSGChatter } from './PrivMSGChatter';

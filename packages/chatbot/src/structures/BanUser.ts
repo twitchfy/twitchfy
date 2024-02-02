@@ -1,6 +1,6 @@
-import { ChatBot } from '../ChatBot';
+import type { ChatBot } from '../ChatBot';
 import { WhisperBody } from '@twitchapi/helix';
-import { User } from './User';
+import type { User } from './User';
 
 /**
  * Represents any user that is involved in a ban. This user can be the broadcaster, the banned user or the moderator who ban the user.

@@ -1,6 +1,6 @@
-import { ChatBot } from '../ChatBot';
+import type { ChatBot } from '../ChatBot';
 import { WhisperBody } from '@twitchapi/helix';
-import { User } from './User';
+import type { User } from './User';
 
 export class FollowerUser{
 

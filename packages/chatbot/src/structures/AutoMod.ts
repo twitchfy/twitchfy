@@ -1,5 +1,5 @@
-import { Channel } from './Channel';
-import { ChatBot } from '../ChatBot';
+import type { Channel } from './Channel';
+import type { ChatBot } from '../ChatBot';
 import { AutoModSettingsManager } from './managers/AutoModSettingsManager';
 
 /**

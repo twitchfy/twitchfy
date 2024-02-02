@@ -1,12 +1,12 @@
 import { ChatBotEventEmitter } from './structures/ChatBotEventEmitter';
-import { ChatBotCapabilities } from './interfaces/ChatBotCapabilities';
-import { ChatBotOptions } from './interfaces/ChatBotOptions';
+import type { ChatBotCapabilities } from './interfaces/ChatBotCapabilities';
+import type { ChatBotOptions } from './interfaces/ChatBotOptions';
 import { ChatBotWs } from './websocket/ChatBotWs';
 import { HelixClient } from '@twitchapi/helix';
 import { UserManager } from './structures/managers/UserManager';
 import { ChannelManager } from './structures/managers/ChannelManager';
-import { ChatBotUser } from './structures/ChatBotUser';
-import { JoinedChannel } from './structures/JoinedChannel';
+import type { ChatBotUser } from './structures/ChatBotUser';
+import type { JoinedChannel } from './structures/JoinedChannel';
 
 
 /**
@@ -29,10 +29,9 @@ export class ChatBot extends ChatBotEventEmitter {
   public ws: ChatBotWs;
 
   /**
-     * @readonly
      * @description The user access token that is provided in the {@link ChatBotOptions}
      */
-  public readonly oauth: string;
+  public oauth: string;
 
   /**
      * @description The ChatBot capabilities provided in the {@link ChatBotOptions}. This capabilities are used to receive some extra Twitch information.
@@ -139,6 +138,15 @@ export class ChatBot extends ChatBotEventEmitter {
      */
   public destroy() {
     this.ws.connection.close();
+  }
+
+  /**
+   * Set a new auth to the ChatBot.
+   * @param {string} oauth The user token use to create the bot. 
+   */
+
+  public setAuth(oauth: string){
+    this.oauth = oauth;
   }
 
 

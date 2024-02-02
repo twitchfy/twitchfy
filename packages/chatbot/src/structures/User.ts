@@ -1,5 +1,5 @@
-import { ChatBot } from '../ChatBot';
-import { User as UserResponse } from '@twitchapi/api-types';
+import type { ChatBot } from '../ChatBot';
+import type { User as UserResponse } from '@twitchapi/api-types';
 import { WhisperBody } from '@twitchapi/helix';
 
 

@@ -1,12 +1,13 @@
-import { client, connection } from 'websocket';
-import { ChatBot } from '../ChatBot';
+import type { connection } from 'websocket';
+import { client } from 'websocket';
+import type { ChatBot } from '../ChatBot';
 import { parseCommand, parseParameters, parseTags } from '../utils/ChatBotMessageParser';
 import { ClearChat } from '../structures/ClearChat/ClearChat';
 import { PrivMSG } from '../structures/PrivMSG/PrivMSG';
 import { ClearMessage } from '../structures/ClearMessage/ClearMessage';
-import { PrivMSGTags } from '../interfaces/tags/PrivMSGTags';
-import { ClearChatTags } from '../interfaces/tags/ClearChatTags';
-import { ClearMessageTags } from '../interfaces/tags/ClearMessageTags';
+import type { PrivMSGTags } from '../interfaces/tags/PrivMSGTags';
+import type { ClearChatTags } from '../interfaces/tags/ClearChatTags';
+import type { ClearMessageTags } from '../interfaces/tags/ClearMessageTags';
 import { ChatBotUser } from '../structures/ChatBotUser';
 import { JoinedChannel } from '../structures/JoinedChannel';
 import { Events } from '../enums/Events';

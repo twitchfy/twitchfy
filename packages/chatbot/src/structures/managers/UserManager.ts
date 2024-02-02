@@ -1,5 +1,5 @@
 import { User } from '../../structures/User';
-import { ChatBot } from '../../ChatBot';
+import type { ChatBot } from '../../ChatBot';
 
 
 /**
