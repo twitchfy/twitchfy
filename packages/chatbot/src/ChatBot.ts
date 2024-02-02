@@ -146,7 +146,13 @@ export class ChatBot extends ChatBotEventEmitter {
    */
 
   public setAuth(oauth: string){
+
     this.oauth = oauth;
+
+    this.helixClient.userToken = oauth;
+
+    return this;
+
   }
 
 
