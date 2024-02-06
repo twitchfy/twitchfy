@@ -1,4 +1,4 @@
-import { Pagination } from './Pagination';
+import type { Pagination } from './Pagination';
 
 export interface GetChattersResponse{
     data: Chatter[]

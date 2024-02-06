@@ -1,5 +1,5 @@
 import { BaseClient } from './BaseClient';
-import { HelixClientOptions } from './interfaces/HelixClientOptions';
+import type { HelixClientOptions } from './interfaces/HelixClientOptions';
 
 
 export class HelixClient extends BaseClient implements HelixClientOptions{

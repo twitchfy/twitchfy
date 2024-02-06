@@ -1,16 +1,16 @@
 import { RequestManager } from './RequestManager';
-import { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions } from '@twitchapi/api-types';
-import { WhisperBody } from './structures/WhisperBody';
-import { BanBody } from './structures/BanBody';
-import { TimeoutBody } from './structures/TimeoutBody';
-import { AnnouncementBody } from './structures/AnnouncementBody';
-import { ChatSettingsBody } from './structures/ChatSettingsBody';
-import { AutoModSettingsBody } from './structures/AutoModSettingsBody';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions } from '@twitchapi/api-types';
+import type { WhisperBody } from './structures/WhisperBody';
+import type { BanBody } from './structures/BanBody';
+import type { TimeoutBody } from './structures/TimeoutBody';
+import type { AnnouncementBody } from './structures/AnnouncementBody';
+import type { ChatSettingsBody } from './structures/ChatSettingsBody';
+import type { AutoModSettingsBody } from './structures/AutoModSettingsBody';
 import { handlePagination } from './utils/HandlePagination';
-import { SubscriptionOptions } from './interfaces/SubscriptionOptions';
-import { HelixClientOptions } from './interfaces/HelixClientOptions';
-import { RequestOptions } from './interfaces/RequestOptions';
-import { GetSubscriptionFilter } from './interfaces/GetSubscriptionsFilter';
+import type { SubscriptionOptions } from './interfaces/SubscriptionOptions';
+import type { HelixClientOptions } from './interfaces/HelixClientOptions';
+import type { RequestOptions } from './interfaces/RequestOptions';
+import type { GetSubscriptionFilter } from './interfaces/GetSubscriptionsFilter';
 
 
 

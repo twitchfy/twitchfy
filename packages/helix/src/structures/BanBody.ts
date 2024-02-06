@@ -1,4 +1,4 @@
-import { PostBanData, PostBanBody } from '@twitchapi/api-types';
+import type { PostBanData, PostBanBody } from '@twitchapi/api-types';
 
 export class BanBody implements PostBanBody{
   public data: PostBanData;
