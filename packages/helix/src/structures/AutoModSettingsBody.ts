@@ -1,5 +1,5 @@
-import { PutAutoModSettings } from '@twitchapi/api-types';
-import { AutoModSettingsOptions } from '../interfaces/AutoModSettingsOptions';
+import type { PutAutoModSettings } from '@twitchapi/api-types';
+import type { AutoModSettingsOptions } from '../interfaces/AutoModSettingsOptions';
 
 
 export class AutoModSettingsBody implements PutAutoModSettings{

@@ -8,6 +8,7 @@
       "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
+      "@typescript-eslint/consistent-type-imports": "error",
       "indent": ["error", 2],
       "linebreak-style": ["error", "unix"],
       "quotes": ["error", "single"],

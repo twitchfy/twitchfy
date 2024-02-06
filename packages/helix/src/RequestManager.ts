@@ -1,21 +1,19 @@
 import fetch from 'node-fetch';
-import { BaseClient } from './BaseClient';
-import { WhisperBody } from './structures/WhisperBody';
-import { TimeoutBody } from './structures/TimeoutBody';
-import { BanBody } from './structures/BanBody';
-import { AnnouncementBody } from './structures/AnnouncementBody';
-import { ChatSettingsBody } from './structures/ChatSettingsBody';
-import { AutoModSettingsBody } from './structures/AutoModSettingsBody';
+import type { BaseClient } from './BaseClient';
+import type { WhisperBody } from './structures/WhisperBody';
+import type { TimeoutBody } from './structures/TimeoutBody';
+import type { BanBody } from './structures/BanBody';
+import type { AnnouncementBody } from './structures/AnnouncementBody';
+import type { ChatSettingsBody } from './structures/ChatSettingsBody';
+import type { AutoModSettingsBody } from './structures/AutoModSettingsBody';
 import { TwitchHelixError } from './structures/TwitchHelixError';
 import type { GetResponses } from './types/GetResponses';
 import type { PostResponses } from './types/PostResponses';
 import type { PatchResponses } from './types/PatchResponses';
 import type { PutResponses } from './types/PutResponses';
 import type { Error } from './interfaces/Error';
-import { SubscriptionOptions } from './interfaces/SubscriptionOptions';
-import { RequestOptions } from './interfaces/RequestOptions';
-
-
+import type { SubscriptionOptions } from './interfaces/SubscriptionOptions';
+import type { RequestOptions } from './interfaces/RequestOptions';
 
 
 

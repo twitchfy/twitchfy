@@ -1,4 +1,4 @@
-import { SubscriptionTransport } from './SubscriptionTransport';
+import type { SubscriptionTransport } from './SubscriptionTransport';
 
 export interface SubscriptionOptions {
     type: string
