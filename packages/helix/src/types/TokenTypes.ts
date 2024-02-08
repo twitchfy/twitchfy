@@ -1,0 +1,1 @@
+export type TokenTypes = 'implicit' | 'code'

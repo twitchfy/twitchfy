@@ -1,5 +1,5 @@
-import type { ChatSettingsOptions } from '../interfaces/ChatSettingsOptions';
 import type { PatchChatSettings } from '@twitchapi/api-types';
+import type { ChatSettingsOptions } from '../interfaces';
 
 export class ChatSettingsBody implements PatchChatSettings{
   public emote_mode?: boolean;

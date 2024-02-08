@@ -1,5 +1,5 @@
 import type { Response } from 'node-fetch';
-import type { Error as ErrorType } from '../interfaces/Error';
+import type { Error as ErrorType } from '../interfaces';
 
 export class TwitchHelixError extends Error {
   public override name: string;
