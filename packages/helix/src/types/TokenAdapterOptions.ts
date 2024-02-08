@@ -7,4 +7,4 @@ export type TokenAdapterOptions<T extends TokenTypes> = {
     token: string
     type: T
 
-} & ( T extends 'code' ? { refreshToken: string } : {} )
+} & ( T extends 'code' ? { refreshToken: string, refresh?: boolean } : {} )

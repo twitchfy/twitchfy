@@ -1,6 +1,7 @@
 import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions } from '@twitchapi/api-types';
 import { RequestManager } from './RequestManager';
-import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, TokenAdapter } from './structures';
+import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody} from './structures';
+import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
 import type { SubscriptionOptions, HelixClientOptions, GetSubscriptionFilter } from './interfaces';
 import type { RequestOptions } from './types';
@@ -19,9 +20,11 @@ export class BaseClient {
 
 
   public constructor(options: HelixClientOptions) {
+
     this.clientId = options.clientId;
-    this.userToken = options.userToken;
+    this.clientSecret = options.clientSecret;
     this.appToken = options.appToken;
+    this.userToken = options.userToken;
     this.proxy = options.proxy;
     this.requestManager = new RequestManager(this);
   }
@@ -219,6 +222,28 @@ export class BaseClient {
 
     return await handlePagination(this, '/eventsub/subscriptions', `${filter ? filter.status ? `status=${filter.status}` : filter.type ? `type=${filter.type}` : `user_id=${filter.user_id}` : ''}`, 'GET', requestOptions) as PostEventSubscriptions[]; 
 
+  }
+
+  public async refreshToken(refreshToken: string){
+
+    return await this.requestManager.refreshToken(refreshToken);
+
+  }
+
+  public async generateToken(code: string, redirectURI: string, refresh: boolean = true){
+
+    const data = await this.requestManager.generateToken(code, redirectURI);
+
+    return new TokenAdapter({ type: 'code', token: data.access_token, refreshToken: data.refresh_token, refresh });
+
+  }
+  
+
+  public setUserToken(token: TokenAdapter){
+
+    this.userToken = token;
+
+    return this;
   }
 
 }
