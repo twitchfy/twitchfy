@@ -247,9 +247,15 @@ export class BaseClient {
 
   }
 
-  public async refreshToken(refreshToken: string){
+  public async refreshToken(token: TokenAdapter<'code', true>){
 
-    return await this.requestManager.refreshToken(refreshToken);
+    const data = await this.requestManager.refreshToken(token.refreshToken);
+
+    token.token = data.access_token;
+
+    token.refreshToken = data.refresh_token;
+
+    return token;
 
   }
 
