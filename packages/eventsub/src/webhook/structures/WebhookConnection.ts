@@ -10,9 +10,9 @@ import { makeMiddlewares, parseRoute } from '../util';
 import { SubscriptionRouter } from '../routes';
 import { SubscriptionCollection, Subscription, type Client } from '../../structures';
 import { Events, type SubscriptionTypes } from '../../enums';
-import type { SubscriptionOptions, SubscriptionOptionsIndex, EventSubEvents } from '../../interfaces';
+import type { SubscriptionOptionsIndex, EventSubEvents } from '../../interfaces';
 import { SubscriptionVersionsObject } from '../../util';
-import type { ConnectionTypes } from '../../types';
+import type { ConnectionTypes, SubscriptionOptions } from '../../types';
 
 class EventSubEventEmitter<T extends ConnectionTypes = ConnectionTypes> extends EventEmitter {
   public constructor() {
@@ -40,9 +40,11 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
   public baseURL: string;
 
-  public auth: string;
+  public appToken: string;
 
   public clientID: string;
+
+  public clientSecret: string;
 
   public helixClient: HelixClient;
 
@@ -65,11 +67,13 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
     this.baseURL = options.baseURL;
 
-    this.auth = options.auth;
+    this.appToken = options.appToken;
 
     this.clientID = options.clientID;
 
-    this.helixClient = new HelixClient({ clientId: options.clientID, appToken: options.auth, ...options.helix });
+    this.clientSecret = options.clientSecret;
+
+    this.helixClient = new HelixClient({ clientId: options.clientID, clientSecret: options.clientSecret, appToken: options.appToken, ...options.helix });
 
     this.subscriptions = new SubscriptionCollection<WebhookConnection>();
 
@@ -85,11 +89,11 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
   }
 
-  public async subscribe<T extends SubscriptionTypes>(options: SubscriptionOptions<T>): Promise<Subscription<T, WebhookConnection>>{
+  public async subscribe<T extends SubscriptionTypes>(options: SubscriptionOptions<T, WebhookConnection>): Promise<Subscription<T, WebhookConnection>>{
 
-    const { type, options: subscriptionOptions, auth } = options;
+    const { type, options: subscriptionOptions } = options;
  
-    const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret: this.secret }, condition: subscriptionOptions }, auth, { useTokenType: 'app' });
+    const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret: this.secret }, condition: subscriptionOptions }, { useTokenType: 'app' });
 
     const subscription = new Subscription<T, WebhookConnection>(this, options, data, this.secret);
 
@@ -102,15 +106,15 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
   }
 
-  public async subscribeAll<T extends SubscriptionTypes>(...options: SubscriptionOptionsIndex[T][]): Promise<Subscription<T, WebhookConnection>[]>{
+  public async subscribeAll<T extends SubscriptionTypes>(...options: SubscriptionOptionsIndex<WebhookConnection>[T][]): Promise<Subscription<T, WebhookConnection>[]>{
 
     const subscriptions: Subscription<SubscriptionTypes, WebhookConnection>[] = [];
 
     for(const sub of options){
       
-      const { type, options: subscriptionOptions, auth } = sub;
+      const { type, options: subscriptionOptions } = sub;
  
-      const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret: this.secret }, condition: subscriptionOptions }, auth , { useTokenType: 'app' });
+      const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret: this.secret }, condition: subscriptionOptions }, { useTokenType: 'app' });
 
       const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, sub, data, this.secret);
 
@@ -149,7 +153,7 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
         if((data.transport as { callback: string }).callback !== this.baseURL + this.subscriptionRoute) continue;
 
-        const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, { type: data.type as SubscriptionTypes, auth: this.auth, options: data.condition as any }, data, this.secret );
+        const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, { type: data.type as SubscriptionTypes, appToken: this.appToken, options: data.condition as any }, data, this.secret );
 
         this.subscriptions.set(subscription.id, subscription);
 

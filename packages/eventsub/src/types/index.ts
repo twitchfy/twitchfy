@@ -3,3 +3,4 @@ export * from './Message';
 export * from './StreamTypes';
 export * from './SubscriptionCallback';
 export * from './SubscriptionMessage';
+export * from './SubscriptionOptions';
