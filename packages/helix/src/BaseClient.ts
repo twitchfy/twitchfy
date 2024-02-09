@@ -32,102 +32,121 @@ export class BaseClient {
   public async getUser(userIdentificator: string, requestOptions?: RequestOptions): Promise<User> {
 
     if (isNaN(Number(userIdentificator))) {
-      const data = await this.requestManager.get('/users', `login=${userIdentificator}`, requestOptions) as UserResponse;
+      const data = await this.requestManager.get('/users', new URLSearchParams({ login: userIdentificator }).toString(), requestOptions) as UserResponse;
 
       return data.data[0];
     } else {
-      const data = await this.requestManager.get('/users', `id=${userIdentificator}`, requestOptions) as UserResponse;
+      const data = await this.requestManager.get('/users', new URLSearchParams({ id: userIdentificator }).toString(), requestOptions) as UserResponse;
 
       return data.data[0];
     }
 
   }
 
-  public async getUsers(usersIdentifications: string[], requestOptions?: RequestOptions): Promise<User[]> {
+  public async getUsers(usersIdentification: string[], requestOptions?: RequestOptions): Promise<User[]> {
 
-    const params = usersIdentifications.map((i) => isNaN(Number(i)) ? `login=${i}` : `id=${i}`).join('&');
+    const params = new URLSearchParams();
 
-    const data = await this.requestManager.get('/users', params, requestOptions) as UserResponse;
+    const identifications = usersIdentification.map((i) => isNaN(Number(i)) ? { login: i } : { id: i });
+
+    for(const identification of identifications) params.append(Object.keys(identification)[0], Object.values(identification)[0]); 
+
+    const data = await this.requestManager.get('/users', params.toString(), requestOptions) as UserResponse;
 
     return data.data;
   }
 
-  public async getChannel(channelIdentification: string, requestOptions?: RequestOptions): Promise<Channel> {
+  public async getChannel(channelID: string, requestOptions?: RequestOptions): Promise<Channel> {
 
-    const data = await this.requestManager.get('/channels', `broadcaster_id=${channelIdentification}`, requestOptions) as ChannelResponse;
+    const data = await this.requestManager.get('/channels', new URLSearchParams({ broadcaster_id: channelID }).toString(), requestOptions) as ChannelResponse;
 
     return data.data[0];
   }
 
-  public async getChannels(channelsIdentification: string[], requestOptions?: RequestOptions): Promise<Channel[]> {
+  public async getChannels(channels_id: string[], requestOptions?: RequestOptions): Promise<Channel[]> {
+
+    const params = new URLSearchParams();
+
+    for(const channel of channels_id) params.append('broadcaster_id', channel);
     
-    const data = await this.requestManager.get('/channels', channelsIdentification.map((c) => `broadcaster_id=${c}`).join('&'), requestOptions) as ChannelResponse;
+    const data = await this.requestManager.get('/channels', params.toString(), requestOptions) as ChannelResponse;
 
     return data.data;
   }
 
-  public async deleteMessage(id: string, moderator_id: string, broadcaster_id: string, requestOptions?: RequestOptions<'user'>) {
+  public async deleteMessage(id: string, broadcaster_id: string, moderator_id: string, requestOptions?: RequestOptions<'user'>) {
 
-    await this.requestManager.delete('/moderation/chat', `message_id=${id}&broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, { ...requestOptions, useTokenType: 'user' });
+    await this.requestManager.delete('/moderation/chat', new URLSearchParams({ message_id: id, broadcaster_id, moderator_id }).toString(), { ...requestOptions, useTokenType: 'user' });
 
   }
 
   public async sendWhisper(senderUserID: string, receiverUserID: string, body: WhisperBody, requestOptions?: RequestOptions<'user'>) {
 
-    await this.requestManager.post('/whispers', `from_user_id=${senderUserID}&to_user_id=${receiverUserID}`, body, { ...requestOptions, useTokenType: 'user' });
+    await this.requestManager.post('/whispers', new URLSearchParams({ from_user_id: senderUserID, to_user_id: receiverUserID }).toString(), body, { ...requestOptions, useTokenType: 'user' });
   }
 
   public async banUser(broadcaster_id: string, moderator_id: string, body: BanBody, requestOptions?: RequestOptions<'user'>): Promise<Ban> {
 
-    const data = await this.requestManager.post('/moderation/bans', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, body, { ...requestOptions, useTokenType: 'user' }) as BanUserResponse;
+    const data = await this.requestManager.post('/moderation/bans', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), body, { ...requestOptions, useTokenType: 'user' }) as BanUserResponse;
 
     return data.data[0];
   }
 
   public async timeoutUser(broadcaster_id: string, moderator_id: string, body: TimeoutBody, requestOptions?: RequestOptions<'user'>): Promise<Ban> {
 
-    const data = await this.requestManager.post('/moderation/bans', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, body, { ...requestOptions, useTokenType: 'user' }) as BanUserResponse;
+    const data = await this.requestManager.post('/moderation/bans', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), body, { ...requestOptions, useTokenType: 'user' }) as BanUserResponse;
 
     return data.data[0];
   }
 
-  public async getBans(broadcaster_id: string, user_id?: string[], requestOptions?: RequestOptions<'user'>): Promise<GetBan[] | GetBan> {
+  public async getBans(broadcaster_id: string, users_id?: string[], requestOptions?: RequestOptions<'user'>): Promise<GetBan[] | GetBan> {
 
-    const data = await this.requestManager.get('/moderation/banned', `broadcaster_id=${broadcaster_id}${user_id ? `&${user_id.map((id) => `user_id=${id}`).join('&')}` : ''}`, { ...requestOptions, useTokenType: 'user' }) as GetBansResponse;
+    const params = new URLSearchParams({ broadcaster_id });
+
+    for(const id of users_id) params.append('user_id', id);
+
+    const data = await this.requestManager.get('/moderation/banned', params.toString(), { ...requestOptions, useTokenType: 'user' }) as GetBansResponse;
 
 
     if (data.data.length === 1) {
+
       return data.data[0];
+
     } else {
+
       return data.data;
     }
 
   }
 
   public async unBanUser(broadcaster_id: string, moderator_id: string, user_id: string, requestOptions?: RequestOptions<'user'>) {
-    await this.requestManager.delete('/moderation/bans', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}&user_id=${user_id}`, { ...requestOptions, useTokenType: 'user' });
+
+    await this.requestManager.delete('/moderation/bans', new URLSearchParams({ broadcaster_id, moderator_id, user_id }).toString(), { ...requestOptions, useTokenType: 'user' });
+  
   }
 
   public async sendAnnouncement(broadcaster_id: string, moderator_id: string, body: AnnouncementBody, requestOptions?: RequestOptions<'user'>){
 
-    await this.requestManager.post('/chat/announcements', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, body, { ...requestOptions, useTokenType: 'user' });
+    await this.requestManager.post('/chat/announcements', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), body, { ...requestOptions, useTokenType: 'user' });
 
   }
 
   public async sendShoutout(from_broadcaster_id: string, to_broadcaster_id: string, moderator_id: string, requestOptions?: RequestOptions<'user'>){
-    await this.requestManager.post('/chat/shoutouts', `from_broadcaster_id=${from_broadcaster_id}&to_broadcaster_id=${to_broadcaster_id}&moderator_id=${moderator_id}`, null, { ...requestOptions, useTokenType: 'user' });
+
+    await this.requestManager.post('/chat/shoutouts', new URLSearchParams({ from_broadcaster_id, to_broadcaster_id, moderator_id }).toString(), null, { ...requestOptions, useTokenType: 'user' });
+  
   }
 
   public async getChatSettings(broadcaster_id: string, moderator_id: string, requestOptions?: RequestOptions): Promise<ChatSettings>{
 
-    const data = await this.requestManager.get('/chat/settings', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, requestOptions) as GetChatSettingsResponse;
+    const data = await this.requestManager.get('/chat/settings', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), requestOptions) as GetChatSettingsResponse;
 
     return data.data[0];
   }
 
   public async updateChatSettings(broadcaster_id: string, moderator_id: string, body: ChatSettingsBody, requestOptions?: RequestOptions<'user'>) : Promise<ChatSettings>{
 
-    const data = await this.requestManager.patch('/chat/settings', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, body, { ...requestOptions, useTokenType: 'user' }) as GetChatSettingsResponse;
+    const data = await this.requestManager.patch('/chat/settings', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), body, { ...requestOptions, useTokenType: 'user' }) as GetChatSettingsResponse;
 
     return data.data[0];
   }
@@ -135,32 +154,32 @@ export class BaseClient {
   public async updateUserColor(user_id: string, color: string, requestOptions?: RequestOptions<'user'>) {
 
 
-    await this.requestManager.put('/chat/color', `user_id=${user_id}&color=${encodeURIComponent(color)}`, null, { ...requestOptions, useTokenType: 'user' });
+    await this.requestManager.put('/chat/color', new URLSearchParams({ user_id, color: encodeURIComponent(color)}).toString(), null, { ...requestOptions, useTokenType: 'user' });
 
   }
 
   public async getAutoModSettings(broadcaster_id: string, moderator_id: string, requestOptions?: RequestOptions<'user'>): Promise<AutoModSettings>{
    
-    const data = await this.requestManager.get('/moderation/automod/settings', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, { ...requestOptions, useTokenType: 'user' }) as GetAutoModSettingsResponse;
+    const data = await this.requestManager.get('/moderation/automod/settings', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), { ...requestOptions, useTokenType: 'user' }) as GetAutoModSettingsResponse;
         
     return data.data[0];
   }
 
   public async updateAutoModSettings(broadcaster_id: string, moderator_id: string, body: AutoModSettingsBody, requestOptions?: RequestOptions<'user'>) : Promise<AutoModSettings>{
 
-    const data = await this.requestManager.put('/moderation/automod/settings', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, body, { ...requestOptions, useTokenType: 'user' }) as GetAutoModSettingsResponse;
+    const data = await this.requestManager.put('/moderation/automod/settings', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), body, { ...requestOptions, useTokenType: 'user' }) as GetAutoModSettingsResponse;
 
     return data.data[0];
   }
 
   public async getChatters(broadcaster_id: string, moderator_id: string, requestOptions?: RequestOptions<'user'>) : Promise<Chatter[]>{
 
-    return await handlePagination(this, '/chat/chatters', `broadcaster_id=${broadcaster_id}&moderator_id=${moderator_id}`, 'GET', { ...requestOptions, useTokenType: 'user' }) as Chatter[];
+    return await handlePagination(this, '/chat/chatters', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), 'GET', { ...requestOptions, useTokenType: 'user' }) as Chatter[];
   }
 
   public async getChannelFollowerCount(broadcaster_id: string, requestOptions?: RequestOptions<'user'>): Promise<number> {
 
-    const data = await this.requestManager.get('/channels/followers', `broadcaster_id=${broadcaster_id}`, { ...requestOptions, useTokenType: 'user' }) as GetFollowersResponse;
+    const data = await this.requestManager.get('/channels/followers', new URLSearchParams({ broadcaster_id }).toString(), { ...requestOptions, useTokenType: 'user' }) as GetFollowersResponse;
 
     return data.total;
 
@@ -168,20 +187,20 @@ export class BaseClient {
 
   public async getChannelFollowers(broadcaster_id: string, requestOptions?: RequestOptions<'user'>): Promise<GetFollowers[]>{
 
-    return await handlePagination(this, '/channels/followers', `broadcaster_id=${broadcaster_id}&first=100`, 'GET', { ...requestOptions, useTokenType: 'user' }) as GetFollowers[];
+    return await handlePagination(this, '/channels/followers', new URLSearchParams({ broadcaster_id, first: '100' }).toString(), 'GET', { ...requestOptions, useTokenType: 'user' }) as GetFollowers[];
 
   }
 
   public async getChannelFollower(broadcaster_id: string, user_id: string, requestOptions?: RequestOptions<'user'>): Promise<GetFollowers>{
 
-    const data = await this.requestManager.get('/channels/followers', `broadcaster_id=${broadcaster_id}&user_id=${user_id}`, { ...requestOptions, useTokenType: 'user' }) as GetFollowersResponse;
+    const data = await this.requestManager.get('/channels/followers', new URLSearchParams({ broadcaster_id, user_id }).toString(), { ...requestOptions, useTokenType: 'user' }) as GetFollowersResponse;
 
     return data.data[0];
   }
 
   public async createClip(broadcaster_id: string, delay: boolean = false, requestOptions?: RequestOptions<'user'>): Promise<PostCreateClip>{
 
-    const data = await this.requestManager.post('/clips', `broadcaster_id=${broadcaster_id}&delay=${delay}`, null, { ...requestOptions, useTokenType: 'user' }) as PostCreateClipResponse;
+    const data = await this.requestManager.post('/clips', new URLSearchParams({ broadcaster_id, delay: String(delay) }).toString(), null, { ...requestOptions, useTokenType: 'user' }) as PostCreateClipResponse;
         
     return data.data[0];
 
@@ -191,12 +210,12 @@ export class BaseClient {
 
     if(isNaN(Number(userIdentificator))){
 
-      const data = await this.requestManager.get('/streams', `user_login=${userIdentificator}`, requestOptions) as GetStreamResponse;
+      const data = await this.requestManager.get('/streams', new URLSearchParams({ user_login: userIdentificator }).toString(), requestOptions) as GetStreamResponse;
 
       return data.data[0] ?? null;
       
     } else {
-      const data = await this.requestManager.get('/streams', `user_id=${userIdentificator}`, requestOptions) as GetStreamResponse;
+      const data = await this.requestManager.get('/streams', new URLSearchParams({ user_id: userIdentificator }).toString(), requestOptions) as GetStreamResponse;
 
       return data.data[0] ?? null;
     }
@@ -214,13 +233,17 @@ export class BaseClient {
 
   public async deleteSubscription(id: string, requestOptions?: RequestOptions) : Promise<void>{
 
-    await this.requestManager.delete('/eventsub/subscriptions', `id=${id}`, requestOptions);
+    await this.requestManager.delete('/eventsub/subscriptions', new URLSearchParams({ id }).toString(), requestOptions);
 
   }
 
   public async getSubscriptions(filter?: GetSubscriptionFilter, requestOptions?: RequestOptions){
 
-    return await handlePagination(this, '/eventsub/subscriptions', `${filter ? filter.status ? `status=${filter.status}` : filter.type ? `type=${filter.type}` : `user_id=${filter.user_id}` : ''}`, 'GET', requestOptions) as PostEventSubscriptions[]; 
+    const params = new URLSearchParams;
+
+    if(filter) filter.status ? params.append('status', filter.status) : filter.type ? params.append('type', filter.type) : params.append('user_id', filter.user_id);
+
+    return await handlePagination(this, '/eventsub/subscriptions', params.toString(), 'GET', requestOptions) as PostEventSubscriptions[]; 
 
   }
 

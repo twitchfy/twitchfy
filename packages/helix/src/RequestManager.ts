@@ -172,7 +172,7 @@ export class RequestManager {
 
   public async refreshToken(refreshToken: string){
 
-    const res = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${this.client.clientId}&client_secret=${this.client.clientSecret}&grant_type=refresh_token&refresh_token=${refreshToken}`, { method: 'POST' });
+    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: this.client.clientId, client_secret: this.client.clientSecret, grant_type: 'refresh_token', refresh_token: refreshToken }).toString()}`, { method: 'POST' });
 
     if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
 
@@ -182,7 +182,7 @@ export class RequestManager {
 
   public async generateToken(code: string, redirectURI: string){
 
-    const res = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${this.client.clientId}&client_secret=${this.client.clientSecret}&code=${code}&grant_type=authorization_code&redirect_uri=${redirectURI}`, { method: 'POST' });
+    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: this.client.clientId, client_secret: this.client.clientSecret, code, grant_type: 'authorization_code', redirect_uri: redirectURI }).toString()}`, { method: 'POST' });
 
     if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
 
