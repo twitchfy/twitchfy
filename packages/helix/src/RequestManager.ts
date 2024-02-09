@@ -33,7 +33,7 @@ export class RequestManager {
 
         if(token.type === 'implicit' || !token.refresh ) throw new TwitchHelixError(res, await res.json() as Error);
 
-        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code'>);
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
         return this.get(endpoint, params, requestOptions);
         
@@ -58,7 +58,7 @@ export class RequestManager {
 
         if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error);
 
-        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code'>);
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
         this.delete(endpoint, params, requestOptions);
         
@@ -82,7 +82,7 @@ export class RequestManager {
 
         if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error);
 
-        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code'>);
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
         return this.post(endpoint, params, body, requestOptions);
         
@@ -109,7 +109,7 @@ export class RequestManager {
 
         if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error);
 
-        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code'>);
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
         return this.patch(endpoint, params, body, requestOptions);
         
@@ -134,7 +134,7 @@ export class RequestManager {
 
         if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error);
 
-        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code'>);
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
         return this.put(endpoint, params, body, requestOptions);
         
@@ -227,11 +227,12 @@ export class RequestManager {
     return token;
   }
 
-  private async handleTokenAdapterRefresh(token: TokenAdapter<'code'>){
+  private async handleTokenAdapterRefresh(token: TokenAdapter<'code', true>){
           
     const data = await this.refreshToken(token.refreshToken);
 
     token.token = data.access_token;
+
     token.refreshToken = data.refresh_token;
 
 

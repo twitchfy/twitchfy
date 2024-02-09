@@ -1,16 +1,16 @@
 import type { TokenTypes, TokenAdapterOptions } from '../types';
 
-export class TokenAdapter<T extends TokenTypes = TokenTypes> {
+export class TokenAdapter<T extends TokenTypes = TokenTypes, K extends boolean = true > {
 
   public type: T;
 
   public token: string;
 
-  public refreshToken: T extends 'code' ? string : never;
+  public refreshToken: K extends true ? string : never;
 
-  public refresh: T extends 'code' ? boolean : never;
+  public refresh: T extends 'code' ? K : never;
 
-  public constructor(options: TokenAdapterOptions<T>){
+  public constructor(options: TokenAdapterOptions<T, K>){
 
     this.type = options.type;
 
