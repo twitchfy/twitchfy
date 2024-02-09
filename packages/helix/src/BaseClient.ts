@@ -1,9 +1,9 @@
-import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions } from '@twitchapi/api-types';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions, TokenCodeFlowResponse } from '@twitchapi/api-types';
 import { RequestManager } from './RequestManager';
 import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody} from './structures';
 import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
-import type { SubscriptionOptions, HelixClientOptions, GetSubscriptionFilter } from './interfaces';
+import type { SubscriptionOptions, HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions } from './interfaces';
 import type { RequestOptions } from './types';
 
 
@@ -253,11 +253,13 @@ export class BaseClient {
 
   }
 
-  public async generateToken(code: string, redirectURI: string, refresh: boolean = true){
+  public async generateToken<T extends boolean = true, K extends boolean = false>(code: string, redirectURI: string, options?: GenerateTokenOptions<T, K>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
 
     const data = await this.requestManager.generateToken(code, redirectURI);
 
-    return new TokenAdapter({ type: 'code', token: data.access_token, refreshToken: data.refresh_token, refresh });
+    if(options?.raw) return data as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
+
+    return new TokenAdapter({ type: 'code', token: data.access_token, refreshToken: data.refresh_token, refresh: options?.refresh ?? true }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
 
   }
   

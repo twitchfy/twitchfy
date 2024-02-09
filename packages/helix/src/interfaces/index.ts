@@ -5,3 +5,4 @@ export * from './GetSubscriptionsFilter';
 export * from './HelixClientOptions';
 export * from './SubscriptionOptions';
 export * from './SubscriptionTransport';
+export * from './GenerateTokenOptions';
