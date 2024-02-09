@@ -27,7 +27,7 @@ export class RequestManager {
 
     if(!res.ok){
 
-      if(requestOptions.useTokenType === 'user'){
+      if(requestOptions?.useTokenType === 'user'){
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
@@ -52,7 +52,7 @@ export class RequestManager {
 
     if(!res.ok){
 
-      if(requestOptions.useTokenType === 'user'){
+      if(requestOptions?.useTokenType === 'user'){
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
@@ -76,7 +76,7 @@ export class RequestManager {
         
     if(!res.ok){
 
-      if(requestOptions.useTokenType === 'user'){
+      if(requestOptions?.useTokenType === 'user'){
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
@@ -103,7 +103,7 @@ export class RequestManager {
 
     if(!res.ok){
 
-      if(requestOptions.useTokenType === 'user'){
+      if(requestOptions?.useTokenType === 'user'){
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
@@ -128,7 +128,7 @@ export class RequestManager {
 
     if(!res.ok){
 
-      if(requestOptions.useTokenType === 'user'){
+      if(requestOptions?.useTokenType === 'user'){
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
@@ -202,7 +202,7 @@ export class RequestManager {
 
     let token : TokenAdapter | string;
     
-    switch(requestOptions!.useTokenType){
+    switch(requestOptions?.useTokenType){
       
     case 'app' : token = this.client.appToken;
 
