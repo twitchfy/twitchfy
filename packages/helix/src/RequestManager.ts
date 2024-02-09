@@ -1,19 +1,10 @@
 import fetch from 'node-fetch';
+import type { RefreshTokenResponse, TokenCodeFlowResponse } from '@twitchapi/api-types';
 import type { BaseClient } from './BaseClient';
-import type { WhisperBody } from './structures/WhisperBody';
-import type { TimeoutBody } from './structures/TimeoutBody';
-import type { BanBody } from './structures/BanBody';
-import type { AnnouncementBody } from './structures/AnnouncementBody';
-import type { ChatSettingsBody } from './structures/ChatSettingsBody';
-import type { AutoModSettingsBody } from './structures/AutoModSettingsBody';
+import type { WhisperBody, TimeoutBody, AnnouncementBody, BanBody, ChatSettingsBody, AutoModSettingsBody, TokenAdapter } from './structures';
 import { TwitchHelixError } from './structures/TwitchHelixError';
-import type { GetResponses } from './types/GetResponses';
-import type { PostResponses } from './types/PostResponses';
-import type { PatchResponses } from './types/PatchResponses';
-import type { PutResponses } from './types/PutResponses';
-import type { Error } from './interfaces/Error';
-import type { SubscriptionOptions } from './interfaces/SubscriptionOptions';
-import type { RequestOptions } from './interfaces/RequestOptions';
+import type { GetResponses, PostResponses, PatchResponses, PutResponses, RequestOptions} from './types';
+import type { Error, SubscriptionOptions } from './interfaces';
 
 
 
@@ -30,69 +21,222 @@ export class RequestManager {
   }
 
 
-  public async get(endpoint: string, params: string, userToken?: string, requestOptions?: RequestOptions) : GetResponses {
-    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'GET', headers: this.makeHeaders(requestOptions, userToken) });
+  public async get(endpoint: string, params: string, requestOptions: RequestOptions) : GetResponses {
 
-    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
+    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'GET', headers: this.makeHeaders(requestOptions) });
 
-    
-    return await res.json();
-  }
+    if(!res.ok){
 
-  public async deleteWithUserToken(endpoint: string, params: string, userToken?: string, requestOptions?: RequestOptions) {
-    if (userToken) {
-      const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'DELETE', headers: this.makeHeaders(requestOptions, userToken) });
+      if(requestOptions.useTokenType === 'user'){
 
-      if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
-    } else {
-      const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'DELETE', headers: this.makeHeaders(requestOptions) });
+        const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
+        if(token.type === 'implicit' || !token.refresh ) throw new TwitchHelixError(res, await res.json() as Error, 'GET');
+
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
+
+        return this.get(endpoint, params, requestOptions);
+        
+      }
+
+      throw new TwitchHelixError(res, await res.json() as Error, 'GET');
+
     }
 
+    return await res.json();
   }
 
-  public async postWithUserToken(endpoint: string, params: string, body: WhisperBody | BanBody | TimeoutBody | AnnouncementBody | SubscriptionOptions | null, userToken?: string, requestOptions?: RequestOptions): PostResponses {
-    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'POST', headers: this.makeHeaders(requestOptions, userToken), body: JSON.stringify(body) });
+  public async delete(endpoint: string, params: string, requestOptions: RequestOptions) {
+
+    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'DELETE', headers: this.makeHeaders(requestOptions) });
+
+    if(!res.ok){
+
+      if(requestOptions.useTokenType === 'user'){
+
+        const token = this.getToken(requestOptions) as TokenAdapter;
+
+        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error, 'DELETE');
+
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
+
+        this.delete(endpoint, params, requestOptions);
         
-    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
+      }
+
+      throw new TwitchHelixError(res, await res.json() as Error, 'DELETE');
+
+    }
+  
+  }
+
+  public async post(endpoint: string, params: string, body: WhisperBody | BanBody | TimeoutBody | AnnouncementBody | SubscriptionOptions | null, requestOptions: RequestOptions): PostResponses {
+    
+    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'POST', headers: this.makeHeaders(requestOptions), body: JSON.stringify(body) });
+        
+    if(!res.ok){
+
+      if(requestOptions.useTokenType === 'user'){
+
+        const token = this.getToken(requestOptions) as TokenAdapter;
+
+        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
+
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
+
+        return this.post(endpoint, params, body, requestOptions);
+        
+      }
+
+      throw new TwitchHelixError(res, await res.json() as Error, 'POST');
+
+    }
 
     if(res.status === 204) return;
-    return await res.json();
-  }
-
-  public async patchWithUserToken(endpoint: string, params: string, body: ChatSettingsBody, userToken?: string, requestOptions?: RequestOptions): PatchResponses {
-    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PATCH', headers: this.makeHeaders(requestOptions, userToken), body: JSON.stringify(body)});
-
-
-    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
 
     return await res.json();
   }
 
-  public async putWithUserToken(endpoint: string, params: string, body?: AutoModSettingsBody, userToken?: string, requestOptions?: RequestOptions) : PutResponses {
+  public async patch(endpoint: string, params: string, body: ChatSettingsBody, requestOptions: RequestOptions): PatchResponses {
 
-    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PUT', headers: this.makeHeaders(requestOptions , userToken), body: JSON.stringify(body)});
+    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PATCH', headers: this.makeHeaders(requestOptions), body: JSON.stringify(body)});
 
-    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
+    if(!res.ok){
+
+      if(requestOptions.useTokenType === 'user'){
+
+        const token = this.getToken(requestOptions) as TokenAdapter;
+
+        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error, 'PATCH');
+
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
+
+        return this.patch(endpoint, params, body, requestOptions);
+        
+      }
+
+      throw new TwitchHelixError(res, await res.json() as Error, 'PATCH');
+
+    }
+
+    return await res.json();
+  }
+
+  public async put(endpoint: string, params: string, body: AutoModSettingsBody | null, requestOptions: RequestOptions) : PutResponses {
+
+    const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PUT', headers: this.makeHeaders(requestOptions), body: JSON.stringify(body)});
+
+    if(!res.ok){
+
+      if(requestOptions.useTokenType === 'user'){
+
+        const token = this.getToken(requestOptions) as TokenAdapter;
+
+        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error, 'PUT');
+
+        await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
+
+        return this.put(endpoint, params, body, requestOptions);
+        
+      }
+
+      throw new TwitchHelixError(res, await res.json() as Error, 'PUT');
+
+    }
 
     if(res.status === 204) return;
 
     return await res.json();
   }
 
-  public async validateUserToken(){
+  public async validateToken(requestOptions: RequestOptions, noError: boolean = true){
 
-    const res = await fetch('https://id.twitch.tv/oauth2/validate', { headers: this.makeHeaders()});
+    const res = await fetch(this.baseURL + '/oauth2/validate', { headers: this.makeHeaders(requestOptions) } );
 
-    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
+    if(!res.ok){
+
+      switch(noError){
+
+      case true : return false;
+
+        break;
+
+      case false : throw new TwitchHelixError(res, await res.json() as Error, 'GET');
+
+      }
+
+    }
+
+    return true;
   }
 
-  private makeHeaders(requestOptions?: RequestOptions, userToken?: string) {
+  public async refreshToken(refreshToken: string){
 
-    const token = requestOptions?.useTokenType ? requestOptions?.useTokenType === 'user' ? userToken || this.client.userToken || this.client.appToken : this.client.appToken : userToken || this.client.userToken || this.client.appToken;
+    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: this.client.clientId, client_secret: this.client.clientSecret, grant_type: 'refresh_token', refresh_token: refreshToken }).toString()}`, { method: 'POST' });
 
-    return { 'Authorization': `Bearer ${token}`, 'Client-Id': this.client.clientId, 'Content-Type': 'application/json' };
+    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
+
+    return await res.json() as RefreshTokenResponse;
+
+  }
+
+  public async generateToken(code: string, redirectURI: string){
+
+    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: this.client.clientId, client_secret: this.client.clientSecret, code, grant_type: 'authorization_code', redirect_uri: redirectURI }).toString()}`, { method: 'POST' });
+
+    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
+
+    return await res.json() as TokenCodeFlowResponse;
+
+  }
+
+  private makeHeaders(requestOptions: RequestOptions) {
+
+    const token = this.getToken(requestOptions);
+
+    return { 'Authorization': `Bearer ${typeof token === 'string' ? token: token?.token}`, 'Client-Id': this.client.clientId, 'Content-Type': 'application/json' };
     
   }
+
+  private getToken(requestOptions: RequestOptions){
+
+    let token : TokenAdapter | string;
+    
+    switch(requestOptions!.useTokenType){
+      
+    case 'app' : token = this.client.appToken;
+
+      break;
+
+    case 'user': {
+
+      setRequestOptionsType<'user'>(requestOptions);
+
+      token = requestOptions.userToken || this.client.userToken;
+
+    }
+
+      break;
+
+    default: token = this.client.appToken;
+
+      break;
+
+    }
+
+    return token;
+  }
+
+  private async handleTokenAdapterRefresh(token: TokenAdapter<'code', true>){
+          
+    const data = await this.refreshToken(token.refreshToken);
+
+    token.token = data.access_token;
+
+    token.refreshToken = data.refresh_token;
+
+
+  }
 }
+
+function setRequestOptionsType<T extends 'app' | 'user'>(requestOptions: RequestOptions): asserts requestOptions is RequestOptions<T> {}

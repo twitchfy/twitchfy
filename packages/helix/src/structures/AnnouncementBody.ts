@@ -1,4 +1,4 @@
-import type { AnnouncementColor } from '../enums/AnnouncementColor';
+import type { AnnouncementColor } from '../enums';
 
 export class AnnouncementBody{
   public message: string;
