@@ -31,7 +31,7 @@ export class RequestManager {
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
-        if(token.type === 'implicit' || !token.refresh ) throw new TwitchHelixError(res, await res.json() as Error);
+        if(token.type === 'implicit' || !token.refresh ) throw new TwitchHelixError(res, await res.json() as Error, 'GET');
 
         await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
@@ -39,7 +39,7 @@ export class RequestManager {
         
       }
 
-      throw new TwitchHelixError(res, await res.json() as Error);
+      throw new TwitchHelixError(res, await res.json() as Error, 'GET');
 
     }
 
@@ -56,7 +56,7 @@ export class RequestManager {
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
-        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error);
+        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error, 'DELETE');
 
         await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
@@ -64,7 +64,7 @@ export class RequestManager {
         
       }
 
-      throw new TwitchHelixError(res, await res.json() as Error);
+      throw new TwitchHelixError(res, await res.json() as Error, 'DELETE');
 
     }
   
@@ -80,7 +80,7 @@ export class RequestManager {
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
-        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error);
+        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
         await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
@@ -88,7 +88,7 @@ export class RequestManager {
         
       }
 
-      throw new TwitchHelixError(res, await res.json() as Error);
+      throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
     }
 
@@ -107,7 +107,7 @@ export class RequestManager {
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
-        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error);
+        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error, 'PATCH');
 
         await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
@@ -115,7 +115,7 @@ export class RequestManager {
         
       }
 
-      throw new TwitchHelixError(res, await res.json() as Error);
+      throw new TwitchHelixError(res, await res.json() as Error, 'PATCH');
 
     }
 
@@ -132,7 +132,7 @@ export class RequestManager {
 
         const token = this.getToken(requestOptions) as TokenAdapter;
 
-        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error);
+        if(token.type === 'implicit' || !token.refresh) throw new TwitchHelixError(res, await res.json() as Error, 'PUT');
 
         await this.handleTokenAdapterRefresh(token as TokenAdapter<'code', true>);
 
@@ -140,7 +140,7 @@ export class RequestManager {
         
       }
 
-      throw new TwitchHelixError(res, await res.json() as Error);
+      throw new TwitchHelixError(res, await res.json() as Error, 'PUT');
 
     }
 
@@ -161,7 +161,7 @@ export class RequestManager {
 
         break;
 
-      case false : throw new TwitchHelixError(res, await res.json() as Error);
+      case false : throw new TwitchHelixError(res, await res.json() as Error, 'GET');
 
       }
 
@@ -174,7 +174,7 @@ export class RequestManager {
 
     const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: this.client.clientId, client_secret: this.client.clientSecret, grant_type: 'refresh_token', refresh_token: refreshToken }).toString()}`, { method: 'POST' });
 
-    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
+    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
     return await res.json() as RefreshTokenResponse;
 
@@ -184,7 +184,7 @@ export class RequestManager {
 
     const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: this.client.clientId, client_secret: this.client.clientSecret, code, grant_type: 'authorization_code', redirect_uri: redirectURI }).toString()}`, { method: 'POST' });
 
-    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error);
+    if(!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
     return await res.json() as TokenCodeFlowResponse;
 
