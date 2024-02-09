@@ -5,3 +5,4 @@ export * from './types';
 export * from './util';
 export * from './webhook';
 export * from './ws';
+export { TokenAdapter } from '@twitchapi/helix';

@@ -1,15 +1,19 @@
 import type { PostEventSubscriptions } from '@twitchapi/api-types';
+import type { TokenAdapter, TokenTypes } from '@twitchapi/helix';
 import { SubscriptionCallbackManager } from './SubscriptionCallbackManager';
 import type { SubscriptionTypes } from '../enums';
-import type { SubscriptionTypeOptions, SubscriptionOptions } from '../interfaces';
-import type { SubscriptionCallback, ConnectionTypes } from '../types';
-import type { WebhookConnection } from '../webhook';
+import type { SubscriptionTypeOptions } from '../interfaces';
+import type { SubscriptionCallback, ConnectionTypes, SubscriptionOptions } from '../types';
+import { WebhookConnection } from '../webhook';
+import type { EventSubConnection } from '../ws';
 
 export class Subscription<T extends SubscriptionTypes = SubscriptionTypes, K extends ConnectionTypes = ConnectionTypes> {
 
   public connection: K;
 
-  public auth: string;
+  public userToken: K extends EventSubConnection ? TokenAdapter : never;
+
+  public appToken: K extends WebhookConnection ? string : never;
 
   public id: string;
 
@@ -30,10 +34,11 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes, K ext
   public readonly callbacks: SubscriptionCallbackManager<T, K>;
 
 
-  public constructor(connection: K, options: SubscriptionOptions<T> , data: PostEventSubscriptions, secret?: K extends WebhookConnection ? string : never){
+  public constructor(connection: K, options: SubscriptionOptions<T, K> , data: PostEventSubscriptions, secret?: K extends WebhookConnection ? string : never){
 
     this.connection = connection;
-    this.auth = options.auth ?? connection?.auth;
+    this.userToken = (options as SubscriptionOptions<T, EventSubConnection>).userToken as K extends EventSubConnection ? TokenAdapter<TokenTypes, true> : never ?? undefined as K extends EventSubConnection ? TokenAdapter<TokenTypes, true> : never;
+    this.appToken = (options as SubscriptionOptions<T, WebhookConnection>).appToken  as K extends WebhookConnection ? string : never ?? undefined as K extends WebhookConnection ? string : never;
     this.type = options.type;
     this.id = data.id;
     this.nonce = options.nonce;
@@ -59,7 +64,7 @@ export class Subscription<T extends SubscriptionTypes = SubscriptionTypes, K ext
 
   public async delete() {
 
-    await this.connection.helixClient.deleteSubscription(this.id, this.auth);
+    await this.connection.helixClient.deleteSubscription(this.id, { useTokenType: this.connection instanceof WebhookConnection ? 'app' : 'user', userToken: this.userToken });
 
     this.connection.subscriptions.delete(this.id);
 

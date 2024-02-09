@@ -2,7 +2,8 @@ import type { HelixOptions } from '../../interfaces';
 
 export interface WebhookConnectionOptions {
     clientID: string
-    auth: string
+    clientSecret: string
+    appToken: string
     baseURL: string
     secret: string
     helix?: HelixOptions

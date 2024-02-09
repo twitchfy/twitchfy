@@ -1,12 +1,12 @@
-import type { SubscriptionOptions } from './SubscriptionOptions';
+import type { ConnectionTypes, SubscriptionOptions } from '../types';
 import type { SubscriptionTypes } from '../enums';
 
 
-export interface SubscriptionOptionsIndex {
-    [SubscriptionTypes.ChannelChatClear]: SubscriptionOptions<SubscriptionTypes.ChannelChatClear>
-    [SubscriptionTypes.ChannelUpdate]: SubscriptionOptions<SubscriptionTypes.ChannelUpdate>
-    [SubscriptionTypes.ChannelFollow]: SubscriptionOptions<SubscriptionTypes.ChannelFollow>
-    [SubscriptionTypes.StreamOnline]: SubscriptionOptions<SubscriptionTypes.StreamOnline>
-    [SubscriptionTypes.ChannelAdBreakBegin]: SubscriptionOptions<SubscriptionTypes.ChannelAdBreakBegin>
-    [SubscriptionTypes.ChannelChatClearUserMessages]: SubscriptionOptions<SubscriptionTypes.ChannelChatClearUserMessages>
+export interface SubscriptionOptionsIndex<K extends ConnectionTypes> {
+    [SubscriptionTypes.ChannelChatClear]: SubscriptionOptions<SubscriptionTypes.ChannelChatClear, K>
+    [SubscriptionTypes.ChannelUpdate]: SubscriptionOptions<SubscriptionTypes.ChannelUpdate, K>
+    [SubscriptionTypes.ChannelFollow]: SubscriptionOptions<SubscriptionTypes.ChannelFollow, K>
+    [SubscriptionTypes.StreamOnline]: SubscriptionOptions<SubscriptionTypes.StreamOnline, K>
+    [SubscriptionTypes.ChannelAdBreakBegin]: SubscriptionOptions<SubscriptionTypes.ChannelAdBreakBegin, K>
+    [SubscriptionTypes.ChannelChatClearUserMessages]: SubscriptionOptions<SubscriptionTypes.ChannelChatClearUserMessages, K>
 }
