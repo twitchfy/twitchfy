@@ -5,3 +5,6 @@ export * from './PutResponses';
 export * from './TokenAdapterOptions';
 export * from './TokenTypes';
 export * from './RequestOptions';
+export * from './PostBody';
+export * from './PatchBody';
+export * from './PutBody';

@@ -6,3 +6,4 @@ export * from './HelixClientOptions';
 export * from './SubscriptionOptions';
 export * from './SubscriptionTransport';
 export * from './GenerateTokenOptions';
+export * from './SendChatMessageOptions';

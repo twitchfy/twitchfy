@@ -1,6 +1,6 @@
-import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions, TokenCodeFlowResponse } from '@twitchapi/api-types';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions, TokenCodeFlowResponse, SendChatMessageResponse } from '@twitchapi/api-types';
 import { RequestManager } from './RequestManager';
-import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody} from './structures';
+import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody} from './structures';
 import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
 import type { SubscriptionOptions, HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions } from './interfaces';
@@ -244,6 +244,12 @@ export class BaseClient {
     if(filter) filter.status ? params.append('status', filter.status) : filter.type ? params.append('type', filter.type) : params.append('user_id', filter.user_id);
 
     return await handlePagination(this, '/eventsub/subscriptions', params.toString(), 'GET', requestOptions) as PostEventSubscriptions[]; 
+
+  }
+
+  public async sendChatMessage(body: SendChatMessageBody, requestOptions?: RequestOptions){
+
+    return await this.requestManager.post('/chat/messages', '', body, requestOptions) as SendChatMessageResponse;
 
   }
 
