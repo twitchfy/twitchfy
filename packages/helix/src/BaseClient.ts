@@ -13,6 +13,7 @@ export class BaseClient {
 
   public clientId: string;
   public clientSecret: string;
+  public preferedToken: 'app' | 'user';
   public appToken?: string;
   public userToken?: TokenAdapter;
   public proxy?: string;
@@ -23,6 +24,7 @@ export class BaseClient {
 
     this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
+    this.preferedToken = options.preferedToken ?? 'app';
     this.appToken = options.appToken;
     this.userToken = options.userToken;
     this.proxy = options.proxy;
@@ -249,7 +251,9 @@ export class BaseClient {
 
   public async sendChatMessage(body: SendChatMessageBody, requestOptions?: RequestOptions){
 
-    return await this.requestManager.post('/chat/messages', '', body, requestOptions) as SendChatMessageResponse;
+    const data = await this.requestManager.post('/chat/messages', '', body, requestOptions) as SendChatMessageResponse;
+
+    return data.data[0];
 
   }
 

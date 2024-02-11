@@ -218,7 +218,7 @@ export class RequestManager {
 
       break;
 
-    default: token = this.client.userToken || this.client.appToken;
+    default: token = this.client.preferedToken === 'app' ? this.client.appToken : this.client.userToken;
 
       break;
 
