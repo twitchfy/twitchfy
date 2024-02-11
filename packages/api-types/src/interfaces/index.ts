@@ -12,4 +12,4 @@ export * from './Clip';
 export * from './Stream';
 export * from './EventSub';
 export * from './Token';
-export * from './SendMessage';
+export * from './SendChatMessage';
