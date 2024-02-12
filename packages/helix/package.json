@@ -14,7 +14,7 @@
     "node-fetch": "^2.6.11"
   },
   "devDependencies": {
-    "@twitchapi/api-types": "^1.1.13",
+    "@twitchapi/api-types": "^1.1.14",
     "@types/node-fetch": "^2.6.11"
   }
 }

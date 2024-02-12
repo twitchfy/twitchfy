@@ -1,4 +1,4 @@
-import type { PutAutoModSettings } from '@twitchapi/api-types';
+import type {  } from '@twitchapi/api-types';
 import type { AutoModSettingsOptions } from '../interfaces';
 
 
