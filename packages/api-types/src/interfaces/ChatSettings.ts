@@ -17,7 +17,7 @@ export interface ChatSettings {
 }
 
 
-export interface PatchChatSettings {
+export interface PatchChatSettingsBody {
     emote_mode?: boolean
     follower_mode?: boolean
     follower_mode_duration?: number | null
