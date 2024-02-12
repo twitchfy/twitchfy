@@ -8,3 +8,4 @@ export * from './SubscriptionTransport';
 export * from './GenerateTokenOptions';
 export * from './SendChatMessageOptions';
 export * from './TimeoutOptions';
+export * from './AnnouncementOptions';
