@@ -1,4 +1,3 @@
-import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, SendChatMessageBody } from '../structures';
-import type { SubscriptionOptions } from '../interfaces';
+import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, SendChatMessageBody, SubscriptionBody } from '../structures';
 
-export type PostBody = WhisperBody | BanBody | TimeoutBody | AnnouncementBody | SubscriptionOptions | SendChatMessageBody | null
+export type PostBody = WhisperBody | BanBody | TimeoutBody | AnnouncementBody | SubscriptionBody | SendChatMessageBody | null

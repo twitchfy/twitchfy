@@ -1,9 +1,9 @@
-import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubscriptions, TokenCodeFlowResponse, SendChatMessageResponse } from '@twitchapi/api-types';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse } from '@twitchapi/api-types';
 import { RequestManager } from './RequestManager';
-import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody} from './structures';
+import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody } from './structures';
 import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
-import type { SubscriptionOptions, HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions } from './interfaces';
+import type { HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions } from './interfaces';
 import type { RequestOptions } from './types';
 
 
@@ -225,9 +225,9 @@ export class BaseClient {
    
   }
 
-  public async subscribeToEventSub(options: SubscriptionOptions, requestOptions?: RequestOptions): Promise<PostEventSubscriptions>{
+  public async subscribeToEventSub(body: SubscriptionBody, requestOptions?: RequestOptions): Promise<PostEventSubSubscription>{
 
-    const data = await this.requestManager.post('/eventsub/subscriptions', '', options, requestOptions) as PostEventSubscriptionsResponse;
+    const data = await this.requestManager.post('/eventsub/subscriptions', '', body, requestOptions) as PostEventSubscriptionsResponse;
 
     return data.data[0];
 
@@ -245,13 +245,13 @@ export class BaseClient {
 
     if(filter) filter.status ? params.append('status', filter.status) : filter.type ? params.append('type', filter.type) : params.append('user_id', filter.user_id);
 
-    return await handlePagination(this, '/eventsub/subscriptions', params.toString(), 'GET', requestOptions) as PostEventSubscriptions[]; 
+    return await handlePagination(this, '/eventsub/subscriptions', params.toString(), 'GET', requestOptions) as PostEventSubSubscription[]; 
 
   }
 
   public async sendChatMessage(body: SendChatMessageBody, requestOptions?: RequestOptions){
 
-    const data = await this.requestManager.post('/chat/messages', '', body, requestOptions) as SendChatMessageResponse;
+    const data = await this.requestManager.post('/chat/messages', '', body, requestOptions) as PostSendChatMessageResponse;
 
     return data.data[0];
 

@@ -7,3 +7,4 @@ export * from './TokenAdapter';
 export * from './TwitchHelixError';
 export * from './WhisperBody';
 export * from './SendChatMessageBody';
+export * from './SubscriptionBody';

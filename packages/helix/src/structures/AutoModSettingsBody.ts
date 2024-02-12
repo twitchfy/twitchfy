@@ -1,8 +1,8 @@
-import type {  } from '@twitchapi/api-types';
+import type { PutAutoModSettingsBody } from '@twitchapi/api-types';
 import type { AutoModSettingsOptions } from '../interfaces';
 
 
-export class AutoModSettingsBody implements PutAutoModSettings{
+export class AutoModSettingsBody implements PutAutoModSettingsBody{
   public overall_level: number | null;
   public disability: number;
   public aggression: number;
