@@ -1,10 +1,10 @@
 import fetch from 'node-fetch';
 import type { RefreshTokenResponse, TokenCodeFlowResponse } from '@twitchapi/api-types';
 import type { BaseClient } from './BaseClient';
-import type { WhisperBody, TimeoutBody, AnnouncementBody, BanBody, ChatSettingsBody, AutoModSettingsBody, TokenAdapter } from './structures';
+import type { TokenAdapter } from './structures';
 import { TwitchHelixError } from './structures/TwitchHelixError';
-import type { GetResponses, PostResponses, PatchResponses, PutResponses, RequestOptions} from './types';
-import type { Error, SubscriptionOptions } from './interfaces';
+import type { GetResponses, PostResponses, PatchResponses, PutResponses, RequestOptions, PostBody, PatchBody, PutBody} from './types';
+import type { Error } from './interfaces';
 
 
 
@@ -70,7 +70,7 @@ export class RequestManager {
   
   }
 
-  public async post(endpoint: string, params: string, body: WhisperBody | BanBody | TimeoutBody | AnnouncementBody | SubscriptionOptions | null, requestOptions: RequestOptions): PostResponses {
+  public async post(endpoint: string, params: string, body: PostBody, requestOptions: RequestOptions): PostResponses {
     
     const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'POST', headers: this.makeHeaders(requestOptions), body: JSON.stringify(body) });
         
@@ -97,7 +97,7 @@ export class RequestManager {
     return await res.json();
   }
 
-  public async patch(endpoint: string, params: string, body: ChatSettingsBody, requestOptions: RequestOptions): PatchResponses {
+  public async patch(endpoint: string, params: string, body: PatchBody, requestOptions: RequestOptions): PatchResponses {
 
     const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PATCH', headers: this.makeHeaders(requestOptions), body: JSON.stringify(body)});
 
@@ -122,7 +122,7 @@ export class RequestManager {
     return await res.json();
   }
 
-  public async put(endpoint: string, params: string, body: AutoModSettingsBody | null, requestOptions: RequestOptions) : PutResponses {
+  public async put(endpoint: string, params: string, body: PutBody, requestOptions: RequestOptions) : PutResponses {
 
     const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PUT', headers: this.makeHeaders(requestOptions), body: JSON.stringify(body)});
 
@@ -218,7 +218,7 @@ export class RequestManager {
 
       break;
 
-    default: token = this.client.appToken;
+    default: token = this.client.preferedToken === 'app' ? this.client.appToken : this.client.userToken;
 
       break;
 

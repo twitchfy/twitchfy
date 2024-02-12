@@ -1,4 +1,4 @@
-export interface PutAutoModSettings {
+export interface PutAutoModSettingsBody {
     overall_level: number | null
     disability: number
     aggression: number

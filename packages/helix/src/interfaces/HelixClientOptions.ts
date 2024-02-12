@@ -5,6 +5,7 @@ export interface HelixClientOptions{
     clientSecret: string
     appToken?: string
     userToken?: TokenAdapter
+    preferedToken?: 'app' | 'user'
     proxy?: string
 
 }

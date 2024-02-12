@@ -1,10 +1,12 @@
+import type { PostAnnouncementBody } from '@twitchapi/api-types';
+import type { AnnouncementOptions } from '../interfaces';
 import type { AnnouncementColor } from '../enums';
 
-export class AnnouncementBody{
+export class AnnouncementBody implements PostAnnouncementBody{
   public message: string;
   public color: AnnouncementColor;
-  public constructor(message: string, color: AnnouncementColor){
-    this.message = message;
-    this.color = color;
+  public constructor(options: AnnouncementOptions){
+    this.message = options.message;
+    this.color = options.color;
   }
 }
