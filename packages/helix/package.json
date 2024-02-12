@@ -11,8 +11,10 @@
   "author": "PabloRNC",
   "license": "ISC",
   "dependencies": {
-    "@twitchapi/api-types": "^1.1.12",
-    "@types/node-fetch": "^2.6.2",
     "node-fetch": "^2.6.11"
+  },
+  "devDependencies": {
+    "@twitchapi/api-types": "^1.1.13",
+    "@types/node-fetch": "^2.6.11"
   }
 }
