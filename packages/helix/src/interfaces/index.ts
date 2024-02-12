@@ -9,3 +9,4 @@ export * from './GenerateTokenOptions';
 export * from './SendChatMessageOptions';
 export * from './TimeoutOptions';
 export * from './AnnouncementOptions';
+export * from './BanOptions';
