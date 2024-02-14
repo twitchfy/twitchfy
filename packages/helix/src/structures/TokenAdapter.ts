@@ -1,6 +1,6 @@
 import type { TokenTypes, TokenAdapterOptions } from '../types';
 
-export class TokenAdapter<T extends TokenTypes = TokenTypes, K extends boolean = true > {
+export class TokenAdapter<T extends TokenTypes = TokenTypes, K extends boolean = (T extends 'code' ? true : never)> {
 
   public type: T;
 
