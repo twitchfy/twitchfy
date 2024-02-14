@@ -179,7 +179,7 @@ export class RequestManager {
 
   }
 
-  public async generateToken(code: string, redirectURI: string){
+  public async generateUserToken(code: string, redirectURI: string){
 
     const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: this.client.clientId, client_secret: this.client.clientSecret, code, grant_type: 'authorization_code', redirect_uri: redirectURI }).toString()}`, { method: 'POST' });
 

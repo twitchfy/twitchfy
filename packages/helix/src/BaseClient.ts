@@ -269,9 +269,9 @@ export class BaseClient {
 
   }
 
-  public async generateToken<T extends boolean = true, K extends boolean = false>(code: string, redirectURI: string, options?: GenerateTokenOptions<T, K>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
+  public async generateUserToken<T extends boolean = true, K extends boolean = false>(code: string, redirectURI: string, options?: GenerateTokenOptions<T, K>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
 
-    const data = await this.requestManager.generateToken(code, redirectURI);
+    const data = await this.requestManager.generateUserToken(code, redirectURI);
 
     if(options?.raw) return data as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
 
