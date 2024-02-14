@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import type { RefreshTokenResponse, TokenCodeFlowResponse } from '@twitchapi/api-types';
 import type { BaseClient } from './BaseClient';
 import type { TokenAdapter } from './structures';
