@@ -193,13 +193,13 @@ export class RequestManager {
 
     const token = this.getToken(requestOptions);
 
-    return { 'Authorization': `Bearer ${typeof token === 'string' ? token: token?.token}`, 'Client-Id': this.client.clientId, 'Content-Type': 'application/json' };
+    return { 'Authorization': `Bearer ${token.token}`, 'Client-Id': this.client.clientId, 'Content-Type': 'application/json' };
     
   }
 
   private getToken(requestOptions: RequestOptions){
 
-    let token : TokenAdapter | string;
+    let token : TokenAdapter;
     
     switch(requestOptions?.useTokenType){
       
