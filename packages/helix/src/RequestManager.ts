@@ -28,7 +28,7 @@ export class RequestManager {
 
       const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if (token?.type === 'implicit' || !token?.refresh || this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'GET');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'GET');
 
       await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
@@ -48,7 +48,7 @@ export class RequestManager {
 
       const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if (token?.type === 'implicit' || !token?.refresh || this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'DELETE');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'DELETE');
 
       await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
@@ -68,7 +68,7 @@ export class RequestManager {
 
       const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if (token?.type === 'implicit' || !token?.refresh || this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
       await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
@@ -91,7 +91,7 @@ export class RequestManager {
 
       const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if (token?.type === 'implicit' || !token?.refresh || this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'PATCH');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'PATCH');
 
       await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
@@ -111,7 +111,7 @@ export class RequestManager {
 
       const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if (token?.type === 'implicit' || !token?.refresh || this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'PUT');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'PUT');
 
       await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
