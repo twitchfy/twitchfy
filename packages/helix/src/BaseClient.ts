@@ -11,7 +11,7 @@ import type { RequestOptions } from './types';
 
 export class BaseClient {
 
-  public clientId: string;
+  public clientID: string;
   public clientSecret: string;
   public preferedToken: 'app' | 'user';
   public appToken?: TokenAdapter<'app'>;
@@ -22,7 +22,7 @@ export class BaseClient {
 
   public constructor(options: HelixClientOptions) {
 
-    this.clientId = options.clientId;
+    this.clientID = options.clientID;
     this.clientSecret = options.clientSecret;
     this.preferedToken = options.preferedToken ?? 'app';
     this.appToken = options.appToken;
@@ -298,7 +298,6 @@ export class BaseClient {
     return new TokenAdapter({ type: 'app', token: data.access_token }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'app', T>;
 
   }
-  
 
   public setUserToken(token: TokenAdapter<'code' | 'implicit'>){
 

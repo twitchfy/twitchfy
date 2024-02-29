@@ -1,7 +1,7 @@
 import type { TokenAdapter  } from '../structures';
 
 export interface HelixClientOptions{
-    clientId: string
+    clientID: string
     clientSecret: string
     appToken?: TokenAdapter<'app'>
     userToken?: TokenAdapter<'code' | 'implicit'>
