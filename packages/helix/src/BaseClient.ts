@@ -1,9 +1,9 @@
-import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse } from '@twitchapi/api-types';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse } from '@twitchapi/api-types';
 import { RequestManager } from './RequestManager';
 import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody } from './structures';
 import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
-import type { HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions } from './interfaces';
+import type { HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions, GenerateAppTokenOptions } from './interfaces';
 import type { RequestOptions } from './types';
 
 
@@ -278,11 +278,38 @@ export class BaseClient {
     return new TokenAdapter({ type: 'code', token: data.access_token, refreshToken: data.refresh_token, refresh: options?.refresh ?? true }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
 
   }
+
+  public async generateAppToken<T extends boolean = true, K extends boolean = false>(options?: GenerateAppTokenOptions<T, K>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)> {
+
+    const data = await this.requestManager.generateAppToken(options);
+
+    if(options?.raw) return data as K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>;
+
+    return new TokenAdapter({ type: 'app', token: data.access_token }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'app', T>;
+
+  }
+
+  public static async generateAppToken<T extends boolean = true, K extends boolean = false>(options: GenerateAppTokenOptions<T, K>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)>{
+
+    const data = await RequestManager.generateAppToken(options);
+
+    if(options?.raw) return data as K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>;
+
+    return new TokenAdapter({ type: 'app', token: data.access_token }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'app', T>;
+
+  }
   
 
   public setUserToken(token: TokenAdapter<'code' | 'implicit'>){
 
     this.userToken = token;
+
+    return this;
+  }
+
+  public setAppToken(token: TokenAdapter<'app'>){
+
+    this.appToken = token;
 
     return this;
   }

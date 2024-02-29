@@ -1,6 +1,6 @@
 import type { TokenTypes, TokenAdapterOptions } from '../types';
 
-export class TokenAdapter<T extends TokenTypes = TokenTypes, K extends boolean = (T extends 'code' ? true : never)> {
+export class TokenAdapter<T extends TokenTypes = TokenTypes, K extends boolean = (T extends 'code' | 'app' ? true : never)> {
 
   public type: T;
 
@@ -8,7 +8,7 @@ export class TokenAdapter<T extends TokenTypes = TokenTypes, K extends boolean =
 
   public refreshToken: K extends true ? string : never;
 
-  public refresh: T extends 'code' ? K : never;
+  public refresh: T extends 'code' | 'app' ? K : never;
 
   public constructor(options: TokenAdapterOptions<T, K>){
 
@@ -18,7 +18,7 @@ export class TokenAdapter<T extends TokenTypes = TokenTypes, K extends boolean =
 
     this.refreshToken = 'refreshToken' in options ? options.refreshToken as never : undefined as never;
 
-    this.refresh = options.type === 'code' ? 'refresh' in options ? options.refresh as never : true as never : undefined as never;
+    this.refresh = options.type === 'code' || options.type === 'app' ? 'refresh' in options ? options.refresh as never : true as never : undefined as never;
 
   }
 }
