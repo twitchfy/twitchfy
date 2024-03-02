@@ -3,8 +3,8 @@ import { RequestManager } from './RequestManager';
 import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody } from './structures';
 import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
-import type { HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions, GenerateAppTokenOptions } from './interfaces';
-import type { RequestOptions } from './types';
+import type { HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions, GenerateAppTokenOptions, HelixClientCallbacks } from './interfaces';
+import type { RequestOptions, UserTokenAdapter } from './types';
 
 
 
@@ -14,10 +14,11 @@ export class BaseClient {
   public clientID: string;
   public clientSecret: string;
   public preferedToken: 'app' | 'user';
-  public appToken?: TokenAdapter<'app'>;
-  public userToken?: TokenAdapter<'code' | 'implicit'>;
+  public appToken?: TokenAdapter<'app', boolean>;
+  public userToken?: UserTokenAdapter<boolean>;
   public proxy?: string;
   public requestManager: RequestManager;
+  public callbacks: HelixClientCallbacks;
 
 
   public constructor(options: HelixClientOptions) {
@@ -29,6 +30,7 @@ export class BaseClient {
     this.userToken = options.userToken;
     this.proxy = options.proxy;
     this.requestManager = new RequestManager(this);
+    this.callbacks = options.callbacks;
   }
 
   public async getUser(userIdentificator: string, requestOptions?: RequestOptions): Promise<User> {

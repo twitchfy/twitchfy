@@ -1,11 +1,14 @@
-import type { TokenAdapter  } from '../structures';
+import type { HelixClientCallbacks } from './HelixClientCallbacks';
+import type { TokenAdapter } from '../structures';
+import type { UserTokenAdapter } from '../types';
 
 export interface HelixClientOptions{
     clientID: string
     clientSecret: string
-    appToken?: TokenAdapter<'app'>
-    userToken?: TokenAdapter<'code' | 'implicit'>
+    appToken?: TokenAdapter<'app', boolean>
+    userToken?: UserTokenAdapter<boolean>
     preferedToken?: 'app' | 'user'
     proxy?: string
+    callbacks?: HelixClientCallbacks
 
 }

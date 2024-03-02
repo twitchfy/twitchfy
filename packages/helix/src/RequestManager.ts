@@ -1,8 +1,8 @@
 import type { RefreshTokenResponse, TokenClientCredentialsFlowResponse, TokenCodeFlowResponse } from '@twitchapi/api-types';
 import type { BaseClient } from './BaseClient';
-import type { TokenAdapter } from './structures';
+import { TokenAdapter } from './structures';
 import { TwitchHelixError } from './structures/TwitchHelixError';
-import type { GetResponses, PostResponses, PatchResponses, PutResponses, RequestOptions, PostBody, PatchBody, PutBody } from './types';
+import type { GetResponses, PostResponses, PatchResponses, PutResponses, RequestOptions, PostBody, PatchBody, PutBody, TokenTypes } from './types';
 import type { Error, GenerateAppTokenOptions } from './interfaces';
 
 
@@ -26,11 +26,19 @@ export class RequestManager {
 
     if (!res.ok) {
 
-      const token = this.getToken(requestOptions) as TokenAdapter;
+      const token = this.getToken(requestOptions);
 
       if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'GET');
 
-      await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
+      const refreshedToken = await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
+
+      if(requestOptions?.useTokenType === 'user'){
+
+        if((requestOptions as RequestOptions<'user'>).userToken){
+          requestOptions = { ...requestOptions, userToken: refreshedToken as TokenAdapter<'code', true> };
+        }else this.client.userToken = refreshedToken as TokenAdapter<'code', true>;
+
+      } else this.client.appToken = refreshedToken as TokenAdapter<'app', true>;
 
       return this.get(endpoint, params, requestOptions);
 
@@ -195,7 +203,7 @@ export class RequestManager {
 
   private getToken(requestOptions: RequestOptions) {
 
-    let token: TokenAdapter;
+    let token: TokenAdapter<TokenTypes, boolean>;
 
     switch (requestOptions?.useTokenType) {
 
@@ -226,21 +234,36 @@ export class RequestManager {
 
     if (token.type === 'app') {
 
+      setTokenType<'app', true>(token);
+
       const data = await this.generateAppToken({ raw: true });
 
-      token.token = data.access_token;
+      const newToken = new TokenAdapter({ ...token }).setToken(data.access_token);
+
+      const onAppTokenRefresh = this.client.callbacks.onAppTokenRefresh;
+
+      if(onAppTokenRefresh) onAppTokenRefresh(token, newToken);
+
+      return newToken;
 
     } else {
 
+      setTokenType<'code', true>(token);
+
       const data = await this.refreshToken(token.refreshToken);
 
-      token.token = data.access_token;
+      const newToken = new TokenAdapter({ ...token }).setToken(data.access_token).setRefreshToken(data.refresh_token);
 
-      token.refreshToken = data.refresh_token;
+      const onUserTokenRefresh = this.client.callbacks.onUserTokenRefresh;
+
+      if(onUserTokenRefresh) onUserTokenRefresh(token, newToken);
+      
+      return newToken;
 
     }
-
   }
 }
 
 function setRequestOptionsType<T extends 'app' | 'user'>(requestOptions: RequestOptions): asserts requestOptions is RequestOptions<T> { }
+
+function setTokenType<T extends TokenTypes = TokenTypes, K extends boolean = true>(token: TokenAdapter<TokenTypes, boolean>): asserts token is TokenAdapter<T, K> {}
