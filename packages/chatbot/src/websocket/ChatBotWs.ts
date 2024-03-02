@@ -11,6 +11,7 @@ import type { ClearMessageTags } from '../interfaces/tags/ClearMessageTags';
 import { ChatBotUser } from '../structures/ChatBotUser';
 import { JoinedChannel } from '../structures/JoinedChannel';
 import { Events } from '../enums/Events';
+import type { UserTokenAdapter } from '@twitchapi/helix';
 
 
 
@@ -35,7 +36,7 @@ export class ChatBotWs extends client {
   /**
      * @description The user access token of the ChatBot's Twitch User.
      */
-  public oauth: string;
+  protected auth: UserTokenAdapter<boolean>;
 
   /**
      * @description The WebSocket connection to the Twitch IRC Server.
@@ -49,13 +50,13 @@ export class ChatBotWs extends client {
      * @param oauth 
      */
 
-  public constructor(chatbot: ChatBot, nick: string, oauth: string) {
+  public constructor(chatbot: ChatBot, nick: string, auth: UserTokenAdapter<boolean>) {
 
     super();
 
     this.chatbot = chatbot;
     this.nick = nick;
-    this.oauth = oauth;
+    this.auth = auth;
 
   }
 
@@ -121,7 +122,7 @@ export class ChatBotWs extends client {
       }
       connection.send(capabilities.trim());
 
-      connection.send(`PASS oauth:${this.oauth}`);
+      connection.send(`PASS oauth:${this.auth}`);
 
       connection.send(`NICK ${this.nick}`);
 

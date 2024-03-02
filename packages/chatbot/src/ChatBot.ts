@@ -2,6 +2,7 @@ import { ChatBotEventEmitter } from './structures/ChatBotEventEmitter';
 import type { ChatBotCapabilities } from './interfaces/ChatBotCapabilities';
 import type { ChatBotOptions } from './interfaces/ChatBotOptions';
 import { ChatBotWs } from './websocket/ChatBotWs';
+import type { UserTokenAdapter } from '@twitchapi/helix';
 import { HelixClient } from '@twitchapi/helix';
 import { UserManager } from './structures/managers/UserManager';
 import { ChannelManager } from './structures/managers/ChannelManager';
@@ -31,7 +32,7 @@ export class ChatBot extends ChatBotEventEmitter {
   /**
      * @description The user access token that is provided in the {@link ChatBotOptions}
      */
-  public oauth: string;
+  protected auth: UserTokenAdapter<boolean>;
 
   /**
      * @description The ChatBot capabilities provided in the {@link ChatBotOptions}. This capabilities are used to receive some extra Twitch information.
@@ -50,6 +51,12 @@ export class ChatBot extends ChatBotEventEmitter {
   public clientID: string;
 
   /**
+   * @description The Twitch app's ClientSecret provided in the {@link ChatBotOptions}.
+   */
+
+  public clientSecret: string;
+
+  /**
      * @description The helixClient instance of the bot to make https request to Twitch Api. Provided by `@twitchapi/helix` package.
      */
   public helixClient: HelixClient;
@@ -57,7 +64,7 @@ export class ChatBot extends ChatBotEventEmitter {
   /**
      * @description The Twitch's User of the ChatBot's user.
      */
-  public user: ChatBotUser;
+  public user: ChatBotUser | null;
 
   /**
      * @description The {@link UserManager} of the ChatBot.
@@ -99,13 +106,15 @@ export class ChatBot extends ChatBotEventEmitter {
 
     this.clientID = options.clientID;
 
-    this.oauth = options.oauth;
+    this.clientSecret = options.clientSecret;
+
+    this.auth = options.auth;
 
     this.nick = options.nick;
 
     this.capabilities = options.capabilities;
 
-    this.helixClient = new HelixClient({ clientId: this.clientID, userToken: this.oauth });
+    this.helixClient = new HelixClient({ clientID: this.clientID, userToken: options.auth, clientSecret: options.clientSecret });
 
     this.users = new UserManager(this);
 
@@ -127,7 +136,7 @@ export class ChatBot extends ChatBotEventEmitter {
      */
   public login() {
 
-    this.ws = new ChatBotWs(this, this.nick, this.oauth).login();
+    this.ws = new ChatBotWs(this, this.nick, this.auth).login();
 
     return this;
 
@@ -145,16 +154,13 @@ export class ChatBot extends ChatBotEventEmitter {
    * @param {string} oauth The user token use to create the bot. 
    */
 
-  public setAuth(oauth: string){
+  public setAuth(auth: UserTokenAdapter<boolean>){
 
-    this.oauth = oauth;
-
-    this.helixClient.userToken = oauth;
+    this.auth = auth;
 
     return this;
 
   }
-
-
+  
 
 }
