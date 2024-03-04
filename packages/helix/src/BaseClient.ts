@@ -301,14 +301,14 @@ export class BaseClient {
 
   }
 
-  public setUserToken(token: TokenAdapter<'code' | 'implicit'>){
+  public setUserToken(token: TokenAdapter<'code' | 'implicit', boolean>){
 
     this.userToken = token;
 
     return this;
   }
 
-  public setAppToken(token: TokenAdapter<'app'>){
+  public setAppToken(token: TokenAdapter<'app', boolean>){
 
     this.appToken = token;
 
