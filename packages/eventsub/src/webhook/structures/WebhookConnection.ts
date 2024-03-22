@@ -58,7 +58,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
     this.server = server;
 
-    this.dropSubsAtStart = typeof options.dropSubsAtStart === 'boolean'? options.dropSubsAtStart : options.maintainSubscriptions? false : true;
+    this.dropSubsAtStart = typeof options.dropSubsAtStart === 'boolean'? options.dropSubsAtStart : this.maintainSubscriptions? false : true;
 
   }
 
