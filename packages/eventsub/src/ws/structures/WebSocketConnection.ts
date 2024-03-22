@@ -11,11 +11,11 @@ import { WebSocketSubscription } from './WebSocketSubscription';
 
 export class WebSocketConnection extends BaseConnection<WebSocketConnection, WebSocketEvents>{
 
-  public userToken: UserTokenAdapter<boolean>;
+  protected userToken: UserTokenAdapter<boolean>;
 
-  public proxy?: string;
+  public readonly proxy?: string;
 
-  public ws: WebSocket;
+  public readonly ws: WebSocket;
 
   public sessionID: string | null;
 

@@ -1,4 +1,3 @@
-import type { UserTokenAdapter } from '@twitchapi/helix';
 import type { PostEventSubSubscription } from '@twitchapi/api-types';
 import type { WebSocketConnection } from './WebSocketConnection';
 import { WebSocketSubscriptionCallbackManager } from './WebSocketSubscriptionCallbackManager';
@@ -13,8 +12,6 @@ export class WebSocketSubscription<T extends SubscriptionTypes = SubscriptionTyp
  
   public readonly connection: WebSocketConnection;
 
-  public readonly userToken: UserTokenAdapter<boolean>;
-
   public callbacks: WebSocketSubscriptionCallbackManager<T>;
 
   public constructor(connection: WebSocketConnection, options: SubscriptionOptions<T>, data: PostEventSubSubscription){
@@ -22,8 +19,6 @@ export class WebSocketSubscription<T extends SubscriptionTypes = SubscriptionTyp
     super(options, data);
 
     this.connection = connection;
-
-    this.userToken = connection.userToken;
 
     this.callbacks = new WebSocketSubscriptionCallbackManager<T>(connection);
 
