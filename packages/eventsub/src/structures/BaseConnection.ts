@@ -20,19 +20,19 @@ export class EventSubEventEmitter<U extends WebhookEvents | WebSocketEvents> ext
 
 export abstract class BaseConnection<K extends ConnectionTypes, U extends WebhookEvents | WebSocketEvents> extends EventSubEventEmitter<U>{
 
-  public clientID: string;
+  public readonly clientID: string;
 
-  public clientSecret: string;
+  public readonly clientSecret: string;
 
-  public helixClient: HelixClient;
+  public readonly helixClient: HelixClient;
 
-  public subscriptions: SubscriptionCollection<K>;
+  public readonly subscriptions: SubscriptionCollection<K>;
 
-  public storage: StorageAdapter<K>;
+  public readonly storage: StorageAdapter<K>;
 
-  public maintainSubscriptions: boolean;
+  public readonly maintainSubscriptions: boolean;
 
-  public logger: Logger;
+  public readonly logger: Logger;
 
   public debug: boolean;
 
