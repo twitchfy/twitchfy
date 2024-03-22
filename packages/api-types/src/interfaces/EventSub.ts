@@ -28,14 +28,14 @@ export interface PostEventSubSubscription {
 
 export interface GetEventSubSubscription extends PostEventSubSubscription {}
 
-export interface PostEventSubscriptionsResponse {
+export interface PostEventSubSubscriptionsResponse {
     data: PostEventSubSubscription[]
     total: number
     total_cost: number
     max_total_cost: number
 }
 
-export interface GetEventSubscriptions {
+export interface GetEventSubSubscriptions {
     data: GetEventSubSubscription[]
     total: number
     pagination: Pagination

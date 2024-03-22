@@ -8,3 +8,4 @@ export * from './RequestOptions';
 export * from './PostBody';
 export * from './PatchBody';
 export * from './PutBody';
+export * from './UserTokenAdapter';

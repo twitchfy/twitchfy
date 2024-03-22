@@ -1,15 +1,15 @@
 import type { connection } from 'websocket';
 import { client } from 'websocket';
-import type { EventSubConnection } from './EventSubConnection';
+import type { WebSocketConnection } from './WebSocketConnection';
 import { messageHandler } from '../util';
 
-export class EventSubWebsocket extends client {
+export class WebSocket extends client {
 
-  public connection: EventSubConnection;
+  public connection: WebSocketConnection;
 
   public wsConnection: connection | null;
 
-  public constructor(connection: EventSubConnection){
+  public constructor(connection: WebSocketConnection){
 
     super();
 
@@ -25,10 +25,12 @@ export class EventSubWebsocket extends client {
     super.connect(this.connection.proxy ?? 'wss://eventsub.wss.twitch.tv/ws');
 
     this.on('connect', (connection) => { 
+
+      this.connection.makeDebug(`Connected to ${this.connection.proxy ?? 'wss://eventsub.wss.twitch.tv/ws'}.`);
     
       this.wsConnection = connection;
 
-      this.wsConnection.on('message', (message) => messageHandler(this, message));
+      this.wsConnection.on('message', async(message) => await messageHandler(this, message));
     
     });
 

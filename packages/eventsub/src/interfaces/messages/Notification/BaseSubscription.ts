@@ -4,7 +4,6 @@ import type { SubscriptionTypeOptions } from '../../SubscriptionTypeOptions';
 import type { SubscriptionTypes } from '../../../enums/';
 
 export interface BaseSubscription<T extends SubscriptionTypes> {
-
     id: string
     status: 'enabled'
     type: T

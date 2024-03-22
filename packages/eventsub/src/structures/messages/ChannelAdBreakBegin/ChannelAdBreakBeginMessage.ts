@@ -1,10 +1,9 @@
 import { ChannelAdBreakBeginBroadcaster } from './ChannelAdBreakBeginBroadcaster';
 import { ChannelAdBreakBeginRequester } from './ChannelAdBreakBeginRequester'; 
 import {  Base } from '../Base';
-import type { Subscription } from '../../Subscription';
 import type { ChannelAdBreakBeginEvent } from '../../../interfaces';
 import type { SubscriptionTypes } from '../../../enums';
-import type { ConnectionTypes } from '../../../types';
+import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
 export class ChannelAdBreakBeginMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelAdBreakBegin, K> {
    
@@ -14,7 +13,7 @@ export class ChannelAdBreakBeginMessage<K extends ConnectionTypes = ConnectionTy
   public startedAt: Date;
   public isAutomatic: boolean;
 
-  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.ChannelAdBreakBegin, K>, data: ChannelAdBreakBeginEvent){
+  public constructor(connection: K, subscription: SubscriptionType<SubscriptionTypes.ChannelAdBreakBegin, K>, data: ChannelAdBreakBeginEvent){
 
     super(connection, subscription);
 
