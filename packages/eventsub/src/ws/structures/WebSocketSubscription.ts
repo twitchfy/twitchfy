@@ -1,4 +1,3 @@
-import type { UserTokenAdapter } from '@twitchapi/helix';
 import type { PostEventSubSubscription } from '@twitchapi/api-types';
 import type { WebSocketConnection } from './WebSocketConnection';
 import { WebSocketSubscriptionCallbackManager } from './WebSocketSubscriptionCallbackManager';

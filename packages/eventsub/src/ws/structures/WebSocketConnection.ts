@@ -17,7 +17,7 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
 
   public readonly ws: WebSocket;
 
-  public readonly sessionID: string | null;
+  public sessionID: string | null;
 
   public constructor(options: WebSocketConnectionOptions){
 
