@@ -1,9 +1,11 @@
-import type { SubscriptionMessage, ConnectionTypes } from '../types';
-import type { Subscription } from '../structures';
+/* eslint-disable @typescript-eslint/ban-types */
+
 import type { SubscriptionTypes } from '../enums';
+import type { SubscriptionMessage, ConnectionTypes, SubscriptionType } from '../types';
 
 export interface EventSubEvents<K extends ConnectionTypes = ConnectionTypes> {
-    connectionReady: (...args: [connection: K]) => void,
-    subscriptionCreate: (...args: [subscription: Subscription<SubscriptionTypes, K>]) => void,
-    subscriptionMessage: (...args: [message: SubscriptionMessage<K>, subscription: Subscription<SubscriptionTypes, K>]) => void
+    connectionReady: [connection: K]
+    subscriptionCreate: [subscription: SubscriptionType<SubscriptionTypes, K>]
+    subscriptionMessage: [message: SubscriptionMessage<K>, subscription: SubscriptionType<SubscriptionTypes, K>]
+    subscriptionReload: [subscription: SubscriptionType<SubscriptionTypes, K>]
 }

@@ -2,80 +2,53 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import type { Express } from 'express';
-import { HelixClient } from '@twitchapi/helix';
-import { EventEmitter } from 'node:events';
-import type { PostEventSubscriptions } from '@twitchapi/api-types';
-import type { WebhookConnectionOptions } from '../interfaces';
+import type { PostEventSubSubscription } from '@twitchapi/api-types';
+import type { TokenAdapter } from '@twitchapi/helix';
+import { WebhookSubscription } from './WebhookSubscription';
+import type { WebhookConnectionOptions } from '../types';
 import { makeMiddlewares, parseRoute } from '../util';
 import { SubscriptionRouter } from '../routes';
-import { SubscriptionCollection, Subscription, type Client } from '../../structures';
+import { BaseConnection } from '../../structures/BaseConnection';
 import { Events, type SubscriptionTypes } from '../../enums';
-import type { SubscriptionOptionsIndex, EventSubEvents } from '../../interfaces';
 import { SubscriptionVersionsObject } from '../../util';
-import type { ConnectionTypes, SubscriptionOptions } from '../../types';
+import type { SubscriptionOptions } from '../../types';
+import type { WebhookEvents } from '../../interfaces';
 
-class EventSubEventEmitter<T extends ConnectionTypes = ConnectionTypes> extends EventEmitter {
-  public constructor() {
-    super();
-  }
+export class WebhookConnection extends BaseConnection<WebhookConnection, WebhookEvents> {
 
-  override on<K extends keyof EventSubEvents<T>>(event: K, listener: EventSubEvents<T>[K]): this {
+  public readonly server: Express;
 
-    return super.on(event, listener);
+  public readonly baseURL: string;
 
-  }
+  protected appToken: TokenAdapter<'app', boolean>;
 
-  override emit<K extends keyof EventSubEvents<T>>(event: K, ...args: Parameters<EventSubEvents[K]>): boolean {
+  public readonly secret: string;
 
-    return super.emit(event, ...args);
-
-  }
-}
-
-export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
-
-  public client: Client;
-
-  public server: Express;
-
-  public baseURL: string;
-
-  public appToken: string;
-
-  public clientID: string;
-
-  public clientSecret: string;
-
-  public helixClient: HelixClient;
-
-  public subscriptions: SubscriptionCollection<WebhookConnection>;
-
-  public secret: string;
-
-  public startServer: boolean;
-
-  public mantainSubscriptions: boolean;
+  public readonly startServer: boolean;
 
   public readonly subscriptionRoute: string;
+
+  public readonly dropSubsAtStart: boolean;
   
 
-  public constructor(client: Client, options: WebhookConnectionOptions, server: Express){
+  public constructor(options: WebhookConnectionOptions, server: Express){
 
-    super();
-
-    this.client = client;
+    super(options);
 
     this.baseURL = options.baseURL;
 
     this.appToken = options.appToken;
 
-    this.clientID = options.clientID;
+    this.helixClient.setAppToken(options.appToken);
 
-    this.clientSecret = options.clientSecret;
+    const onAppTokenRefresh = this.helixClient.callbacks.onAppTokenRefresh;
+    
+    this.helixClient.callbacks.onAppTokenRefresh = (oldToken, newToken) => {
 
-    this.helixClient = new HelixClient({ clientId: options.clientID, clientSecret: options.clientSecret, appToken: options.appToken, ...options.helix });
+      this.appToken = newToken;
 
-    this.subscriptions = new SubscriptionCollection<WebhookConnection>();
+      if(onAppTokenRefresh) onAppTokenRefresh(oldToken, newToken);
+    };
 
     this.secret = options.secret;
 
@@ -83,21 +56,25 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
     this.startServer = typeof options.startServer === 'boolean' ? options.startServer : true;
 
-    this.mantainSubscriptions = typeof options.mantainSubscriptions === 'boolean' ? options.mantainSubscriptions : true;
-
     this.server = server;
+
+    this.dropSubsAtStart = typeof options.dropSubsAtStart === 'boolean'? options.dropSubsAtStart : options.maintainSubscriptions? false : true;
 
   }
 
-  public async subscribe<T extends SubscriptionTypes>(options: SubscriptionOptions<T, WebhookConnection>): Promise<Subscription<T, WebhookConnection>>{
+  public async subscribe<T extends SubscriptionTypes>(options: SubscriptionOptions<T>){
 
     const { type, options: subscriptionOptions } = options;
  
     const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret: this.secret }, condition: subscriptionOptions }, { useTokenType: 'app' });
 
-    const subscription = new Subscription<T, WebhookConnection>(this, options, data, this.secret);
+    const subscription = new WebhookSubscription<T>(this, options, data, this.secret);
+
+    await this.storage?.set(subscription.id, subscription);
 
     this.subscriptions.set(subscription.id, subscription);
+
+    this.makeDebug(`Subscribed to ${data.type} (${data.id})`);
 
     this.emit(Events.SubscriptionCreate, subscription);
 
@@ -106,9 +83,9 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
   }
 
-  public async subscribeAll<T extends SubscriptionTypes>(...options: SubscriptionOptionsIndex<WebhookConnection>[T][]): Promise<Subscription<T, WebhookConnection>[]>{
+  public async subscribeAll<T extends SubscriptionTypes>(...options: SubscriptionOptions<T>[]){
 
-    const subscriptions: Subscription<SubscriptionTypes, WebhookConnection>[] = [];
+    const subscriptions: WebhookSubscription<T>[] = [];
 
     for(const sub of options){
       
@@ -116,16 +93,20 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
  
       const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret: this.secret }, condition: subscriptionOptions }, { useTokenType: 'app' });
 
-      const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, sub, data, this.secret);
+      const subscription = new WebhookSubscription<T>(this, sub, data, this.secret);
+
+      await this.storage?.set(subscription.id, subscription);
 
       this.subscriptions.set(subscription.id, subscription);
+
+      this.makeDebug(`Subscribed to ${data.type} (${data.id})`);
 
       this.emit(Events.SubscriptionCreate, subscription);
 
       subscriptions.push(subscription);
     }
 
-    return subscriptions as Subscription<T, WebhookConnection>[];
+    return subscriptions;
 
   }
 
@@ -135,78 +116,86 @@ export class WebhookConnection extends EventSubEventEmitter<WebhookConnection>{
 
     await this.startup();
 
+    return this.emit(Events.ConnectionReady, this);
+
+  }
+
+  public setAuth(appToken: TokenAdapter<'app', boolean>){
+
+    this.appToken = appToken;
+
+    return this;
+
   }
 
   private async startup() {
 
-    const subscriptions = (await this.helixClient.getSubscriptions({ status: 'enabled' })).filter((subscription) => {
+    if(this.dropSubsAtStart) await processChunks(this, chunkArray(await this.helixClient.getSubscriptions({ status: 'enabled'}), 30));
 
-      const transport = subscription.transport as { callback: string, method: string };
+    if(this.maintainSubscriptions){
 
-      return transport.callback === this.baseURL + this.subscriptionRoute && transport.method === 'webhook';
+      const apiSubs = await this.helixClient.getSubscriptions({ status: 'enabled' });
 
-    });
+      const filteredSubs = apiSubs.filter((x) => x.transport.callback === `${this.baseURL}${this.subscriptionRoute}`);
 
-    if(this.mantainSubscriptions) {
+      this.makeDebug(`Fetched a total of ${apiSubs.length} API Subscriptions. Filtered to ${filteredSubs.length} for this callback ${this.baseURL}${this.subscriptionRoute}.`);
 
-      for(const data of subscriptions){
+      for await(const data of await this.storage.getAll()){
 
-        if((data.transport as { callback: string }).callback !== this.baseURL + this.subscriptionRoute) continue;
+        const filteredSub = filteredSubs.find((x) => x.id === data.id || (x.type === data.type && JSON.stringify(x.condition) === JSON.stringify(data.options) && x.transport.callback === `${this.baseURL}${this.subscriptionRoute}`));
 
-        const subscription = new Subscription<SubscriptionTypes, WebhookConnection>(this, { type: data.type as SubscriptionTypes, appToken: this.appToken, options: data.condition as any }, data, this.secret );
+        if(!filteredSub){
 
-        this.subscriptions.set(subscription.id, subscription);
+          const subscriptionData = await this.helixClient.subscribeToEventSub({ type: data.type, condition: data.options, transport: { method: 'webhook', secret: data.secret, callback: `${this.baseURL}${this.subscriptionRoute}` }, version: SubscriptionVersionsObject[data.type] });
 
-        this.emit(Events.SubscriptionCreate, subscription);
+          const subscription = new WebhookSubscription<typeof data.type>(this, data, subscriptionData, data.secret);
+
+          await this.storage.delete(data.id);
+
+          await this.storage.set(subscription.id, subscription);
+
+          this.subscriptions.set(subscription.id, subscription);
+
+          this.makeDebug(`Created subscription as it couldn't be reloaded (not exist or it's status was revoked) ${subscription.id}`);
+
+          this.emit(Events.SubscriptionReload, subscription);
+
+        } else {
+
+          const subscription = new WebhookSubscription<typeof data.type>(this, data, filteredSub, data.secret);
+
+          if(data.id !== filteredSub.id){
+
+            await this.storage.delete(data.id);
+
+            await this.storage.set(filteredSub.id, subscription);
+
+          }
+
+          this.subscriptions.set(filteredSub.id, subscription);
+
+          this.makeDebug(`Reloaded subscription ${subscription.id}`);
+
+          this.emit(Events.SubscriptionReload, subscription);
+
+        }
 
       }
 
-    }else{
-
-      await processChunks(this, chunkArray(subscriptions, 30));
-
     }
-
+    
     makeMiddlewares(this, this.server);
 
     this.server.use(this.subscriptionRoute, SubscriptionRouter);
 
-    this.emit(Events.ConnectionReady, this);
-
-  }
-
-  public async dropAllSubscriptions(filter: boolean = true){
-
-    if(filter){
-
-      for(const subscription of this.subscriptions.values()){
-
-        this.subscriptions.delete(subscription.id);
-
-        await subscription.delete();
-
-
-      }
-
-    }else{
-
-      const subscriptions = (await this.helixClient.getSubscriptions({ status: 'enabled' })).filter((subscription) => {
-
-        const transport = subscription.transport as { callback: string, method: string };
-
-        return transport.method === 'webhook';
-
-      });
-
-      await processChunks(this, chunkArray(subscriptions, 30));
-    }
+    this.makeDebug('Default middlewares have been set into the express server.');
 
     return;
 
   }
 }
 
-function chunkArray(array: PostEventSubscriptions[], chunkSize: number) {
+function chunkArray(array: PostEventSubSubscription[], chunkSize: number) {
   const result = [];
   for (let i = 0; i < array.length; i += chunkSize) {
     result.push(array.slice(i, i + chunkSize));
@@ -214,7 +203,8 @@ function chunkArray(array: PostEventSubscriptions[], chunkSize: number) {
   return result;
 }
 
-async function processChunks(connection: WebhookConnection, chunks: PostEventSubscriptions[][]) {
+
+async function processChunks(connection: WebhookConnection, chunks: PostEventSubSubscription[][]) {
 
   let index = 0;
 
@@ -224,14 +214,12 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
 
     for(const subscription of chunk){
 
-      if(connection.subscriptions.get(subscription.id)) connection.subscriptions.delete(subscription.id);
-
       connection.helixClient.deleteSubscription(subscription.id);
 
     }
 
     index++;
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
   }
 }

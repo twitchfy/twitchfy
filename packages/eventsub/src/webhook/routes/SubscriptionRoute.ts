@@ -3,23 +3,54 @@ import { Router } from 'express';
 import type { BasePayload } from '../../interfaces';
 import type { SubscriptionTypes } from '../../enums';
 import { notificationHandler } from '../../util';
+import type { WebhookConnection } from '../../webhook';
 
 
 export const SubscriptionRouter = Router();
 
 SubscriptionRouter.post('/', (req: Request, res) => {
 
-  const connection = res.locals.webhookConnection;
+  const connection = res.locals.webhookConnection as WebhookConnection;
 
   const body = req.body;
-  
-  if(req.headers['twitch-eventsub-message-type'] === 'notification'){
 
-    setBodyType(body);
+  setBodyType(body);
+
+  const subscription = connection.subscriptions.get(body.subscription.id);
+
+  if(!subscription) return connection.makeDebug(`Incoming non-listed subscription ${body.subscription.id} (${req.headers['twitch-eventsub-message-type']}). If you are using an storage check it's functionality.`);
+
+  switch(req.headers['twitch-eventsub-message-type']){
+
+  case 'notification': {
 
     notificationHandler(connection, body);
 
     return res.sendStatus(200);
+
+    break;
+
+  }
+  
+    break;
+
+  case 'revocation': {
+
+    connection.makeWarn(`Subscription was revoked (${body.subscription.id})`);
+
+  }
+
+    break;
+
+
+  case 'webhook_callback_verification': {
+
+    connection.makeDebug(`Get webhook callback verification for ${body.subscription.id}`);
+
+  }
+
+    break;
+
   }
 
   return res.sendStatus(200);

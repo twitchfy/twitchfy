@@ -7,4 +7,5 @@ export interface SubscriptionVersions {
     [SubscriptionTypes.StreamOnline]: '1'
     [SubscriptionTypes.ChannelAdBreakBegin]: '1'
     [SubscriptionTypes.ChannelChatClearUserMessages]: '1'
+    [SubscriptionTypes.ChannelChatMessage]: '1'
 }

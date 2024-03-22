@@ -1,4 +1,5 @@
-import { ChannelUpdateMessage, ChannelFollowMessage, ChannelChatClearMessage, StreamOnlineMessage, ChannelAdBreakBeginMessage, ChannelChatClearUserMessagesMessage } from '../structures';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { ChannelUpdateMessage, ChannelFollowMessage, ChannelChatClearMessage, StreamOnlineMessage, ChannelAdBreakBeginMessage, ChannelChatClearUserMessagesMessage, ChannelChatMessageMessage } from '../structures';
 import { SubscriptionTypes } from '../enums';
 import type { BasePayload } from '../interfaces';
 import type { ConnectionTypes } from '../types';
@@ -15,6 +16,8 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     if(!subscription) return;
 
+    //@ts-expect-error
+
     subscription.callbacks.execute(new ChannelFollowMessage(connection, subscription, payload.event));
     
   }
@@ -28,6 +31,8 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
     const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelUpdate>(payload.subscription.id);
 
     if(!subscription) return;
+
+    //@ts-expect-error
 
     subscription.callbacks.execute(new ChannelUpdateMessage(connection, subscription, payload.event));
 
@@ -43,6 +48,8 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     if(!subscription) return;
 
+    //@ts-expect-error
+
     subscription.callbacks.execute(new ChannelChatClearMessage(connection, subscription, payload.event));
   }
 
@@ -56,6 +63,8 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     if(!subscription) return;
 
+    //@ts-expect-error
+
     subscription.callbacks.execute(new StreamOnlineMessage(connection, subscription, payload.event));
   }
 
@@ -68,6 +77,8 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
     const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelAdBreakBegin>(payload.subscription.id);
 
     if(!subscription) return;
+
+    //@ts-expect-error
 
     subscription.callbacks.execute(new ChannelAdBreakBeginMessage(connection, subscription, payload.event));
 
@@ -83,7 +94,24 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     if(!subscription) return;
 
+    //@ts-expect-error
+
     subscription.callbacks.execute(new ChannelChatClearUserMessagesMessage(connection, subscription, payload.event));
+  }
+
+    break;
+
+  case SubscriptionTypes.ChannelChatMessage : {
+
+    setPayloadType<SubscriptionTypes.ChannelChatMessage>(payload);
+
+    const subscription = connection.subscriptions.get<SubscriptionTypes.ChannelChatMessage>(payload.subscription.id);
+
+    if(!subscription) return;
+
+    //@ts-expect-error
+    
+    subscription.callbacks.execute(new ChannelChatMessageMessage(connection, subscription, payload.event));
   }
 
   }

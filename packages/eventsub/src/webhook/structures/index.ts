@@ -1,2 +1,3 @@
 export * from './WebhookConnection';
-export * from './WebhookEventEmitter';
+export * from './WebhookSubscription';
+export * from './WebhookSubscriptionCallbackManager';

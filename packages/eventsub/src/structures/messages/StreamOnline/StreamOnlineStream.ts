@@ -1,11 +1,10 @@
 import { BaseStream } from '../BaseStream';
-import type { Subscription } from '../../Subscription';
 import type { SubscriptionTypes } from '../../../enums';
-import type { StreamTypes, ConnectionTypes } from '../../../types';
+import type { StreamTypes, ConnectionTypes, SubscriptionType } from '../../../types';
 
 export class StreamOnlineStream<K extends ConnectionTypes = ConnectionTypes> extends BaseStream<SubscriptionTypes.StreamOnline, K>{
 
-  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.StreamOnline, K>, id: string, type: StreamTypes, started_at: string){
+  public constructor(connection: K, subscription: SubscriptionType<SubscriptionTypes.StreamOnline, K>, id: string, type: StreamTypes, started_at: string){
     
     super(connection, subscription, id, type, started_at);
   

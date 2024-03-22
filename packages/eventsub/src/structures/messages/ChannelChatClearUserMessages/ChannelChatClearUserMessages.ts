@@ -1,10 +1,9 @@
 import { ChannelChatClearUserMessagesBroadcaster } from './ChannelChatClearUserMessagesBroadcaster';
 import { ChannelChatClearUserMessagesUser } from './ChannelChatClearUserMessagesUser';
 import { Base } from '../Base';
-import type { Subscription } from '../../Subscription';
 import type { SubscriptionTypes } from '../../../enums';
 import type { ChannelChatClearUserMessagesEvent } from '../../../interfaces';
-import type { ConnectionTypes } from '../../../types';
+import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
 export class ChannelChatClearUserMessagesMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelChatClearUserMessages, K> {
 
@@ -12,7 +11,7 @@ export class ChannelChatClearUserMessagesMessage<K extends ConnectionTypes = Con
     
   public user: ChannelChatClearUserMessagesUser<K>;
 
-  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.ChannelChatClearUserMessages, K>, data: ChannelChatClearUserMessagesEvent){
+  public constructor(connection: K, subscription: SubscriptionType<SubscriptionTypes.ChannelChatClearUserMessages, K>, data: ChannelChatClearUserMessagesEvent){
 
     super(connection, subscription);
 

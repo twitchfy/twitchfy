@@ -1,20 +1,20 @@
 import type { Express } from 'express';
-import { EventSubConnection, type EventSubConnectionOptions } from '../ws';
+import { WebSocketConnection, type WebSocketConnectionOptions } from '../ws';
 import { type WebhookConnectionOptions, WebhookConnection } from '../webhook';
 
 export class Client {
 
   public constructor(){}
 
-  public createWebsocketConnection(options: EventSubConnectionOptions){
+  public createWebSocketConnection(options: WebSocketConnectionOptions){
 
-    return new EventSubConnection(this, options);
+    return new WebSocketConnection(options);
 
   }
 
   public createWebhookConnection(options: WebhookConnectionOptions, server: Express){
 
-    return new WebhookConnection(this, options, server);
+    return new WebhookConnection(options, server);
 
   }
 

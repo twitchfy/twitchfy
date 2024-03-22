@@ -1,0 +1,1 @@
+export type FragmentTypes = 'text' | 'cheermote' | 'emote' | 'mention';

@@ -1,10 +1,9 @@
 import { StreamOnlineStream } from './StreamOnlineStream';
 import { StreamOnlineBroadcaster } from './StreamOnlineBroadcaster';
 import { Base } from '../Base';
-import type { Subscription } from '../../Subscription';
 import type { SubscriptionTypes } from '../../../enums';
 import type { StreamOnlineEvent } from '../../../interfaces';
-import type { ConnectionTypes } from '../../../types';
+import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
 
 export class StreamOnlineMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.StreamOnline, K>{
@@ -12,7 +11,7 @@ export class StreamOnlineMessage<K extends ConnectionTypes = ConnectionTypes> ex
   public broadcaster: StreamOnlineBroadcaster<K>;
   public stream: StreamOnlineStream<K>;
 
-  public constructor(connection: K, subscription: Subscription<SubscriptionTypes.StreamOnline, K>, data: StreamOnlineEvent){
+  public constructor(connection: K, subscription: SubscriptionType<SubscriptionTypes.StreamOnline, K>, data: StreamOnlineEvent){
 
     super(connection, subscription);
 
