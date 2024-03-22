@@ -30,7 +30,7 @@ export class BaseClient {
     this.userToken = options.userToken;
     this.proxy = options.proxy;
     this.requestManager = new RequestManager(this);
-    this.callbacks = options.callbacks;
+    this.callbacks = options.callbacks ?? {};
   }
 
   public async getUser(userIdentificator: string, requestOptions?: RequestOptions): Promise<User> {

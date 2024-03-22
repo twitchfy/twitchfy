@@ -35,4 +35,12 @@ export class TokenAdapter<T extends TokenTypes = TokenTypes, K extends boolean =
 
     return this;
   }
+
+  public isUserToken(){
+    return (this.type === 'code' || this.type === 'implicit'); 
+  }
+
+  public isAppToken(){
+    return this.type === 'app';
+  }
 }

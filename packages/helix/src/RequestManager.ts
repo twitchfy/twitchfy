@@ -12,11 +12,13 @@ export class RequestManager {
 
   public client: BaseClient;
   public baseURL: string;
+  public authURL: string;
 
   public constructor(client: BaseClient) {
 
     this.client = client;
     this.baseURL = client.proxy ?? 'https://api.twitch.tv/helix';
+    this.authURL = 'https://id.twitch.tv';
   }
 
 
@@ -28,19 +30,13 @@ export class RequestManager {
 
       const token = this.getToken(requestOptions);
 
-      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'GET');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions) || requestOptions?.refreshToken === false) throw new TwitchHelixError(res, await res.json() as Error, 'GET');
 
       const refreshedToken = await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
-      if(requestOptions?.useTokenType === 'user'){
+      this.setProperToken(token as TokenAdapter<TokenTypes, true>, refreshedToken, requestOptions);
 
-        if((requestOptions as RequestOptions<'user'>).userToken){
-          requestOptions = { ...requestOptions, userToken: refreshedToken as TokenAdapter<'code', true> };
-        }else this.client.userToken = refreshedToken as TokenAdapter<'code', true>;
-
-      } else this.client.appToken = refreshedToken as TokenAdapter<'app', true>;
-
-      return this.get(endpoint, params, requestOptions);
+      return await this.get(endpoint, params, { ...requestOptions, refreshToken: false });
 
 
     }
@@ -56,11 +52,13 @@ export class RequestManager {
 
       const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'DELETE');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions) || requestOptions?.refreshToken === false) throw new TwitchHelixError(res, await res.json() as Error, 'DELETE');
 
-      await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
+      const refreshedToken = await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
-      this.delete(endpoint, params, requestOptions);
+      this.setProperToken(token as TokenAdapter<TokenTypes, true>, refreshedToken, requestOptions);
+
+      await this.delete(endpoint, params, { ...requestOptions, refreshToken: false });
 
 
     }
@@ -73,15 +71,15 @@ export class RequestManager {
 
     if (!res.ok) {
 
-
       const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions) || requestOptions?.refreshToken === false) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
-      await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
+      const refreshedToken = await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
-      return this.post(endpoint, params, body, requestOptions);
+      this.setProperToken(token as TokenAdapter<TokenTypes, true>, refreshedToken, requestOptions);
 
+      return await this.post(endpoint, params, body, { ...requestOptions, refreshToken: false });
 
     }
 
@@ -99,11 +97,13 @@ export class RequestManager {
 
       const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'PATCH');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions) || requestOptions?.refreshToken === false) throw new TwitchHelixError(res, await res.json() as Error, 'PATCH');
 
-      await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
+      const refreshedToken = await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
-      return this.patch(endpoint, params, body, requestOptions);
+      this.setProperToken(token as TokenAdapter<TokenTypes, true>, refreshedToken, requestOptions);
+
+      return await this.patch(endpoint, params, body, { ...requestOptions, refreshToken: false });
 
 
     }
@@ -119,11 +119,13 @@ export class RequestManager {
 
       const token = this.getToken(requestOptions) as TokenAdapter;
 
-      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions)) throw new TwitchHelixError(res, await res.json() as Error, 'PUT');
+      if (token?.type === 'implicit' || !token?.refresh || await this.validateToken(requestOptions) || requestOptions?.refreshToken === false) throw new TwitchHelixError(res, await res.json() as Error, 'PUT');
 
-      await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
+      const refreshedToken = await this.handleTokenAdapterRefresh(token as TokenAdapter<'code' | 'app', true>);
 
-      return this.put(endpoint, params, body, requestOptions);
+      this.setProperToken(token as TokenAdapter<TokenTypes, true>, refreshedToken, requestOptions);
+
+      return await this.put(endpoint, params, body, { ...requestOptions, refreshToken: false });
 
 
     }
@@ -135,7 +137,7 @@ export class RequestManager {
 
   public async validateToken(requestOptions: RequestOptions, noError: boolean = true) {
 
-    const res = await fetch(this.baseURL + '/oauth2/validate', { headers: this.makeHeaders(requestOptions) });
+    const res = await fetch(this.authURL + '/oauth2/validate', { headers: this.makeHeaders(requestOptions) });
 
     if (!res.ok) {
 
@@ -156,7 +158,7 @@ export class RequestManager {
 
   public async refreshToken(refreshToken: string) {
 
-    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: this.client.clientID, client_secret: this.client.clientSecret, grant_type: 'refresh_token', refresh_token: refreshToken }).toString()}`, { method: 'POST' });
+    const res = await fetch(this.authURL + `/oauth2/token?${new URLSearchParams({ client_id: this.client.clientID, client_secret: this.client.clientSecret, grant_type: 'refresh_token', refresh_token: refreshToken }).toString()}`, { method: 'POST' });
 
     if (!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
@@ -166,7 +168,7 @@ export class RequestManager {
 
   public async generateUserToken(code: string, redirectURI: string) {
 
-    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: this.client.clientID, client_secret: this.client.clientSecret, code, grant_type: 'authorization_code', redirect_uri: redirectURI }).toString()}`, { method: 'POST' });
+    const res = await fetch(this.authURL + `/oauth2/token?${new URLSearchParams({ client_id: this.client.clientID, client_secret: this.client.clientSecret, code, grant_type: 'authorization_code', redirect_uri: redirectURI }).toString()}`, { method: 'POST' });
 
     if (!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
@@ -176,7 +178,7 @@ export class RequestManager {
 
   public async generateAppToken(options?: GenerateAppTokenOptions) {
 
-    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: options?.clientID ?? this.client.clientID, client_secret: options?.clientSecret ?? this.client.clientSecret, grant_type: 'client_credentials' }).toString()}`, { method: 'POST' });
+    const res = await fetch(this.authURL + `/oauth2/token?${new URLSearchParams({ client_id: options?.clientID ?? this.client.clientID, client_secret: options?.clientSecret ?? this.client.clientSecret, grant_type: 'client_credentials' }).toString()}`, { method: 'POST' });
 
     if (!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
@@ -197,7 +199,9 @@ export class RequestManager {
 
     const token = this.getToken(requestOptions);
 
-    return { 'Authorization': `Bearer ${token?.token}`, 'Client-Id': this.client.clientID, 'Content-Type': 'application/json' };
+    const headers = { 'Authorization': `Bearer ${token?.token}`, 'Client-Id': this.client.clientID, 'Content-Type': 'application/json' };
+
+    return headers;
 
   }
 
@@ -261,6 +265,17 @@ export class RequestManager {
       return newToken;
 
     }
+  }
+
+  private setProperToken(oldToken: TokenAdapter<TokenTypes, true>, newToken: TokenAdapter<TokenTypes, true>, requestOptions: RequestOptions){
+
+    if(oldToken.isUserToken()){
+
+      if((requestOptions as RequestOptions<'user'>)?.userToken){
+        requestOptions = { ...requestOptions, userToken: newToken as TokenAdapter<'code', true> };
+      }else this.client.setUserToken(newToken as TokenAdapter<'code', true>);
+
+    } else this.client.setAppToken(newToken as TokenAdapter<'app', true>);
   }
 }
 
