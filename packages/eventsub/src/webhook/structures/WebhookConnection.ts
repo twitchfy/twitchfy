@@ -58,7 +58,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
     this.server = server;
 
-    this.dropSubsAtStart = typeof options.dropSubsAtStart === 'boolean'? options.dropSubsAtStart : options.maintainSubscriptions? false : true;
+    this.dropSubsAtStart = typeof options.dropSubsAtStart === 'boolean'? options.dropSubsAtStart : this.maintainSubscriptions? false : true;
 
   }
 
@@ -215,6 +215,8 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
     for(const subscription of chunk){
 
       connection.helixClient.deleteSubscription(subscription.id);
+
+      connection.makeDebug(`Drop subscription (${subscription.id}) at start because dropSubsAtStart was enabled.`);
 
     }
 

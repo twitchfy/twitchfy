@@ -4,7 +4,7 @@ import { SubscriptionTypes } from '../enums';
 import type { BasePayload } from '../interfaces';
 import type { ConnectionTypes } from '../types';
 
-export function notificationHandler(connection: ConnectionTypes, payload: BasePayload<SubscriptionTypes>){
+export async function notificationHandler(connection: ConnectionTypes, payload: BasePayload<SubscriptionTypes>){
 
   switch(payload.subscription.type){
 
@@ -18,7 +18,7 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     //@ts-expect-error
 
-    subscription.callbacks.execute(new ChannelFollowMessage(connection, subscription, payload.event));
+    await subscription.callbacks.execute(new ChannelFollowMessage(connection, subscription, payload.event));
     
   }
 
@@ -34,7 +34,7 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     //@ts-expect-error
 
-    subscription.callbacks.execute(new ChannelUpdateMessage(connection, subscription, payload.event));
+    await subscription.callbacks.execute(new ChannelUpdateMessage(connection, subscription, payload.event));
 
   }
 
@@ -50,7 +50,7 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     //@ts-expect-error
 
-    subscription.callbacks.execute(new ChannelChatClearMessage(connection, subscription, payload.event));
+    await subscription.callbacks.execute(new ChannelChatClearMessage(connection, subscription, payload.event));
   }
 
     break;
@@ -65,7 +65,7 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     //@ts-expect-error
 
-    subscription.callbacks.execute(new StreamOnlineMessage(connection, subscription, payload.event));
+    await subscription.callbacks.execute(new StreamOnlineMessage(connection, subscription, payload.event));
   }
 
     break;
@@ -80,7 +80,7 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     //@ts-expect-error
 
-    subscription.callbacks.execute(new ChannelAdBreakBeginMessage(connection, subscription, payload.event));
+    await subscription.callbacks.execute(new ChannelAdBreakBeginMessage(connection, subscription, payload.event));
 
   }
 
@@ -96,7 +96,7 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     //@ts-expect-error
 
-    subscription.callbacks.execute(new ChannelChatClearUserMessagesMessage(connection, subscription, payload.event));
+    await subscription.callbacks.execute(new ChannelChatClearUserMessagesMessage(connection, subscription, payload.event));
   }
 
     break;
@@ -111,7 +111,7 @@ export function notificationHandler(connection: ConnectionTypes, payload: BasePa
 
     //@ts-expect-error
     
-    subscription.callbacks.execute(new ChannelChatMessageMessage(connection, subscription, payload.event));
+    await subscription.callbacks.execute(new ChannelChatMessageMessage(connection, subscription, payload.event));
   }
 
   }

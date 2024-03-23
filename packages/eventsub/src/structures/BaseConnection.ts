@@ -64,7 +64,7 @@ export abstract class BaseConnection<K extends ConnectionTypes, U extends Webhoo
 
   public makeDebug(...args: any[]){
 
-    return this.logger.debug(...args);
+    return this.logger.info(...args);
 
   }
 

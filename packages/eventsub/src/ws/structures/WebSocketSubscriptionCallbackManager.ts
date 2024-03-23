@@ -27,9 +27,11 @@ export class WebSocketSubscriptionCallbackManager<T extends SubscriptionTypes>{
 
   }
 
-  public execute(message: SubscriptionMessages<WebSocketConnection>[T]){
+  public async execute(message: SubscriptionMessages<WebSocketConnection>[T]){
 
-    this.callbacks.forEach((c) => c(message));
+    for await(const callback of this.callbacks){
+      await callback(message);
+    }
 
   }
 

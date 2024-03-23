@@ -8,7 +8,7 @@ import type { WebhookConnection } from '../../webhook';
 
 export const SubscriptionRouter = Router();
 
-SubscriptionRouter.post('/', (req: Request, res) => {
+SubscriptionRouter.post('/', async(req: Request, res) => {
 
   const connection = res.locals.webhookConnection as WebhookConnection;
 
@@ -24,7 +24,7 @@ SubscriptionRouter.post('/', (req: Request, res) => {
 
   case 'notification': {
 
-    notificationHandler(connection, body);
+    await notificationHandler(connection, body);
 
     return res.sendStatus(200);
 

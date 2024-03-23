@@ -35,7 +35,7 @@ export async function messageHandler(websocket: WebSocket, message: WSMessage) {
         
       setMessageType<BaseNotification>(parsedMessage);
 
-      notificationHandler(websocket.connection, parsedMessage.payload);
+      await notificationHandler(websocket.connection, parsedMessage.payload);
         
     }
     }
