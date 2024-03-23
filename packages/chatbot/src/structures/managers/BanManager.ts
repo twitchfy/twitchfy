@@ -48,7 +48,7 @@ export class BanManager{
      */
   public async createBan(userID: string, options?: BanOptions): Promise<Ban> {
 
-    const body = new BanBody(userID, options?.reason);
+    const body = new BanBody({ userID, ...options });
         
     return new Ban(this.chatbot, await this.chatbot.helixClient.banUser(this.channel.id, this.chatbot.user.id, body));
   }
@@ -56,7 +56,7 @@ export class BanManager{
 
   public async createTimeout(userID: string, options: TimeoutOptions): Promise<Ban> {
 
-    const body = new TimeoutBody(userID, options.duration, options.reason);
+    const body = new TimeoutBody({ userID, ...options });
 
     return new Ban(this.chatbot, await this.chatbot.helixClient.timeoutUser(this.channel.id, this.chatbot.user.id, body));
 
