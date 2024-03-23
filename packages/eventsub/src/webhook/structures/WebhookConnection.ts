@@ -216,6 +216,8 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
 
       connection.helixClient.deleteSubscription(subscription.id);
 
+      connection.makeDebug(`Drop subscription (${subscription.id}) at start because dropSubsAtStart was enabled.`);
+
     }
 
     index++;
