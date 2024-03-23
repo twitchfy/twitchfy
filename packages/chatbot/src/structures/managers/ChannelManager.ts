@@ -2,29 +2,27 @@ import { Channel } from '../Channel';
 import type { ChatBot } from '../../ChatBot';
 import { User } from '../User';
 import { JoinedChannel } from '../JoinedChannel';
-import type { ConnectionType } from '../../enums/ConnectionType';
-import { ConnectionTypes, Subscription, SubscriptionCallback, SubscriptionTypes, WebSocketConnection, WebhookConnection } from '@twitchapi/eventsub';
 
 /**
  * Represents the ChannelManager of the ChatBot.
  * @class
  */
 
-export class ChannelManager<T extends ConnectionType>{
+export class ChannelManager{
 
   /**
      * @description The current instance of the {@link ChatBot}.
      */
 
 
-  public chatbot: ChatBot<T>;
+  public chatbot: ChatBot;
 
   /**
      * @public
      * @param chatbot 
      */
 
-  public constructor(chatbot: ChatBot<T>){
+  public constructor(chatbot: ChatBot){
         
     this.chatbot = chatbot;
 
@@ -49,33 +47,23 @@ export class ChannelManager<T extends ConnectionType>{
   /**
      * 
      * Use to join to a Twitch channel to receive events.
-     * @param {string} channelID The channel name of the channel the chatbot will join.
+     * @param {string} channelName The channel name of the channel the chatbot will join.
      * @returns {JoinedChannel} Returns {@link JoinedChannel}.
      */
 
-  public async join(channelID: string) {
-    
-    const subscription = await this.chatbot.connection.subscribe({
-      type: SubscriptionTypes.ChannelChatMessage,
-      options: {
-        broadcaster_user_id: channelID,
-        user_id: this.chatbot.user.id
-      }
-    });
+  public join(channelName: string): JoinedChannel {
+       
+    const channel = new JoinedChannel(this.chatbot, channelName);
 
-    if(subscription.connection instanceof WebhookConnection){
+    if(this.chatbot.joinedChannels.find((x) => x.name === channel.name)) return channel;
 
-      setSubscriptionType<WebhookConnection>(subscription)
+    this.chatbot.ws.sendMessage(`JOIN #${channel.name}`);
 
-      subscription.onMessage((message) => message)
-    }else {
+    this.chatbot.joinedChannels.push(channel);
 
-      setSubscriptionType<ConnectionTypes>(subscription);
+    this.chatbot.emit('JOIN', channel);
 
-      subscription.onMessage((msg) => msg)
-    }
-
-    subscription.onMessage((message) => message.);
+    return channel;
 
   }
 
@@ -100,5 +88,3 @@ export class ChannelManager<T extends ConnectionType>{
     return channel;
   }
 }
-
-function setSubscriptionType<T extends ConnectionTypes>(subscription: SubscriptionType): asserts subscription is Subscription<SubscriptionTypes.ChannelChatMessage, T> {} 
