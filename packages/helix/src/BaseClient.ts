@@ -227,7 +227,7 @@ export class BaseClient {
 
   public async getStreams(options?: GetStreamsOptions<true>, requestOptions?: RequestOptions<'app' | 'user', true>): Promise<GetStream[]> {
 
-    const parsedOptions = Object.keys(options).flatMap((x: keyof GetStreamsOptions<true>) => {
+    const parsedOptions = Object.keys(options || {}).flatMap((x: keyof GetStreamsOptions<true>) => {
 
       const opt = options[x];
 
