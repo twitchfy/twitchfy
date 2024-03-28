@@ -6,8 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "docs": "typedoc --plugin typedoc-plugin-markdown",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "tsc -p tsconfig.json"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
