@@ -3,7 +3,7 @@ import { RequestManager } from './RequestManager';
 import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody } from './structures';
 import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
-import type { HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions, GenerateAppTokenOptions, HelixClientCallbacks } from './interfaces';
+import type { HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions, GenerateAppTokenOptions, HelixClientCallbacks, GetStreamsOptions } from './interfaces';
 import type { RequestOptions, UserTokenAdapter } from './types';
 
 
@@ -176,9 +176,13 @@ export class BaseClient {
     return data.data[0];
   }
 
-  public async getChatters(broadcaster_id: string, moderator_id: string, requestOptions?: RequestOptions<'user'>) : Promise<Chatter[]>{
+  public async getChatters(broadcaster_id: string, moderator_id: string, requestOptions?: RequestOptions<'user', true>) : Promise<Chatter[]>{
 
-    return await handlePagination(this, '/chat/chatters', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), 'GET', { ...requestOptions, useTokenType: 'user' }) as Chatter[];
+    const params = new URLSearchParams({ broadcaster_id, moderator_id });
+
+    if(requestOptions?.data_per_page) params.append('first', requestOptions.data_per_page.toString());
+
+    return await handlePagination(this, '/chat/chatters', params.toString(), 'GET', { ...requestOptions, useTokenType: 'user' }) as Chatter[];
   }
 
   public async getChannelFollowerCount(broadcaster_id: string, requestOptions?: RequestOptions<'user'>): Promise<number> {
@@ -189,9 +193,13 @@ export class BaseClient {
 
   }
 
-  public async getChannelFollowers(broadcaster_id: string, requestOptions?: RequestOptions<'user'>): Promise<GetFollowers[]>{
+  public async getChannelFollowers(broadcaster_id: string, requestOptions?: RequestOptions<'user', true>): Promise<GetFollowers[]>{
 
-    return await handlePagination(this, '/channels/followers', new URLSearchParams({ broadcaster_id, first: '100' }).toString(), 'GET', { ...requestOptions, useTokenType: 'user' }) as GetFollowers[];
+    const params = new URLSearchParams({ broadcaster_id });
+
+    if(requestOptions?.data_per_page) params.append('first', requestOptions.data_per_page.toString());
+
+    return await handlePagination(this, '/channels/followers', params.toString(), 'GET', { ...requestOptions, useTokenType: 'user' }) as GetFollowers[];
 
   }
 
@@ -210,21 +218,30 @@ export class BaseClient {
 
   }
 
-  public async getStream(userIdentificator: string, requestOptions?: RequestOptions): Promise<GetStream | null> {
+  public async getStream(options?: GetStreamsOptions<false>, requestOptions?: RequestOptions): Promise<GetStream | null> {
 
-    if(isNaN(Number(userIdentificator))){
+    const data = await this.requestManager.get('/streams', new URLSearchParams({ ...options }).toString(), requestOptions) as GetStreamResponse;
 
-      const data = await this.requestManager.get('/streams', new URLSearchParams({ user_login: userIdentificator }).toString(), requestOptions) as GetStreamResponse;
+    return data.data[0] ?? null;
+  }
 
-      return data.data[0] ?? null;
-      
-    } else {
-      const data = await this.requestManager.get('/streams', new URLSearchParams({ user_id: userIdentificator }).toString(), requestOptions) as GetStreamResponse;
+  public async getStreams(options?: GetStreamsOptions<true>, requestOptions?: RequestOptions<'app' | 'user', true>): Promise<GetStream[]> {
 
-      return data.data[0] ?? null;
-    }
+    const parsedOptions = Object.keys(options).flatMap((x: keyof GetStreamsOptions<true>) => {
 
-   
+      const opt = options[x];
+
+      if(Array.isArray(opt)) return opt.map((i) => [x, i]);
+
+      return [[x, opt]];
+    });
+
+    const params = new URLSearchParams(parsedOptions);
+
+    if(requestOptions?.data_per_page) params.append('first', requestOptions.data_per_page.toString());
+
+    return await handlePagination(this, '/streams', params.toString(), 'GET', requestOptions) as GetStream[];
+
   }
 
   public async subscribeToEventSub(body: SubscriptionBody, requestOptions?: RequestOptions): Promise<PostEventSubSubscription>{
@@ -241,11 +258,13 @@ export class BaseClient {
 
   }
 
-  public async getSubscriptions(filter?: GetSubscriptionFilter, requestOptions?: RequestOptions){
+  public async getSubscriptions(filter?: GetSubscriptionFilter, requestOptions?: RequestOptions<'user' | 'app', true>){
 
     const params = new URLSearchParams;
 
     if(filter) filter.status ? params.append('status', filter.status) : filter.type ? params.append('type', filter.type) : params.append('user_id', filter.user_id);
+
+    if(requestOptions?.data_per_page) params.append('first', requestOptions.data_per_page.toString());
 
     return await handlePagination(this, '/eventsub/subscriptions', params.toString(), 'GET', requestOptions) as PostEventSubSubscription[]; 
 
