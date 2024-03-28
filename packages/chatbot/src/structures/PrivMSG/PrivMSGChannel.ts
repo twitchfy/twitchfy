@@ -64,7 +64,7 @@ export class PrivMSGChannel{
      */
 
   public async sendAnnouncement(message: string, color: AnnouncementColor) {
-    const announcementBody = new AnnouncementBody(message, color);
+    const announcementBody = new AnnouncementBody({ message, color });
     await this.chatbot.helixClient.sendAnnouncement(this.id, this.chatbot.user.id, announcementBody);
   }
 

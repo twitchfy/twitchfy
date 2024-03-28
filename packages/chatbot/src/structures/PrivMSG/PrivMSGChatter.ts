@@ -114,7 +114,7 @@ export class PrivMSGChatter{
      */
   public async ban(options?: BanOptions): Promise<Ban> {
 
-    const banBody = new BanBody(this.id, options?.reason);
+    const banBody = new BanBody({ userID: this.id, ...options });
 
     return new Ban(this.chatbot, await this.chatbot.helixClient.banUser(this.channel.id, this.chatbot.user.id, banBody));
   }
@@ -126,7 +126,7 @@ export class PrivMSGChatter{
      */
   public async timeout(options: TimeoutOptions): Promise<Ban> {
 
-    const timeoutBody = new TimeoutBody(this.id, options.duration, options.reason);
+    const timeoutBody = new TimeoutBody({ userID: this.id, ...options });
 
     return new Ban(this.chatbot, await this.chatbot.helixClient.timeoutUser(this.channel.id , this.chatbot.user.id, timeoutBody));
 
