@@ -1,6 +1,6 @@
 {
   "name": "@twitchapi/helix",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "A powerful node module to interact with twitch api",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
   },
   "author": "PabloRNC",
   "license": "ISC",
-  "devDependencies": {
-    "@twitchapi/api-types": "^1.1.17"
+  "dependencies": {
+    "@twitchapi/api-types": "^1.1.18"
   }
 }
