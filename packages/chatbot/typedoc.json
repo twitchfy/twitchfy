@@ -1,5 +1,0 @@
-{
-    "out": "../../website/docs/chatbot",
-    "entryPoints": ["./src/index.ts"],
-    "readme": "./README.md"
-}

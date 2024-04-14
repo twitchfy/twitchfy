@@ -1,9 +1,10 @@
+import type { BanOptions } from '@twitchapi/helix';
+
 /**
  * The options to timeout an user.
- * @interface
+ * @param duration The duration of the timeout in seconds.
+ * @extends {BanOptions}
  */
-
-export interface TimeoutOptions{
-    reason: string
-    duration: number
+export interface TimeoutOptions extends BanOptions {
+    duration: number;
 }

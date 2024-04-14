@@ -1,27 +1,25 @@
 {
   "name": "@twitchapi/chatbot",
   "version": "1.4.15",
-  "description": "A powerful node module to make your own twitch chatbot!",
+  "description": "A powerful node module to make your own Twitch ChatBot",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/PabloRNC/twitchapi"
-  },
-  "bugs": {
-    "url": "https://github.com/PabloRNC/twitchapi/issues"
-  },
-  "homepage": "https://pablornc.github.io/twitchapi/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pablornc/twitchapi.git"
+  },
   "author": "PabloRNC",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pablornc/twitchapi/issues"
+  },
+  "homepage": "https://github.com/pablornc/twitchapi#readme",
   "dependencies": {
-    "@twitchapi/api-types": "^1.1.5",
-    "@twitchapi/eventsub": "^1.0.0-beta.18",
-    "@twitchapi/helix": "^1.3.6",
-    "@types/websocket": "^1.0.5",
-    "websocket": "^1.0.34"
+    "@twitchapi/api-types": "^1.1.18",
+    "@twitchapi/eventsub": "^1.0.0-beta.23",
+    "@twitchapi/helix": "^1.5.3",
+    "ngrok": "^5.0.0-beta.2"
   }
 }

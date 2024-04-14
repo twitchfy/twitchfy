@@ -1,73 +1,45 @@
-import { Ban } from '../Ban';
-import type { ChatBot } from '../../ChatBot';
-import type { Channel } from '../../structures/Channel';
-import type { BanOptions } from '../../interfaces/BanOptions';
-import type { TimeoutOptions } from '../../interfaces/TimeoutOptions';
-import { BanBody, TimeoutBody } from '@twitchapi/helix';
-
-
+import { Base } from '../Base';
+import type { ChatRoom } from '../ChatRoom';
+import type { ChatBot } from '../ChatBot';
+import type { EventSubConnection } from '../../enums';
+import type { BanOptions } from '../../interfaces';
 
 /**
- * Represents a BanManager of a channel
- * @class
+ * The ban manager of a chatroom.
  */
-
-
-export class BanManager{
-
-   
-  /**
-     * @description The current instance of the {@link ChatBot}.
-     */
-  public chatbot: ChatBot;
-
-
-   
-  /**
-     * @description The {@link Channel} of the BanManager.
-     */
-
-  public channel: Channel;
+export class BanManager<T extends EventSubConnection> extends Base<T>{
 
   /**
-     * 
-     * @param chatbot 
-     * @param channel 
-     */
-
-  public constructor(chatbot: ChatBot, channel: Channel){
-    this.chatbot = chatbot;
-    this.channel = channel;
+   * The chatroom which includes this manager.
+   */
+  public readonly chatroom: ChatRoom<T>;
+  
+  /**
+   * Creates a new instance of the badge manager.
+   * @param chatbot The current instance of the chatbot.
+   * @param chatroom The chatroom which includes this manager.
+   */
+  public constructor(chatbot: ChatBot<T>, chatroom: ChatRoom<T>){
+    super(chatbot);
+    this.chatroom = chatroom;
   }
 
   /**
-     * 
-     * @param {string} userID The user's id of the user you want to ban. 
-     * @param {BanOptions} options The options of the ban. 
-     * @returns {Ban} Returns a {@link Ban} class that represents the ban.
-     */
-  public async createBan(userID: string, options?: BanOptions): Promise<Ban> {
-
-    const body = new BanBody({ userID, ...options });
-        
-    return new Ban(this.chatbot, await this.chatbot.helixClient.banUser(this.channel.id, this.chatbot.user.id, body));
-  }
-
-
-  public async createTimeout(userID: string, options: TimeoutOptions): Promise<Ban> {
-
-    const body = new TimeoutBody({ userID, ...options });
-
-    return new Ban(this.chatbot, await this.chatbot.helixClient.timeoutUser(this.channel.id, this.chatbot.user.id, body));
-
+   * Ban a specific user.
+   * @param options The options required for banning an user. See {@link BanOptions}.
+   * @returns A class representation of the ban. See {@link Ban}. 
+   */
+  public async add(options: BanOptions){
+    return await this.chatbot.bans.add(this.chatroom.id, options);
   }
 
   /**
-     * UnBan the specified user in the {@link Channel} of this BanManager.
-     * @param {string} userID The userID of the person who is banned and you are going to unBan.
-     */
-
-  public async unBan(userID: string){
-    await this.chatbot.helixClient.unBanUser(this.channel.id, this.chatbot.user.id, userID);
+   * Deletes the ban of a specific user.
+   * @param userID The id of the user to unban. 
+   * @returns 
+   */
+  public async delete(userID: string){
+    return await this.chatbot.bans.delete(this.chatroom.id, userID);
   }
+
 }

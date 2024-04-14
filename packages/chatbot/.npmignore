@@ -1,6 +1,1 @@
-**/*.test.ts
-**/*.test.js
-tsconfig.json
 src/
-typedoc.json
-

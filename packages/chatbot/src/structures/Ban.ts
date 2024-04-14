@@ -1,80 +1,66 @@
-import type { ChatBot } from '../ChatBot';
-import { BanUser } from './BanUser';
 import type { Ban as BanData } from '@twitchapi/api-types';
+import type { ChatBot } from './ChatBot';
+import { Base } from './Base';
+import type { EventSubConnection } from '../enums';
 
 /**
- * @class
- * Represents a ban in a channel. The ban can be a Twitch ban or a Twitch timeout. 
+ * Represents a ban in a chatroom.
  */
-export class Ban{
+export class Ban<T extends EventSubConnection> extends Base<T> {
+   
+  /**
+   * The ID of the user who was banned.
+   */
+  public readonly userID: string;
 
   /**
-     * @description The current instance of the {@link ChatBot}.
-     */
-  public chatbot: ChatBot;
+   * The ID of the moderator who banned the user.
+   */
+  public readonly moderatorID: string;
 
   /**
-     * @description The broadcaster who has the channel where the ban was done.
-     */
-  public broadcaster: BanUser;
+   * The data of the ban returned from the API.
+   */
+  private data: BanData;
 
   /**
-     * @description The user who was banned.
-     */
-  public user: BanUser;
-
-  /**
-     * @description The moderator who ban the user.
-     */
-  public moderator: BanUser;
-
-  /**
-     * @description The duration of the ban. This is null if the ban is a Twitch ban. 
-     */
-  public duration: number | null;
-
-  /**
-     * @description A JavaScript Date that represents when the ban was created.
-     */
-  public createdAt: Date;
-
-  /**
-     * 
-     * @param chatbot 
-     * @param data 
-     */
-  public constructor(chatbot: ChatBot, data: BanData){
-    this.chatbot = chatbot;
-    this.broadcaster = new BanUser(this.chatbot, data.broadcaster_id);
-    this.user = new BanUser(this.chatbot, data.user_id);
-    this.moderator = new BanUser(this.chatbot, data.moderator_id);
-    this.duration = data.end_time;
-    this.createdAt = new Date(data.created_at);
+   * Creates a new instance of the ban.
+   * @param chatbot The current instance of the chatbot.
+   * @param data The data of the ban returned from the API.
+   */
+  public constructor(chatbot: ChatBot<T>, data: BanData){
+    super(chatbot);
+    this.data = data;
+    this.userID = data.user_id;
+    this.moderatorID = data.moderator_id;
   }
 
   /**
-     * Check if the ban is a Twitch ban.
-     * @returns {boolean} Returns a boolean that determines if the ban is a Twitch ban.
-     */
-  public isBan() : boolean {
-    return !this.duration;
-  }
-
-  /**
-     * Check if the ban is a Twitch timeout
-     * @returns {boolean} Returns a boolean that determines if the ban is a timeout.
-     */
-  public isTimeout() : boolean {
-    return !!this.duration;
-  }
-
-  /**
-     * Delete this ban.
-     */
+   * Deletes the ban from the chatroom.
+   * @returns
+   */
   public async delete(){
-
-    return await this.chatbot.helixClient.unBanUser(this.broadcaster.id, this.chatbot.user.id, this.user.id);
-
+    return await this.chatbot.helixClient.unBanUser(this.chatroomID, this.moderatorID, this.userID);
   }
 
+  /**
+   * The ID of the chatroom where the ban was made.
+   */
+  public get chatroomID(){
+    return this.data.broadcaster_id;
+  }
+
+  /**
+   * The Date when the ban was created. Returns a JavaScript Date object.
+   */
+  public get createdAt(){
+    return new Date(this.data.created_at);
+  }
+
+  /**
+   * If the ban is a timeout this will return the end time of the timeout in a JavaScript Date object. If not, it will return a nullish value.
+   */
+  public get endTime(){
+    return this.data.end_time ? new Date(this.data.end_time) : null;
+  }
 }
