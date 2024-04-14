@@ -1,95 +1,65 @@
-import type { ChatBot } from '../ChatBot';
-import type { User as UserResponse } from '@twitchapi/api-types';
-import { WhisperBody } from '@twitchapi/helix';
+import type { User as UserData } from '@twitchapi/api-types'; 
+import type { ChatBot } from './ChatBot';
+import { BaseUser } from './BaseUser';
+import type { EventSubConnection } from '../enums';
 
-
-export class User{
-
-  /**
-     * @description The current instance of the {@link ChatBot}.
-     */
-  public chatbot: ChatBot;
+/**
+ * Represents a Twitch user.
+ */
+export class User<T extends EventSubConnection> extends BaseUser<T> {
 
   /**
-     * @description The user's id
-     */
-  public id: string;
+   * The description of the user.
+   */
+  public readonly description: string;
 
   /**
-     * @description The user's login name.
-     */
-  public login: string;
+   * The profile image URL of the user.
+   */
+  public readonly profileImage: string;
 
   /**
-     * @description The user's name that is displayed in the chat. This name is like the login name but can have UpperCase letters.
-     */
-  public displayName: string;
+   * The data of the user returned from the API.
+   */
+  private readonly data: UserData;
 
   /**
-     * @description The user type. The value is null if the user is a normal one.
-     */
-  public type: string | null;
-
-  /**
-     * @description The broadcaster type. It can be an affiliate, a partner or a normal user, if is a normal user the value will be null.
-     */
-  public broadcasterType: string | null;
-
-  /**
-     * @description The user's profile description.
-     */
-  public description: string;
-
-  /**
-     * @description The url of the user's avatar.
-     */
-  public avatarURL: string;
-
-  /**
-     * @description The offline image url of the user.
-     */
-  public offlineImageURL: string;
-
-  /**
-     * @description The Date that represents when the user was created.
-     */
-  public createdAt: Date;
-
-  /**
-     * @param chatbot 
-     * @param data 
-     */
-  public constructor(chatbot: ChatBot, data: UserResponse){
-    this.chatbot = chatbot;
-    this.id = data.id;
-    this.login = data.login;
-    this.displayName = data.display_name;
-    this.type = data.type === '' ? null : data.type;
-    this.broadcasterType = data.broadcaster_type === '' ? null: data.broadcaster_type;
+   * Creates a new instance of the user.
+   * @param chatbot The current instance of the chatbot.
+   * @param data The data of the user returned from the API.
+   */
+  public constructor(chatbot: ChatBot<T>, data: UserData){
+    super(chatbot, data);
+    this.data = data;
     this.description = data.description;
-    this.avatarURL = data.profile_image_url;
-    this.offlineImageURL = data.offline_image_url;
-    this.createdAt = new Date(data.created_at);
+    this.profileImage = data.profile_image_url;
   }
 
   /**
-     * Send a whisper to this user.
-     * @param {string} message The message you want to send to the user. You have to have the scope user:manage:whispers and the sender user has to have a verified phone number. 
-     */
-  public async sendWhisper(message: string){
-
-    const whisperBody = new WhisperBody(message);
-
-    await this.chatbot.helixClient.sendWhisper(this.chatbot.user.id, this.id, whisperBody);
+   * When the user was created. A JavaScript Date object is returned.
+   */
+  public get createdAt(){
+    return new Date(this.data.created_at);
   }
 
   /**
-     * Get the whole {@link User} object with all the user's information.
-     * @returns {Promise<User>} The {@link User} of this user.
-     */
-  public async fetch(): Promise<User>{
-
-    return await this.chatbot.users.fetch(this.id);
+   * The user's type.
+   */
+  public get userType(){
+    return this.data.type.length ? this.data.type : 'normal';
   }
 
+  /**
+   * The user's broadcaster type. Possible values are 'partner', 'affiliate' and 'normal'.
+   */
+  public get broadcasterType(){
+    return this.data.broadcaster_type.length ? this.data.broadcaster_type : 'normal';
+  }
+
+  /**
+   * The user's offline image url. Returns null if the user has no offline image set
+   */
+  public get offlineImage(): string | null {
+    return this.data.offline_image_url.length ? this.data.offline_image_url : null;
+  }
 }

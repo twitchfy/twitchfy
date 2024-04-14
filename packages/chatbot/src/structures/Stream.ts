@@ -1,105 +1,73 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { GetStream } from '@twitchapi/api-types';
-import type { ChatBot } from '../ChatBot';
-import { Broadcaster } from './Broadcaster';
-import { CreatedClip } from './CreatedClip';
+import type { ChatBot } from './ChatBot';
+import { BaseStream } from './BaseStream';
+import type { EventSubConnection } from '../enums';
+import type { Game, ThumbailOptions } from '../interfaces';
 
-export class Stream {
-
-  /**
-     * @description The current instance of the {@link ChatBot}.
-     */
-  public chatbot: ChatBot;
-
-  /**
-     * @description The {@link Broadcaster broadcaster} of the stream.
-     */
-  public broadcaster: Broadcaster;
+/**
+ * Represents a Twitch stream.
+ */
+// @ts-expect-error
+export class Stream<T extends EventSubConnection> extends BaseStream<T> {
 
   /**
-     * @description The id of the stream.
-     */
-  public id: string;
+   * The amount of viewers watching the stream.
+   */
+  public readonly viewerCount: number;
 
   /**
-     * @description The id of the game that is playing in the stream.
-     */
-  public gameId: string;
+   * The language of the stream.
+   */
+  public readonly language: string;
 
   /**
-     * @description The name of the game that is playing in the stream.
-     */
-  public gameName: string;
+   * The tags of the stream.
+   */
+  public readonly tags: string[];
 
   /**
-     * @description The type of stream. Usually is live.
-     */
-  public type: string;
+   * Whether the stream is marked as mature.
+   */
+  public readonly isMature: boolean;
 
   /**
-     * @description The title of the stream.
-     */
-  public title: string;
+   * The game which is currently being played on the stream.
+   */
+  public readonly game: Game;
 
   /**
-     * @description A string array containing the stream's tags.
-     */
-  public tags: string[];
+   * The data of the stream returned from the API.
+   */
+  private override data: GetStream;
 
   /**
-     * @description The viewerCount of the stream.
-     */
-  public viewerCount: number;
-
-  /**
-     * @description A Date that represents when the stream started.
-     */
-  public startedAt: Date;
-
-  /**
-     * @description The language code of the stream.
-     */
-  public language: string;
-
-  /**
-     * @description The thumbnail url of the stream.
-     */
-  public thumbnailURL: string;
-
-  /**
-     * @description A boolean value that indicates whether the stream is meant for mature audiences.
-     */
-  public isMature: boolean;
-
-  /**
-     * 
-     * @param chatbot 
-     * @param data 
-     */
-  public constructor(chatbot: ChatBot, data: GetStream) {
-    this.chatbot = chatbot;
-    this.broadcaster = new Broadcaster(this.chatbot, data.user_id, data.user_login, data.user_name);
-    this.id = data.id;
-    this.gameName = data.game_name;
-    this.gameId = data.game_id;
-    this.type = data.type;
-    this.title = data.title;
-    this.tags = data.tags;
+   * Creates a new instance of the stream.
+   * @param chatbot The current instance of the chatbot.
+   * @param data The data of the stream returned from the API.
+   */
+  public constructor(chatbot: ChatBot<T>, data: GetStream){
+    super(chatbot, data);
+    this.data;
     this.viewerCount = data.viewer_count;
-    this.startedAt = new Date(data.started_at);
     this.language = data.language;
-    this.thumbnailURL = data.thumbnail_url.replace('{width}', '1920').replace('{height}', '1080');
+    this.tags = data.tags;
     this.isMature = data.is_mature;
+    this.game = { id: data.game_id, name: data.game_name };
   }
 
   /**
-    * 
-    * @param {boolean} delay If true there will be a delay an the clip wouldn't finish when the request is sent instead it would finish instants later.
-    * @returns {Promise<CreatedClip>} Returns the {@link CreatedClip} object that contains the URL of the clip.
-    */
-  public async createClip(delay?: boolean) {
-
-    return new CreatedClip(this.chatbot, await this.chatbot.helixClient.createClip(this.broadcaster.id, delay));
+   * The title of the stream.
+   */
+  public get title(){
+    return this.data.title.length ? this.data.title : null;
   }
 
-
+  /**
+   * The thumbnail URL of the stream.
+   * @param options The options for the thumbnail.
+   */
+  public thumbnailURL(options?: ThumbailOptions){
+    return this.data.thumbnail_url.replace('{width}', options?.width?.toString() || '1920').replace('{height}', options?.height?.toString() || '1080');
+  }
 }

@@ -1,90 +1,107 @@
+import { SubscriptionTypes } from '@twitchapi/eventsub';
+import type { ChatBot } from '../ChatBot';
+import { Base } from '../Base';
+import { ChannelProfile } from '../ChannelProfile';
 import { Channel } from '../Channel';
-import type { ChatBot } from '../../ChatBot';
-import { User } from '../User';
-import { JoinedChannel } from '../JoinedChannel';
+import type { EventSubConnection } from '../../enums';
+import { handleOnMessage } from '../../util';
+import type { ChannelEvents } from '../../types';
 
 /**
- * Represents the ChannelManager of the ChatBot.
- * @class
+ * Represents the chatbot channel manager used to join to channels.
  */
-
-export class ChannelManager{
-
-  /**
-     * @description The current instance of the {@link ChatBot}.
-     */
-
-
-  public chatbot: ChatBot;
+export class ChannelManager<T extends EventSubConnection> extends Base<T> {
 
   /**
-     * @public
-     * @param chatbot 
-     */
-
-  public constructor(chatbot: ChatBot){
-        
-    this.chatbot = chatbot;
-
+   * Creates a new instance of the channel manager.
+   * @param chatbot The current instance of the chatbot.
+   */
+  public constructor(chatbot: ChatBot<T>){
+    super(chatbot);
   }
 
   /**
-     * 
-     * Use to get any Twitch channel information.
-     * @param {string} channelIdentificator The fetched channel's id or name. 
-     * @returns {Promise<Channel>} Returns {@link Channel}.
-     */
-  public async fetch(channelIdentificator: string): Promise<Channel> {
-    const userResponse = await this.chatbot.helixClient.getUser(channelIdentificator);
+   * Join a channel and listen to messages.
+   * @param id The id of the channel to join.
+   * @param events The EventSub events you will listen  to. See {@link ChannelEvents}.
+   * @returns A class representation of the channel profile which contains the events you are subscribed with. See {@link ChannelProfile}.
+   */
+  public async join(id: string, events?: ChannelEvents[]){
 
-    const channelResponse = await this.chatbot.helixClient.getChannel(userResponse.id);
+    const existingProfile = this.chatbot.profiles.get(id);
 
-    const channel = new Channel(this.chatbot, channelResponse, new User(this.chatbot, userResponse));
+    if(existingProfile) return existingProfile;
 
-    return channel;
+    const profile = new ChannelProfile<T>(this.chatbot, { id, events: events || ['ChannelChatMessage'] });
+
+    const subscription = await this.chatbot.eventsub.subscribe({ type: SubscriptionTypes.ChannelChatMessage, options: { broadcaster_user_id: id, user_id: this.chatbot.userID }});
+
+    const fn = handleOnMessage.bind(this.chatbot);
+
+    subscription.onMessage(fn);
+
+    if(events){
+      const parsedEvents = events.reduce((acc, event) => {
+        if(acc.includes(event)) return acc;
+        acc.push(event);
+        return acc;
+      }, [] as ChannelEvents[]);
+
+      for(const event of parsedEvents){
+
+        const type = SubscriptionTypes[event];
+
+        if(!type) continue;
+
+        await this.chatbot.eventsub.subscribe({ type, options: { moderator_user_id: this.chatbot.userID, user_id: this.chatbot.userID, broadcaster_user_id: id }});
+
+      }
+    }
+
+    return profile;
+  }
+
+
+  /**
+   * Leave a channel. You will no longer listen to messages and the other events you've subscribed.
+   * @param id The id of the channel to leave.
+   * @returns 
+   */
+  public async leave(id: string){
+
+    const subscription = this.chatbot.eventsub.subscriptions.exist(SubscriptionTypes.ChannelChatMessage, { broadcaster_user_id: id, user_id: this.chatbot.userID });
+    
+    if(!subscription) return;
+
+    await subscription.delete();
+
+    const profile = this.chatbot.profiles.get(id);
+
+    if(!profile) return;
+
+    for(const event of profile.events){
+
+      const type = SubscriptionTypes[event];
+
+      if(!type) continue;
+
+      const subscription = this.chatbot.eventsub.subscriptions.exist(type, { broadcaster_user_id: id, user_id: this.chatbot.userID, moderator_user_id: this.chatbot.userID });
+
+      if(subscription) await subscription.delete();
+
+    }
+
+    this.chatbot.profiles.delete(id);
+
+    return;
   }
 
   /**
-     * 
-     * Use to join to a Twitch channel to receive events.
-     * @param {string} channelName The channel name of the channel the chatbot will join.
-     * @returns {JoinedChannel} Returns {@link JoinedChannel}.
-     */
-
-  public join(channelName: string): JoinedChannel {
-       
-    const channel = new JoinedChannel(this.chatbot, channelName);
-
-    if(this.chatbot.joinedChannels.find((x) => x.name === channel.name)) return channel;
-
-    this.chatbot.ws.sendMessage(`JOIN #${channel.name}`);
-
-    this.chatbot.joinedChannels.push(channel);
-
-    this.chatbot.emit('JOIN', channel);
-
-    return channel;
-
-  }
-
-  /**
-     * 
-     * @param {string} channelName The channel name of the channel the chatbot will leave.
-     * @returns {JoinedChannel} Returns the {@link JoinedChannel} of the channel the ChatBot left.
-     */
-
-  public leave(channelName: string): JoinedChannel {
-
-    const channel = new JoinedChannel(this.chatbot, channelName);
-
-    const index = this.chatbot.joinedChannels.findIndex((x) => x.name === channelName);
-
-    if(index === -1) return channel;
-
-    this.chatbot.joinedChannels.splice(index, 1);
-
-    this.chatbot.ws.sendMessage(`PART #${channelName}`);
-
-    return channel;
+   * Fetches a channel by id.
+   * @param id The id of the channel to fetch.
+   * @returns A class representation of the channel. See {@link Channel}.
+   */
+  public async fetch(id: string){
+    return new Channel(this.chatbot, await this.chatbot.helixClient.getChannel(id));
   }
 }

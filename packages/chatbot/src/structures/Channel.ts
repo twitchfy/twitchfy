@@ -1,235 +1,151 @@
-import type { User } from '../structures/User';
-import type { ChatBot } from '../ChatBot';
-import type { Channel as ChannelResponse } from '@twitchapi/api-types';
-import { BanManager } from './managers/BanManager';
-import type { AnnouncementColor } from '../enums/AnnouncementColor';
-import { AnnouncementBody } from '@twitchapi/helix';
-import { Chat } from './Chat';
-import { AutoMod } from './AutoMod';
-import type { JoinedChannel } from './JoinedChannel';
-import { Follower } from './Follower';
-import { StreamManager } from './managers/StreamManager';
+import type { Channel as ChannelData } from '@twitchapi/api-types';
+import type { GetClipsOptions } from '@twitchapi/helix';
+import { Base } from './Base';
+import type { ChatBot } from './ChatBot';
+import { BaseUser } from './BaseUser';
+import { Collection } from './Collection';
+import { ChannelEmote } from './ChannelEmote';
+import { ChatRoom } from './ChatRoom';
+import type { EventSubConnection } from '../enums';
+import type { Game } from '../interfaces';
 
 /**
- * @class
- * Represents a Twitch Channel. If the origin of this channel is not the {@link ChannelManager} the information might be unupdated, to update this information use the fetch method.
+ * Represents a Twitch channel.
  */
-
-export class Channel {
-
-  /**
-     * @description The name of the channel.
-     */
-  public name: string;
+export class Channel<T extends EventSubConnection> extends Base<T>{
 
   /**
-     * @description The user whose channel is.
-     */
-
-  public broadcaster: User;
-
-  /**
-     * @description The public name the user has in any chat.
-     */
-
-  public displayName: string;
+   * The broadcaster of the channel.
+   */
+  public readonly broadcaster: BaseUser<T>;
 
   /**
-     * @description The current instance of the {@link ChatBot}
-     */
-
-  public chatbot: ChatBot;
-
-  /**
-     * @description The unique id of the channel.
-     */
-
-  public id: string;
+   * The game which was currently set into the channel.
+   */
+  public readonly game: Game;
 
   /**
-     * @description The language of the current channel.
-     */
-
-  public language: string;
-
-  /**
-     * @description The unique id of the game that the broadcaster is playing or last played.
-     */
-
-  public gameId: string;
+   * The tags of the channel.
+   */
+  public readonly tags: string[];
 
   /**
-     * @description The name of the game that the broadcaster is playing or last played.
-     */
-  public gameName: string;
+   * The classification labels of the channel.
+   */
+  public readonly classificationLabels: string[];
 
   /**
-     * @description The title of the stream that the broadcaster is currently streaming or last streamed.
-     */
-  public title: string;
+   * Whether the channel has branded content.
+   */
+  public readonly isBrandedContent: boolean;
 
   /**
-     * @description The value of the broadcaster’s stream delay setting, in seconds. If the channel is not the ChatBot's channel the delay is 0. Instead of use this property is recommended to fetch the channel settings.
-     */
-  public delay: number;
+   * The chatroom of the channel.
+   */
+  public readonly chatroom: ChatRoom<T>;
 
   /**
-     * @description The tags applied to the channel.
-     */
-
-  public tags: string[];
-
-  /**
-     * @description The {@link BanManager} of this channel.
-     */
-  public bans: BanManager;
+   * The data of the channel returned from the API.
+   */
+  private data: ChannelData;
 
   /**
-     * @description The {@link Chat} of this channel.
-     */
-  public chat: Chat;
-
-  /**
-     * @description The {@link AutoMod} of the chat.
-     */
-  public automod: AutoMod;
-
-  /**
-     * @description The {@link StreamManager} of the channel.
-     */
-  public stream: StreamManager;
-
-  /**
-     * 
-     * @param data 
-     * @param user 
-     * @param chatbot
-     */
-
-  public constructor(chatbot: ChatBot, data: ChannelResponse, user: User) {
-    this.chatbot = chatbot;
-    this.name = data.broadcaster_login;
-    this.broadcaster = user;
-    this.bans = new BanManager(this.chatbot, this);
-    this.displayName = data.broadcaster_name;
-    this.id = data.broadcaster_id;
-    this.language = data.broadcaster_language;
-    this.gameId = data.game_id;
-    this.gameName = data.game_name;
-    this.title = data.title;
-    this.delay = data.delay;
+   * Creates a new instance of the channel.
+   * @param chatbot The current instance of the chatbot.
+   * @param data The data of the channel returned from the API.
+   */
+  public constructor(chatbot: ChatBot<T>, data: ChannelData){
+    super(chatbot);
+    this.data = data;
+    this.broadcaster = new BaseUser<T>(chatbot, { id: data.broadcaster_id, login: data.broadcaster_login, display_name: data.broadcaster_name });
+    this.game = { id: data.game_id, name: data.game_name };
     this.tags = data.tags;
-    this.chat = new Chat(this.chatbot, this);
-    this.automod = new AutoMod(this.chatbot, this);
-    this.stream = new StreamManager(this.chatbot, this);
-
+    this.classificationLabels = data.content_classification_labels;
+    this.isBrandedContent = data.is_branded_content;
+    this.chatroom = new ChatRoom<T>(chatbot, { broadcaster_id: data.broadcaster_id, broadcaster_login: data.broadcaster_login, broadcaster_name: data.broadcaster_name });
   }
 
   /**
-     * Send a message to the channel.
-     * @param {string} message The message that is going to be sent to the channel.
-     */
-
-  public sendMessage(message: string) {
-
-    this.chatbot.ws.sendMessage(`PRIVMSG #${this.name} :${message}`);
-
+   * The id of the broadcaster who owns the channel.
+   */
+  public get broadcasterID(){
+    return this.broadcaster.id;
   }
 
   /**
-     * Send an announcement to the chat where everyone can see it.
-     * @param {string} message The message of the announcement to send.
-     * @param {AnnouncementColor} color The color of the announcement to send.
-     */
-
-  public async sendAnnouncement(message: string, color: AnnouncementColor) {
-    const announcementBody = new AnnouncementBody({ message, color });
-    await this.chatbot.helixClient.sendAnnouncement(this.id, this.chatbot.user.id, announcementBody);
+   * The id of the chatroom of the channel.
+   */
+  public get chatroomID(){
+    return this.broadcaster.id;
   }
 
   /**
-    * Connects the ChatBot to the chat of the channel.
-    * @returns {JoinedChannel} The {@link JoinedChannel}.
-    */
-  public join(): JoinedChannel {
-
-    const channel = this.chatbot.channels.join(this.name);
-
-    this.chatbot.emit('JOIN', channel);
-
-    return channel;
-
+   * The title of the channel. If it was never set, it will return a nullish value.
+   */
+  public get title(){
+    return this.data.title.length ? this.data.title : null;
   }
 
   /**
-     * Disconnect the ChatBot to the chat of the channel.
-     * @returns {JoinedChannel} The {@link JoinedChannel} that the bot has disconnected.
-     */
-
-  public leave(): JoinedChannel {
-
-    const channel = this.chatbot.channels.leave(this.name);
-
-    this.chatbot.emit('LEAVE', channel);
-
-    return channel;
+   * The language that was set to the channel.
+   */
+  public get language(){
+    return this.data.broadcaster_language;
   }
 
   /**
-     * Get the whole {@link Channel} object with all the channel's information.
-     * @returns {Promise<Channel>} Returns a complete {@link Channel}.
-     */
-  public async fetch() {
-
-    return await this.chatbot.channels.fetch(this.id);
-
+   * The chatroom bans manager. See {@link BanManager}.
+   */
+  public get bans(){
+    return this.chatroom.bans;
   }
 
   /**
-     * Get the number of followers of this channel.
-     * @returns {Promise<number>} Returns the number of followers that follow this channel.
-     */
-  public async getFollowerCount(): Promise<number>{
-
-    return await this.chatbot.helixClient.getChannelFollowerCount(this.id);
-
+   * The chatroom timeouts manager. See {@link TimeoutManager}.
+   */
+  public get timeouts(){
+    return this.chatroom.timeouts;
   }
 
   /**
-     * Retrieve all followers of the channel. If the chatbot is not a moderator of that channel, an empty array will be returned.
-     * @returns {Promise<Follower[]>} Returns an array that contains each follower of that channel.
-     */
-  public async getFollowers(): Promise<Follower[]>{
-
-    const followers = await this.chatbot.helixClient.getChannelFollowers(this.id);
-
-    return followers.map((x) => new Follower(this.chatbot, x));
-
+   * The chatroom messages manager. See {@link MessageManager}.
+   */
+  public get messages(){
+    return this.chatroom.messages;
   }
 
   /**
-     * 
-     * @param {string} userID The userID of the follower you want to get.
-     * @returns {Promise<Follower | null>} Returns the {@link Follower} if the user is following the channel, if not a nullish value will be returned.
-     */
-  public async getFollower(userID: string): Promise<Follower | null >{
+   * Fetches all the emotes of this channel.
+   * @returns The a Collection containing all the emotes of the channel.
+   */
+  public async emotes(){
+    const data = await this.chatbot.helixClient.getChannelEmotes(this.broadcaster.id);
+    return new Collection<string, ChannelEmote<T>>(data.emotes.map(emote => [emote.id, new ChannelEmote<T>(this.chatbot, { ...emote, owner_id: this.broadcaster.id, template: data.template })]));
+  } 
 
-    const follower = await this.chatbot.helixClient.getChannelFollower(this.id, userID);
-
-    if(!follower) return null;
-
-    return new Follower(this.chatbot, follower);
+  /**
+   * Fetches the current stream of the channel from the API.
+   * @returns The current stream or null if the stream is offline.
+   */
+  public async stream(){
+    return await this.chatbot.stream({ user_id: this.broadcaster.id });
   }
 
   /**
-     * 
-     * @returns {Promise<boolean>} Returns a boolean indicating if the channel is currently streaming or not.
-     */
-
-  public async inStream() : Promise<boolean>{
-
-    const stream = await this.stream.fetch();
-
-    return !!stream;
+   * Fetches the clips of the channel from the API.
+   * @param options The options to fetch the clips.
+   * @returns An array containing the clips of the channel.
+   */
+  public async clips(options?: Omit<GetClipsOptions<true>, 'broadcaster_id'>){
+    if(options?.id) return await this.chatbot.clips(options);
+    return await this.chatbot.clips({ ...options, broadcaster_id: this.broadcaster.id });
+  }
+    
+  /**
+   * Fetches the current channel from the API.
+   * @returns The fetched channel from the API.
+   */
+  public async fetch(){
+    return new Channel<T>(this.chatbot, await this.chatbot.helixClient.getChannel(this.broadcaster.id));
   }
 }
