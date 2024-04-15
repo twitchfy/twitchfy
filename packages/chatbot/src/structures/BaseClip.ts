@@ -51,10 +51,14 @@ export class BaseClip<T extends EventSubConnection> extends Base<T> {
 
 /**
  * The base data of a clip.
- * @param id The id of the clip.
- * @param url The url of the clip.
  */
 export interface BaseClipData {
+    /**
+     * The id of the clip.
+     */
     id: string
+    /**
+     * The url of the clip.
+     */
     url: string
 }

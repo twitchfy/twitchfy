@@ -105,17 +105,27 @@ export class BaseEmote<T extends EventSubConnection, K extends EmoteType = Emote
 
 /**
  * The data of the base emote.
- * @param id The id of the emote.
- * @param owner_id The id of the owner of the emote.
- * @param emote_set_id The id of the emote set.
- * @param format The format of the emote.
- * @param name The name of the emote.
  */
 export interface BaseEmoteData {
+    /**
+     * The id of the emote.
+     */
     id: string;
+    /**
+     * The id of the owner of the emote.
+     */
     owner_id: string;
+    /**
+     * The id of the emote set.
+     */
     emote_set_id: string;
+    /**
+     * The format of the emote.
+     */
     format: ('static' | 'animated')[];
+    /**
+     * The name of the emote.
+     */
     name: string;
 }
 

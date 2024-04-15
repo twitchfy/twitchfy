@@ -75,18 +75,30 @@ export class BaseMessage<T extends EventSubConnection> extends Base<T>{
 
 /**
  * The base data for a message.
- * @param id The id of the message.
- * @param content The content of the message.
- * @param user_id The id of the user who sent the message.
- * @param user_name The display name of the user who sent the message.
- * @param user_login The login name of the user who sent the message.
- * @param chatroom_id The id of the chatroom where the message was sent.
  */
 export interface BaseMessageData {
+    /**
+     * The id of the message.
+     */
     id: string;
+    /**
+     * The content of the message.
+     */
     content: string | null;
+    /**
+     * The id of the user who sent the message.
+     */
     user_id: string;
+    /**
+     * The display name of the user who sent the message.
+     */
     user_name: string;
+    /**
+     * The login name of the user who sent the message.
+     */
     user_login: string;
+    /**
+     * The id of the chatroom where the message was sent.
+     */
     chatroom_id: string;
 }

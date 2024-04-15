@@ -85,8 +85,20 @@ export class BaseUser<T extends EventSubConnection> extends Base<T> {
   }
 }
 
+/**
+ * The base data of an user.
+ */
 export interface BaseUserData {
+    /**
+     * The id of the user.
+     */
     id: string
+    /**
+     * The username of the user.
+     */
     login: string
+    /**
+     * The display name of the user.
+     */
     display_name: string
 }

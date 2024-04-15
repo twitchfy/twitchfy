@@ -5,26 +5,47 @@ import type { CommandContext } from '../structures';
 
 /**
  * The options to build up a chatbot.
- * @param clientID The client ID of the Twitch's application.
- * @param clientSecret The client secret of the Twitch's application.
- * @param userToken The user token of the chatbot Twitch account.
- * @param connectionType The eventsub connection type of the chatbot. See {@link EventSubConnection}.
- * @param eventsub The options to build up the eventsub connection. See {@link EventSubOptions}.
- * @param paths The paths of the diffrent resources of the chatbot. See {@link Paths}.
- * @param prefix A callback which expects the chatbot command's prefixes to be returned.
- * @param optionOperator The operator to separate the options in the command.
- * @param helix The options to build up the helix client.
  */
 export interface ChatBotOptions<T extends EventSubConnection = EventSubConnection> {
+    /**
+     * The client ID of the Twitch's application.
+     */
     clientID: string
+    /**
+     * The client secret of the Twitch's application.
+     */
     clientSecret: string
+    /**
+     * The user token of the chatbot Twitch account.
+     */
     userToken: UserTokenAdapter<boolean>
+    /**
+     * The eventsub connection type of the chatbot. See {@link EventSubConnection}.
+     */
     connectionType: T
+    /**
+     * The options to build up the eventsub connection. See {@link EventSubOptions}.
+     */
     eventsub: EventSubOptions<T>
+    /**
+     * The paths of the diffrent resources of the chatbot. See {@link Paths}.
+     */
     paths: Paths
+    /**
+     * A callback to set up the prefixes of the chatbot commands.
+     * @param message The message sent by an user in a chatroom.
+     * @returns The possible prefixes of the chatbot commands in an array.
+     */
     // eslint-disable-next-line @typescript-eslint/ban-types
     prefix?: (message: CommandContext<{}, T>) => string[]
+    /**
+     * The operator to separate the options in the command.
+     */
     optionOperator?: string
+
+    /**
+     * The options to build up the helix client.
+     */
     helix?: Partial<HelixClientOptions>
 }
 
@@ -36,7 +57,16 @@ export interface ChatBotOptions<T extends EventSubConnection = EventSubConnectio
  
  */
 export interface Paths {
+    /**
+     * The path of the commands.
+     */
     commands?: string
+    /**
+     * The path of the output source code.
+     */
     output: string
+    /**
+     * The path of the events.
+     */
     events?: string
 }

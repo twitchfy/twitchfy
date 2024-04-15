@@ -71,18 +71,30 @@ export class BaseStream<T extends EventSubConnection> extends Base<T> {
 
 /**
  * The data of the base stream.
- * @param id The id of the stream.
- * @param type The type of the stream.
- * @param started_at When the stream has started.
- * @param user_id The id of the user who is streaming.
- * @param user_name The name of the user who is streaming.
- * @param user_login The login of the user who is streaming.
  */
 export interface BaseStreamData {
+    /**
+     * The id of the stream.
+     */
     id: string;
+    /**
+     * The type of the stream.
+     */
     type: string;
+    /**
+     * When the stream has started.
+     */
     started_at: string;
+    /**
+     * The id of the user who is streaming.
+     */
     user_id: string;
+    /**
+     * The name of the user who is streaming.
+     */
     user_name: string;
+    /**
+     * The login of the user who is streaming.
+     */
     user_login: string;
 }

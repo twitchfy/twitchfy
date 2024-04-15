@@ -42,8 +42,10 @@ export class ChatBotMessageManager<T extends EventSubConnection> extends Base<T>
 
 /**
  * The options to send a message.
- * @param replyMessageID The id of the message to reply.
  */
 export interface MessageOptions {
+  /**
+   * The id of the message to reply.
+   */
   replyMessageID?: string;
 }

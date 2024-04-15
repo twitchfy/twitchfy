@@ -8,9 +8,16 @@ import type { EventSubConnection } from '../enums';
 
 /**
  * The result of the permission check.
+ * @internal
  */
 export interface PermissionCheckResult {
+    /**
+     * Whether the permission check passed.
+     */
     passed: boolean;
+    /**
+     * The permissions required to run the command.
+     */
     requiredPerms: RequiredPerms;
 }
 
