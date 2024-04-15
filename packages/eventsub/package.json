@@ -1,6 +1,6 @@
 {
   "name": "@twitchapi/eventsub",
-  "version": "1.0.0-beta.23",
+  "version": "1.0.0",
   "description": "A powerful node module to interact with the EventSub on Twitch.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@twitchapi/api-types": "^1.1.18",
-    "@twitchapi/helix": "^1.5.0",
+    "@twitchapi/api-types": "^1.1.19",
+    "@twitchapi/helix": "^1.5.4",
     "@vladfrangu/async_event_emitter": "^2.2.4",
     "express": "^4.18.2",
     "websocket": "^1.0.34"

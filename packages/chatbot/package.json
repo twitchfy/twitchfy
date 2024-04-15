@@ -1,6 +1,6 @@
 {
   "name": "@twitchapi/chatbot",
-  "version": "1.4.15",
+  "version": "2.0.1",
   "description": "A powerful node module to make your own Twitch ChatBot",
   "main": "dist/index.js",
   "scripts": {
@@ -17,9 +17,8 @@
   },
   "homepage": "https://github.com/pablornc/twitchapi#readme",
   "dependencies": {
-    "@twitchapi/api-types": "^1.1.18",
-    "@twitchapi/eventsub": "^1.0.0-beta.23",
-    "@twitchapi/helix": "^1.5.3",
-    "ngrok": "^5.0.0-beta.2"
+    "@twitchapi/api-types": "^1.1.19",
+    "@twitchapi/eventsub": "^1.0.0",
+    "@twitchapi/helix": "^1.5.4"
   }
 }
