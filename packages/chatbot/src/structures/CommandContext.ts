@@ -87,15 +87,15 @@ export class CommandContext<K extends OptionsRecord = {}, T extends EventSubConn
   /**
    * Fetches the stream which is currently live in the context. If the stream is offline, it will return null.
    */
-  public stream(){
-    return this.author.stream();
+  public async stream(){
+    return await this.author.stream();
   }
 
   /**
    * Checks whether the author is a moderator in the context.
    */
-  public get inStream(){
-    return this.author.inStream();
+  public async inStream(){
+    return await this.author.inStream();
   }
 
   /**

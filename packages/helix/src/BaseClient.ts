@@ -1,10 +1,10 @@
-import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse } from '@twitchapi/api-types';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse, GetCheermotesResponse, GetChannelEmotesResponse, GetGlobalEmotesResponse, GetClipsResponse, GetVideosResponse, GetModeratedChannelsResponse } from '@twitchapi/api-types';
 import { RequestManager } from './RequestManager';
 import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody } from './structures';
 import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
-import type { HelixClientOptions, GetSubscriptionFilter, GenerateTokenOptions, GenerateAppTokenOptions, HelixClientCallbacks, GetStreamsOptions } from './interfaces';
-import type { RequestOptions, UserTokenAdapter } from './types';
+import type { HelixClientOptions, GetSubscriptionFilter, GenerateUserTokenOptions, GenerateAppTokenOptions, HelixClientCallbacks, GetStreamsOptions, GetClipsOptions, GetVideosOptions } from './interfaces';
+import type { ModifyType, PickRequired, RequestOptions, UserTokenAdapter } from './types';
 
 
 
@@ -278,6 +278,92 @@ export class BaseClient {
 
   }
 
+  public async getCheermotes(broadcaster_id?: string, requestOptions?: RequestOptions){
+
+    const data = await this.requestManager.get('/bits/cheermotes', new URLSearchParams({ broadcaster_id }).toString(), requestOptions) as GetCheermotesResponse;
+
+    return data.data;
+  }
+
+  public async getChannelEmotes(broadcaster_id: string, requestOptions?: RequestOptions){
+
+    const data = await this.requestManager.get('/chat/emotes', new URLSearchParams({ broadcaster_id }).toString(), requestOptions) as GetChannelEmotesResponse;
+
+    return { emotes: data.data, template: data.template };
+  }
+
+  public async getGlobalEmotes(requestOptions?: RequestOptions){
+      
+    const data = await this.requestManager.get('/chat/emotes/global', '', requestOptions) as GetGlobalEmotesResponse;
+  
+    return { emotes: data.data, template: data.template };
+  }
+
+  public async getClip(options: GetClipsOptions<false>, requestOptions?: RequestOptions){
+
+    const parsedOptions: ModifyType<GetClipsOptions<false>, { is_featured?: string }> = { ...options, is_featured: options.is_featured ? String(options.is_featured) : 'false' };
+
+    const data = await this.requestManager.get('/clips', new URLSearchParams(parsedOptions).toString(), requestOptions) as GetClipsResponse;
+
+    return data.data[0] ?? null;
+  }
+
+  public async getClips(options: GetClipsOptions<true>, requestOptions?: RequestOptions<'app' | 'user', true>){
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const parsedOptions: string[][] = Object.keys(options || {}).flatMap((x: keyof GetClipsOptions<true>) => {
+
+      let opt = options[x];
+
+      if(x === 'is_featured') opt = String(opt); 
+
+      if(Array.isArray(opt)) return opt.map((i) => [x, i]);
+
+      return [[x, opt]];
+    });
+
+
+    const params = new URLSearchParams(parsedOptions);
+
+    if(requestOptions?.data_per_page) params.append('first', requestOptions.data_per_page.toString());
+
+    return await handlePagination(this, '/clips', params.toString(), 'GET', requestOptions) as GetClipsResponse['data'];
+
+  }
+
+  public async getUserToken(requestOptions?: RequestOptions<'user'>){
+    return await this.requestManager.validateToken({ ...requestOptions, useTokenType: 'user' }, true);
+  }
+
+  public async getVideo(options: GetVideosOptions<false>, requestOptions?: RequestOptions){
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-expect-error
+    const data = await this.requestManager.get('/videos', new URLSearchParams(options).toString(), requestOptions) as GetVideosResponse;
+
+    return data.data[0] ?? null;
+  }
+
+  public async getVideos(options: GetVideosOptions<true>, requestOptions?: RequestOptions<'app' | 'user', true>) {
+
+    const parsedOptions: string[][] = Object.keys(options || {}).flatMap((x: keyof GetVideosOptions<true>) => {
+
+      const opt = options[x];
+
+      if(Array.isArray(opt)) return opt.map((i) => [x, i]);
+
+      return [[x, opt]];
+    });
+
+    return await handlePagination(this, '/videos', new URLSearchParams(parsedOptions).toString(), 'GET', requestOptions) as GetVideosResponse['data'];
+  }
+
+  public async getModeratedChannels(user_id: string, requestOptions?: RequestOptions<'user', true>){
+    return await handlePagination(this, '/moderation/channels', new URLSearchParams({ user_id }).toString(), 'GET', { ...requestOptions, useTokenType: 'user' }) as GetModeratedChannelsResponse['data'];
+  }
+
+  
   public async refreshToken(token: TokenAdapter<'code', true>){
 
     const data = await this.requestManager.refreshToken(token.refreshToken);
@@ -290,33 +376,31 @@ export class BaseClient {
 
   }
 
-  public async generateUserToken<T extends boolean = true, K extends boolean = false>(code: string, redirectURI: string, options?: GenerateTokenOptions<T, K>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
-
-    const data = await this.requestManager.generateUserToken(code, redirectURI);
-
-    if(options?.raw) return data as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
-
-    return new TokenAdapter({ type: 'code', token: data.access_token, refreshToken: data.refresh_token, refresh: options?.refresh ?? true }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
-
+  public async generateUserToken<T extends boolean = true, K extends boolean = false>(options?: GenerateUserTokenOptions<T, K>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
+    return await BaseClient.generateUserToken<T, K>({ ...options, clientID: this.clientID, clientSecret: this.clientSecret });
   }
 
   public async generateAppToken<T extends boolean = true, K extends boolean = false>(options?: GenerateAppTokenOptions<T, K>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)> {
-
-    const data = await this.requestManager.generateAppToken(options);
-
-    if(options?.raw) return data as K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>;
-
-    return new TokenAdapter({ type: 'app', token: data.access_token }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'app', T>;
-
+    return await BaseClient.generateAppToken<T, K>({ ...options, clientID: this.clientID, clientSecret: this.clientSecret });
   }
 
-  public static async generateAppToken<T extends boolean = true, K extends boolean = false>(options: GenerateAppTokenOptions<T, K>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)>{
+  public static async generateAppToken<T extends boolean = true, K extends boolean = false>(options: PickRequired<GenerateAppTokenOptions<T, K>, 'clientID' | 'clientSecret'>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)>{
 
     const data = await RequestManager.generateAppToken(options);
 
     if(options?.raw) return data as K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>;
 
     return new TokenAdapter({ type: 'app', token: data.access_token }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'app', T>;
+
+  }
+
+  public static async generateUserToken<T extends boolean = true, K extends boolean = false>(options: PickRequired<GenerateUserTokenOptions<T, K>, 'clientID' | 'clientSecret'>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
+
+    const data = await RequestManager.generateUserToken(options);
+
+    if(options?.raw) return data as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
+
+    return new TokenAdapter({ type: 'code', token: data.access_token, refreshToken: data.refresh_token, refresh: options?.refresh ?? true }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
 
   }
 

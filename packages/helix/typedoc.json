@@ -1,4 +1,0 @@
-{
-    "out": "../../website/docs/helix",
-    "entryPoints": ["./src/index.ts"]
-}

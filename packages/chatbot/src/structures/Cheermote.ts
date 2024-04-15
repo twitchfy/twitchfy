@@ -1,4 +1,4 @@
-import type { Cheermote as CheermoteData, CheermotesType } from '@twitchapi/api-types';
+import type { Cheermote as CheermoteData, CheermoteType } from '@twitchapi/api-types';
 import type { ChatBot } from './ChatBot';
 import { Base } from './Base';
 import { CheermoteTier } from './CheermoteTier';
@@ -13,7 +13,7 @@ export class Cheermote<T extends EventSubConnection> extends Base<T> {
   /**
    * The type of the cheermote.
    */
-  public readonly type: CheermotesType;
+  public readonly type: CheermoteType;
 
   /**
    * The prefix of the cheermote.

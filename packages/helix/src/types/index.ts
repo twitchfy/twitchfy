@@ -9,3 +9,6 @@ export * from './PostBody';
 export * from './PatchBody';
 export * from './PutBody';
 export * from './UserTokenAdapter';
+export * from './ModifyType';
+export * from './PaginationResponses';
+export * from './PickRequired';

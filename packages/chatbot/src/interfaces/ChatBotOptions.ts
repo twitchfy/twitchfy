@@ -23,7 +23,7 @@ export interface ChatBotOptions<T extends EventSubConnection = EventSubConnectio
     eventsub: EventSubOptions<T>
     paths: Paths
     // eslint-disable-next-line @typescript-eslint/ban-types
-    prefix: (message: CommandContext<{}, T>) => string[]
+    prefix?: (message: CommandContext<{}, T>) => string[]
     optionOperator?: string
     helix?: Partial<HelixClientOptions>
 }
@@ -36,7 +36,7 @@ export interface ChatBotOptions<T extends EventSubConnection = EventSubConnectio
  
  */
 export interface Paths {
-    commands: string
+    commands?: string
     output: string
     events?: string
 }

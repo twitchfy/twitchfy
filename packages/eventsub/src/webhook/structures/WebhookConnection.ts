@@ -54,7 +54,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
     this.subscriptionRoute = options.subscriptionRoute ? parseRoute(options.subscriptionRoute) : '/subscriptions';
 
-    this.startServer = typeof options.startServer === 'boolean' ? options.startServer : true;
+    this.startServer = typeof options.startServer === 'boolean' ? options.startServer : false;
 
     this.server = server;
 
@@ -130,7 +130,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
   private async startup() {
 
-    if(this.dropSubsAtStart) await processChunks(this, chunkArray(await this.helixClient.getSubscriptions({ status: 'enabled'}), 30));
+    if(this.dropSubsAtStart) await processChunks(this, chunkArray(await this.helixClient.getSubscriptions(), 30));
 
     if(this.maintainSubscriptions){
 
@@ -142,6 +142,24 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
       for await(const data of await this.storage.getAll()){
 
+        if(!data.secret){
+          
+          await this.storage.delete(data.id);
+
+          this.makeDebug(`Subscription (${data.type}) ${data.id} doesn't have a secret, skipping and deleting.`);
+  
+          continue;
+        }
+
+        if(data.secret !== this.secret){
+            
+          await this.storage.delete(data.id);
+  
+          this.makeDebug(`Subscription (${data.type}) ${data.id} has a different secret, skipping and deleting.`);
+  
+          continue;
+        }
+        
         const filteredSub = filteredSubs.find((x) => x.id === data.id || (x.type === data.type && JSON.stringify(x.condition) === JSON.stringify(data.options) && x.transport.callback === `${this.baseURL}${this.subscriptionRoute}`));
 
         if(!filteredSub){
@@ -156,7 +174,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
           this.subscriptions.set(subscription.id, subscription);
 
-          this.makeDebug(`Created subscription as it couldn't be reloaded (not exist or it's status was revoked) ${subscription.id}`);
+          this.makeDebug(`Created subscription as it couldn't be reloaded (${subscription.type}) (not exist or it's status was revoked) ${subscription.id}`);
 
           this.emit(Events.SubscriptionReload, subscription);
 
@@ -174,7 +192,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
           this.subscriptions.set(filteredSub.id, subscription);
 
-          this.makeDebug(`Reloaded subscription ${subscription.id}`);
+          this.makeDebug(`Reloaded subscription ${subscription.type} ${subscription.id}`);
 
           this.emit(Events.SubscriptionReload, subscription);
 

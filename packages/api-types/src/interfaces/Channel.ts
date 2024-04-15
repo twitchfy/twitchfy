@@ -12,4 +12,6 @@ export interface Channel{
     title: string
     delay: number
     tags: string[]
+    content_classification_labels: string[]
+    is_branded_content: boolean
 }

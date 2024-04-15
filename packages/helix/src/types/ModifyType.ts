@@ -1,0 +1,1 @@
+export type ModifyType<M, N> = Omit<M, Extract<keyof M, keyof N>> & N;

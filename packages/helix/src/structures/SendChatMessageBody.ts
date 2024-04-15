@@ -8,7 +8,7 @@ export class SendChatMessageBody {
 
   public message: string;
 
-  public reply_parent_message_id: string;
+  public reply_parent_message_id?: string;
 
   public constructor(options: SendChatMessageOptions){
 

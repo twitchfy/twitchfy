@@ -1,4 +1,4 @@
-import type { GetVideo, MutedSegment, VideoType } from '@twitchapi/api-types';
+import type { Video as VideoData, MutedSegment, VideoType } from '@twitchapi/api-types';
 import { Base } from './Base';
 import { BaseUser } from './BaseUser';
 import type { ChatBot } from './ChatBot';
@@ -66,10 +66,10 @@ export class Video<T extends EventSubConnection> extends Base<T> {
   /**
    * The data of the video from the API.
    */
-  private readonly data: GetVideo;
+  private readonly data: VideoData;
 
 
-  public constructor(chatbot: ChatBot<T>, data: GetVideo){
+  public constructor(chatbot: ChatBot<T>, data: VideoData){
     super(chatbot);
     this.data = data;
     this.id = data.id;

@@ -5,6 +5,12 @@
 
 **/*.test.js
 
+**/test
+
+**/test.tsconfig.json
+
+**/dist-test
+
 # Compilation
 **/dist/
 

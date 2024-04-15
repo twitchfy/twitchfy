@@ -1,3 +1,3 @@
-import type { GetChatSettingsResponse, UserResponse, ChannelResponse, GetBansResponse, GetAutoModSettingsResponse, GetFollowersResponse, GetStreamResponse } from '@twitchapi/api-types';
+import type { GetChatSettingsResponse, UserResponse, ChannelResponse, GetBansResponse, GetAutoModSettingsResponse, GetFollowersResponse, GetStreamResponse, GetCheermotesResponse, GetGlobalEmotesResponse, GetChannelEmotesResponse, GetClipsResponse, GetVideosResponse} from '@twitchapi/api-types';
 
-export type GetResponses = Promise<GetChatSettingsResponse | UserResponse | ChannelResponse | GetBansResponse | GetAutoModSettingsResponse | GetFollowersResponse | GetStreamResponse>
+export type GetResponses = GetChatSettingsResponse | UserResponse | ChannelResponse | GetBansResponse | GetAutoModSettingsResponse | GetFollowersResponse | GetStreamResponse | GetCheermotesResponse | GetGlobalEmotesResponse | GetChannelEmotesResponse | GetClipsResponse | GetVideosResponse

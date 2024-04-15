@@ -1,27 +1,27 @@
-import type { WebSocketConnection} from '../structures';
+import type { WebSocketConnection } from '../structures';
 import { WebSocketSubscription } from '../structures';
 import { Events } from '../../enums';
 import { SubscriptionVersionsObject } from '../../util';
 
-export async function startup(connection: WebSocketConnection) {
+export async function startup(this: WebSocketConnection) {
 
-  if (connection.maintainSubscriptions) {
+  if (this.maintainSubscriptions) {
 
-    for (const data of await connection.storage.getAll()) {
+    for (const data of await this.storage.getAll()) {
 
-      const subscriptionData = await connection.helixClient.subscribeToEventSub({ type: data.type, condition: data.options, transport: { method: 'websocket', session_id: connection.sessionID }, version: SubscriptionVersionsObject[data.type] }, { useTokenType: 'user' });
+      const subscriptionData = await this.helixClient.subscribeToEventSub({ type: data.type, condition: data.options, transport: { method: 'websocket', session_id: this.sessionID }, version: SubscriptionVersionsObject[data.type] }, { useTokenType: 'user' });
 
-      const subscription = new WebSocketSubscription<typeof data.type>(connection, data, subscriptionData);
+      const subscription = new WebSocketSubscription<typeof data.type>(this, data, subscriptionData);
 
-      await connection.storage.delete(data.id);
+      await this.storage.delete(data.id);
 
-      await connection.storage.set(subscription.id, subscription);
+      await this.storage.set(subscription.id, subscription);
 
-      connection.subscriptions.set(subscription.id, subscription);
+      this.subscriptions.set(subscription.id, subscription);
 
-      connection.makeDebug(`Created subscription as it was reloaded in websockets (they can only be created) (${subscription.type}) ${subscription.id}`);
+      this.makeDebug(`Created subscription as it was reloaded in websockets (they can only be created) (${subscription.type}) ${subscription.id}`);
 
-      connection.emit(Events.SubscriptionReload, subscription);
+      this.emit(Events.SubscriptionReload, subscription);
 
     }
   }

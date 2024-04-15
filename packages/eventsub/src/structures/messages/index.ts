@@ -21,3 +21,4 @@ export * from './Parent';
 export * from './Thread';
 export * from './UncompleteMessage';
 export * from './UncompleteUser';
+export * from './Badge';

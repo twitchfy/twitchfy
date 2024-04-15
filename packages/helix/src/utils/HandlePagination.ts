@@ -1,6 +1,6 @@
-import type { GetEventSubSubscriptions, GetFollowersResponse, GetStreamResponse, Pagination } from '@twitchapi/api-types';
+import type { Pagination } from '@twitchapi/api-types';
 import type { HelixClient } from '../HelixClient';
-import type { RequestOptions } from '../types';
+import type { PaginationResponses, RequestOptions } from '../types';
 
 export async function handlePagination(client: HelixClient, endpoint: string, params: string, method: 'GET', requestOptions?: RequestOptions<'app' | 'user', true>) {
     
@@ -18,7 +18,7 @@ export async function handlePagination(client: HelixClient, endpoint: string, pa
 
     do {
 
-      const getData = await client.requestManager.get(endpoint, fetchParams, requestOptions) as GetFollowersResponse | GetEventSubSubscriptions | GetStreamResponse;
+      const getData = await client.requestManager.get(endpoint, fetchParams, requestOptions) as PaginationResponses;
 
       pagination = getData.pagination;
 

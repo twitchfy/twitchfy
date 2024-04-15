@@ -1,18 +1,17 @@
-import { UncompleteMessage } from './UncompleteMessage';
 import { UncompleteUser } from './UncompleteUser';
 import type { ReplyData } from '../../interfaces';
 
 export class Thread {
 
-  public message: UncompleteMessage;
+  public messageID: string;
 
   public user: UncompleteUser;
 
   public constructor(data: ReplyData){
 
-    this.message = new UncompleteMessage(data.parent_message_id, data.parent_message_body);
+    this.messageID = data.thread_message_id;
 
-    this.user = new UncompleteUser(data.parent_user_id, data.parent_user_login, data.parent_user_name);
+    this.user = new UncompleteUser(data.thread_user_id, data.thread_user_login, data.thread_user_name);
 
   }
 

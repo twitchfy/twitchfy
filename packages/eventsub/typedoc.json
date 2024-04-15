@@ -1,4 +1,0 @@
-{
-    "out": "../../website/docs/eventsub",
-    "entryPoints": ["./src/index.ts"]
-}

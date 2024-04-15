@@ -1,17 +1,16 @@
-import type { PutAutoModSettingsBody } from '@twitchapi/api-types';
 import type { AutoModSettingsOptions } from '../interfaces';
 
 
-export class AutoModSettingsBody implements PutAutoModSettingsBody{
-  public overall_level: number | null;
-  public disability: number;
-  public aggression: number;
-  public sexuality_sex_or_gender: number;
-  public misogyny: number;
-  public bullying: number;
-  public swearing: number;
-  public race_ethnicity_or_religion: number;
-  public sex_based_terms: number;
+export class AutoModSettingsBody{
+  public overall_level?: number;
+  public disability?: number;
+  public aggression?: number;
+  public sexuality_sex_or_gender?: number;
+  public misogyny?: number;
+  public bullying?: number;
+  public swearing?: number;
+  public race_ethnicity_or_religion?: number;
+  public sex_based_terms?: number;
   public constructor(options: AutoModSettingsOptions){
     this.overall_level = options.overallLevel;
     this.disability = options.disability;

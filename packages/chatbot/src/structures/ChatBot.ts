@@ -139,7 +139,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
     this.timeouts = new ChatBotTimeoutManager<T>(this);
     this.users = new ChatBotUserManager<T>(this);
     this.handlers = {
-      commands: new CommandHandler(join(process.cwd(), options.paths.output, options.paths.commands)),
+      commands: new CommandHandler(join(process.cwd(), options.paths.output, options.paths.commands || '.')),
       events: new EventHandler(join(process.cwd(), options.paths.output, options.paths.events || '.'))
     };
     this.commands = new Collection<string, Command<T>>();
@@ -147,7 +147,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
     this.connectionType = options.connectionType;
     this.optionOperator = options.optionOperator ?? '-';
     this.helixClient = new HelixClient({ ...options, ...options.helix });
-    this.__prefix = options.prefix;
+    this.__prefix = options.prefix ?? (() => ['!']);
     this.eventsub = this.createEventSubConnection(options.connectionType, options);
 
     const fn = handleSubscriptionReload.bind(this);
@@ -204,15 +204,18 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
    */
   public async start(options?: StartOptions<T>) {
 
-    const commands = await this.handlers.commands.load();
+    if(this.options.paths.commands){
+      
+      const commands = await this.handlers.commands.load();
 
-    for(const commandClass of commands){
+      for(const commandClass of commands){
 
-      const command = new commandClass<T>();
+        const command = new commandClass<T>();
 
-      if(!command.name || !command.run) continue;
+        if(!command.name || !command.run) continue;
 
-      this.commands.set(command.name, command);
+        this.commands.set(command.name, command);
+      }
     }
 
     if(this.options.paths.events){

@@ -1,5 +1,4 @@
-export interface PutAutoModSettingsBody {
-    overall_level: number | null
+export type PutAutoModSettingsBody = {
     disability: number
     aggression: number
     sexuality_sex_or_gender: number
@@ -8,7 +7,7 @@ export interface PutAutoModSettingsBody {
     swearing: number
     race_ethnicity_or_religion: number
     sex_based_terms: number
-}
+} | { overall_level: number }
 
 export interface AutoModSettings {
     broadcaster_id: string

@@ -15,7 +15,7 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
 
   public readonly proxy?: string;
 
-  public readonly ws: WebSocket;
+  public ws: WebSocket;
 
   public sessionID: string | null;
 

@@ -6,5 +6,5 @@ export interface ChannelUpdateEvent {
     language: string
     category_id: string
     category_name: string
-    content_classification_labels: string
+    content_classification_labels: string[]
 }

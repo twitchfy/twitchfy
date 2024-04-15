@@ -1,9 +1,9 @@
-import type { RefreshTokenResponse, TokenClientCredentialsFlowResponse, TokenCodeFlowResponse } from '@twitchapi/api-types';
+import type { RefreshTokenResponse, TokenClientCredentialsFlowResponse, TokenCodeFlowResponse, ValidateTokenResponse } from '@twitchapi/api-types';
 import type { BaseClient } from './BaseClient';
 import { TokenAdapter } from './structures';
 import { TwitchHelixError } from './structures/TwitchHelixError';
-import type { GetResponses, PostResponses, PatchResponses, PutResponses, RequestOptions, PostBody, PatchBody, PutBody, TokenTypes } from './types';
-import type { Error, GenerateAppTokenOptions } from './interfaces';
+import type { GetResponses, PostResponses, PatchResponses, PutResponses, RequestOptions, PostBody, PatchBody, PutBody, TokenTypes, PickRequired } from './types';
+import type { Error, GenerateAppTokenOptions, GenerateUserTokenOptions } from './interfaces';
 
 
 
@@ -22,7 +22,7 @@ export class RequestManager {
   }
 
 
-  public async get(endpoint: string, params: string, requestOptions: RequestOptions): GetResponses {
+  public async get(endpoint: string, params: string, requestOptions: RequestOptions): Promise<GetResponses> {
 
     const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'GET', headers: this.makeHeaders(requestOptions) });
 
@@ -65,7 +65,7 @@ export class RequestManager {
 
   }
 
-  public async post(endpoint: string, params: string, body: PostBody, requestOptions: RequestOptions): PostResponses {
+  public async post(endpoint: string, params: string, body: PostBody, requestOptions: RequestOptions): Promise<PostResponses> {
 
     const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'POST', headers: this.makeHeaders(requestOptions), body: JSON.stringify(body) });
 
@@ -88,7 +88,7 @@ export class RequestManager {
     return await res.json();
   }
 
-  public async patch(endpoint: string, params: string, body: PatchBody, requestOptions: RequestOptions): PatchResponses {
+  public async patch(endpoint: string, params: string, body: PatchBody, requestOptions: RequestOptions): Promise<PatchResponses> {
 
     const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PATCH', headers: this.makeHeaders(requestOptions), body: JSON.stringify(body) });
 
@@ -111,7 +111,7 @@ export class RequestManager {
     return await res.json();
   }
 
-  public async put(endpoint: string, params: string, body: PutBody, requestOptions: RequestOptions): PutResponses {
+  public async put(endpoint: string, params: string, body: PutBody, requestOptions: RequestOptions): Promise<PutResponses> {
 
     const res = await fetch(this.baseURL + endpoint + `?${params}`, { method: 'PUT', headers: this.makeHeaders(requestOptions), body: JSON.stringify(body) });
 
@@ -135,7 +135,7 @@ export class RequestManager {
     return await res.json();
   }
 
-  public async validateToken(requestOptions: RequestOptions, noError: boolean = true) {
+  public async validateToken<T extends boolean = false>(requestOptions?: RequestOptions, showInfo: T = false as T, noError: boolean = true): Promise<T extends true ? ValidateTokenResponse : boolean>{
 
     const res = await fetch(this.authURL + '/oauth2/validate', { headers: this.makeHeaders(requestOptions) });
 
@@ -143,7 +143,7 @@ export class RequestManager {
 
       switch (noError) {
 
-      case true: return false;
+      case true: return false as T extends true ? ValidateTokenResponse : boolean;
 
         break;
 
@@ -153,8 +153,9 @@ export class RequestManager {
 
     }
 
-    return true;
+    return (showInfo ? await res.json() as ValidateTokenResponse: true) as T extends true ? ValidateTokenResponse : boolean;
   }
+
 
   public async refreshToken(refreshToken: string) {
 
@@ -166,27 +167,7 @@ export class RequestManager {
 
   }
 
-  public async generateUserToken(code: string, redirectURI: string) {
-
-    const res = await fetch(this.authURL + `/oauth2/token?${new URLSearchParams({ client_id: this.client.clientID, client_secret: this.client.clientSecret, code, grant_type: 'authorization_code', redirect_uri: redirectURI }).toString()}`, { method: 'POST' });
-
-    if (!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
-
-    return await res.json() as TokenCodeFlowResponse;
-
-  }
-
-  public async generateAppToken(options?: GenerateAppTokenOptions) {
-
-    const res = await fetch(this.authURL + `/oauth2/token?${new URLSearchParams({ client_id: options?.clientID ?? this.client.clientID, client_secret: options?.clientSecret ?? this.client.clientSecret, grant_type: 'client_credentials' }).toString()}`, { method: 'POST' });
-
-    if (!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
-
-    return await res.json() as TokenClientCredentialsFlowResponse;
-
-  }
-
-  public static async generateAppToken(options: GenerateAppTokenOptions){
+  public static async generateAppToken(options: PickRequired<GenerateAppTokenOptions, 'clientID' | 'clientSecret'>){
 
     const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: options?.clientID, client_secret: options?.clientSecret, grant_type: 'client_credentials' }).toString()}`, { method: 'POST' });
 
@@ -194,6 +175,15 @@ export class RequestManager {
 
     return await res.json() as TokenClientCredentialsFlowResponse;
   }
+
+  public static async generateUserToken(options: PickRequired<GenerateUserTokenOptions, 'clientID' | 'clientSecret'>) {
+
+    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: options.clientID, client_secret: options.clientSecret, grant_type: 'authorization_code', redirect_uri: options.redirectURI, code: options.code }).toString()}`, { method: 'POST' });
+
+    if (!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
+
+    return await res.json() as TokenCodeFlowResponse;
+  } 
 
   private makeHeaders(requestOptions: RequestOptions) {
 
@@ -240,7 +230,7 @@ export class RequestManager {
 
       setTokenType<'app', true>(token);
 
-      const data = await this.generateAppToken({ raw: true });
+      const data = await RequestManager.generateAppToken({ ...this.client, raw: true });
 
       const newToken = new TokenAdapter({ ...token }).setToken(data.access_token);
 

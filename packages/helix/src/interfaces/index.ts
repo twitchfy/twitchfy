@@ -13,3 +13,6 @@ export * from './BanOptions';
 export * from './GenerateAppTokenOptions';
 export * from './HelixClientCallbacks';
 export * from './GetStreamsOptions';
+export * from './GetClipsOptions';
+export * from './GetVideosOptions';
+export * from './GenerateUserTokenOptions';

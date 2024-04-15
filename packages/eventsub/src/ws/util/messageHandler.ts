@@ -1,13 +1,14 @@
-import type { Message as WSMessage } from 'websocket';
+import { type Message as WSMessage } from 'websocket';
 import { startup } from './startup';
 import { notificationHandler } from '../../util';
 import type { Message } from '../../types';
-import type { WebSocket } from '../structures';
-import type { WelcomeMessage } from '../interfaces';
+import { WebSocket } from '../structures';
+import type { ReconnectMessage} from '../interfaces';
+import { type WelcomeMessage } from '../interfaces';
 import type { BaseNotification } from '../../interfaces';
 import { Events } from '../../enums';
 
-export async function messageHandler(websocket: WebSocket, message: WSMessage) {
+export async function messageHandler(this: WebSocket, message: WSMessage) {
 
   if (message.type === 'utf8') {
 
@@ -19,13 +20,15 @@ export async function messageHandler(websocket: WebSocket, message: WSMessage) {
 
       setMessageType<WelcomeMessage>(parsedMessage);
 
-      websocket.connection.sessionID = parsedMessage.payload.session.id;
+      this.connection.sessionID = parsedMessage.payload.session.id;
 
-      websocket.connection.makeDebug(`Received session_welcome message and estabilished sessionId to ${parsedMessage.payload.session.id}`);
+      this.connection.makeDebug(`Received session_welcome message and estabilished sessionId to ${parsedMessage.payload.session.id}`);
 
-      await startup(websocket.connection);
+      const fn = startup.bind(this.connection);
+      
+      await fn();
 
-      websocket.connection.emit(Events.ConnectionReady, (websocket.connection));
+      this.connection.emit(Events.ConnectionReady, (this.connection));
 
     }
 
@@ -35,9 +38,25 @@ export async function messageHandler(websocket: WebSocket, message: WSMessage) {
         
       setMessageType<BaseNotification>(parsedMessage);
 
-      await notificationHandler(websocket.connection, parsedMessage.payload);
+      await notificationHandler(this.connection, parsedMessage.payload);
         
     }
+
+      break;
+
+    case 'session_reconnect': {
+
+      setMessageType<ReconnectMessage>(parsedMessage);
+
+      const newConnection = new WebSocket(this.connection);
+
+      newConnection._oldConnection = this; 
+
+      this.connection.ws = newConnection;
+
+      newConnection.connect(parsedMessage.payload.session.reconnect_url);
+    }
+
     }
 
   }

@@ -13,3 +13,7 @@ export * from './Stream';
 export * from './EventSub';
 export * from './Token';
 export * from './SendChatMessage';
+export * from './Cheermote';
+export * from './Emote';
+export * from './Video';
+export * from './Moderation';

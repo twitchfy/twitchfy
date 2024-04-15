@@ -16,7 +16,7 @@ export class ChannelUpdateMessage<K extends ConnectionTypes = ConnectionTypes> e
 
   public category: ChannelUpdateCategory<K>;
 
-  public labels: string;
+  public labels: string[];
 
   public constructor(connection: K, subscription: SubscriptionType<SubscriptionTypes.ChannelUpdate, K>, data: ChannelUpdateEvent){
 
