@@ -4,11 +4,15 @@ import type { Command } from '../structures';
 
 /**
  * The options to build up a command.
- * @param name The name of the command.
- * @param options The options of the command.
  */ 
 export interface CommandOptions {
+    /**
+     * The name of the command.
+     */
     name: string
+    /**
+     * The options of the command.
+     */
     options?: OptionsRecord;
 }
 
