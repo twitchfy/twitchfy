@@ -18,7 +18,7 @@
   "homepage": "https://github.com/pablornc/twitchapi#readme",
   "dependencies": {
     "@twitchapi/api-types": "^1.1.19",
-    "@twitchapi/eventsub": "^1.0.0",
+    "@twitchapi/eventsub": "^1.0.1",
     "@twitchapi/helix": "^1.5.4"
   }
 }
