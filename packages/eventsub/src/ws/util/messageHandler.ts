@@ -24,11 +24,20 @@ export async function messageHandler(this: WebSocket, message: WSMessage) {
 
       this.connection.makeDebug(`Received session_welcome message and estabilished sessionId to ${parsedMessage.payload.session.id}`);
 
-      const fn = startup.bind(this.connection);
-      
-      await fn();
+      if(!this._oldConnection){
 
-      this.connection.emit(Events.ConnectionReady, (this.connection));
+        const fn = startup.bind(this.connection);
+      
+        await fn();
+
+        this.connection.emit(Events.ConnectionReady, (this.connection));
+
+      } else {
+
+        this.connection.makeDebug('Reconnected to another session. No need to start subscriptions again.');
+
+        this.connection.emit(Events.ConnectionReconnect, this.connection, this.connectionURL);
+      }
 
     }
 
@@ -47,6 +56,8 @@ export async function messageHandler(this: WebSocket, message: WSMessage) {
     case 'session_reconnect': {
 
       setMessageType<ReconnectMessage>(parsedMessage);
+
+      this.connection.makeDebug(`Received session_reconnect message. Reconnecting to new reconnect url (${parsedMessage.payload.session.reconnect_url}).`);
 
       const newConnection = new WebSocket(this.connection);
 

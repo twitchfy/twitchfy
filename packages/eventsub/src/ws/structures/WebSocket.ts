@@ -9,6 +9,8 @@ export class WebSocket extends client {
 
   public wsConnection: connection | null;
 
+  public connectionURL: string | null;
+
   protected _oldConnection: WebSocket | null;
 
   public constructor(connection: WebSocketConnection){
@@ -19,10 +21,14 @@ export class WebSocket extends client {
 
     this.wsConnection = null;
 
+    this.connectionURL = null;
+
     this._oldConnection = null;
   }
 
   public override connect(url?: string){
+
+    this.connectionURL = url;
 
     super.connect(url ?? this.connection.proxy ?? 'wss://eventsub.wss.twitch.tv/ws');
 
