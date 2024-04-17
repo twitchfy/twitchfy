@@ -151,6 +151,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
     this.eventsub = this.createEventSubConnection(options.connectionType, options);
 
     const fn = handleSubscriptionReload.bind(this);
+    // @ts-expect-error
     this.eventsub.on(Events.SubscriptionReload, fn);
   }
 
@@ -232,6 +233,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
 
     const listener = handleEvent.bind(this);
 
+    // @ts-expect-error
     this.eventsub.on(Events.SubscriptionMessage, listener);
 
     const tokenInfo = await this.helixClient.getUserToken();

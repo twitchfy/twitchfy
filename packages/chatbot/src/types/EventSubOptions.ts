@@ -5,7 +5,7 @@ import type { EventSubConnection } from '../enums';
 /**
  * Omit the client ID and secret from the EventSub Options.
  */
-type OmitClientProps<T> = T extends { clientID: string; clientSecret: string } ? Omit<T, 'clientID' | 'clientSecret'> : T;
+type OmitClientProps<T> = T extends { clientID: string; clientSecret: string } ? Omit<T, 'clientID' | 'clientSecret' | 'userToken'> : T;
 
 /**
  * The options for the EventSub connection.
