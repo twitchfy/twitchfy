@@ -332,8 +332,11 @@ export class BaseClient {
 
   }
 
-  public async getUserToken(requestOptions?: RequestOptions<'user'>){
-    return await this.requestManager.validateToken({ ...requestOptions, useTokenType: 'user' }, true);
+  public async getUserToken(noError: boolean = false, requestOptions?: RequestOptions<'user'>){
+
+    const data = await this.requestManager.validateToken({ ...requestOptions, useTokenType: 'user' }, true, noError);
+  
+    return data ?? null;
   }
 
   public async getVideo(options: GetVideosOptions<false>, requestOptions?: RequestOptions){
