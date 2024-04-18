@@ -24,7 +24,7 @@ export class CommandHandler{
    * @returns The loaded commands.
    */
   public async load(){
-    return (await loadFiles<typeof Command>(this.dir)).map((x) => x.default);
+    return (await loadFiles<typeof Command>(this.dir)).map((x) => x.default ?? x);
   }
 
 }
