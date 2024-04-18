@@ -5,6 +5,7 @@ import { Events, WebhookConnection, WebSocketConnection } from '@twitchapi/event
 import type { GetClipsOptions, GetStreamsOptions } from '@twitchapi/helix';
 import { HelixClient } from '@twitchapi/helix';
 import { join } from 'path';
+import { BaseChannel } from './BaseChannel';
 import { Collection } from './Collection';
 import { ChatBotUser } from './ChatBotUser';
 import { EventHandler } from './EventHandler';
@@ -14,6 +15,7 @@ import type { CommandContext } from './CommandContext';
 import type { ChannelProfile } from './ChannelProfile';
 import { Stream } from './Stream';
 import { Clip } from './Clip';
+import { ChatRoom } from './ChatRoom';
 import { ChannelManager, ChatBotBanManager, ChatBotMessageManager, ChatBotTimeoutManager, ChatBotUserManager } from './managers';
 import { EventSubConnection } from '../enums';
 import type { Events as ChatBotEvents } from '../types';
@@ -308,6 +310,28 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
     const data = await this.helixClient.getClip(options);
     if(!data) return null;
     return new Clip<T>(this, data);
+  }
+
+  /**
+   * Checks whether the chatbot is moderator in a specific channel.
+   * @param channelID The ID of the channel to check.
+   * @returns A boolean indicating whether the chatbot is moderator in the channel.
+   */
+  public async isModerator(channelID: string){
+    const data = await this.moderatedChannels();
+
+    return data.some((x) => x.id === channelID);
+  }
+
+  /**
+   * Get the moderated channels of the chatbot.
+   * @returns An array containing the moderated channels of the chatbot.
+   */
+  public async moderatedChannels(){
+
+    const data = await this.helixClient.getModeratedChannels(this.userID);
+
+    return data.map((x) => new BaseChannel<T>(this, x, new ChatRoom<T>(this, x)));
   }
   
   /**

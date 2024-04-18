@@ -22,6 +22,7 @@ export class BaseUser<T extends EventSubConnection> extends Base<T> {
    */
   public readonly displayName: string;
 
+
   /**
    * Creates a new instance of the base user.
    * @param chatbot The current instance of the chatbot.
@@ -73,6 +74,10 @@ export class BaseUser<T extends EventSubConnection> extends Base<T> {
   public async inStream(){
     const stream = await this.stream();
     return !!stream;
+  }
+
+  public async channel(){
+    return await this.chatbot.channels.fetch(this.id);
   }
 
   /**

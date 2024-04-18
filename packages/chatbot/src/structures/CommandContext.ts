@@ -80,8 +80,7 @@ export class CommandContext<K extends OptionsRecord = {}, T extends EventSubConn
    * @returns A boolean indicating whether the bot is moderator.
    */
   public async isModerator(){
-    const data = await this.chatbot.helixClient.getModeratedChannels(this.chatbot.userID);
-    return data.some((x) => x.broadcaster_id === this.broadcaster.id);
+    return await this.channel.isModerator();
   }
 
   /**

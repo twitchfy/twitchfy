@@ -51,3 +51,4 @@ export * from './ChannelFollow';
 export * from './ChannelChatClear';
 export * from './Channel';
 export * from './Video';
+export * from './BaseChannel';

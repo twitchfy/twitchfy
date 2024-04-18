@@ -3,6 +3,7 @@ import { Base } from './Base';
 import type { ChatBot } from './ChatBot';
 import { BaseUser } from './BaseUser';
 import { AutoMod } from './AutoMod';
+import { BaseChannel } from './BaseChannel';
 import { MessageManager, BanManager, TimeoutManager, ChatRoomSettingsManager } from './managers';
 import type { EventSubConnection } from '../enums';
 
@@ -15,6 +16,11 @@ export class ChatRoom<T extends EventSubConnection> extends Base<T> {
    * The broadcaster who owns the chatroom.
    */
   public readonly broadcaster: BaseUser<T>;
+
+  /**
+   * The channel of the chatroom.
+   */
+  public readonly channel: BaseChannel<T>;
 
   /**
    * The ban manager of the chatroom.
@@ -55,6 +61,7 @@ export class ChatRoom<T extends EventSubConnection> extends Base<T> {
     super(chatbot);
     this.data = data;
     this.broadcaster = new BaseUser<T>(chatbot, { id: data.broadcaster_id, login: data.broadcaster_login, display_name: data.broadcaster_name});
+    this.channel = new BaseChannel<T>(chatbot, data, this);
     this.bans = new BanManager<T>(this.chatbot, this);
     this.timeouts = new TimeoutManager<T>(this.chatbot, this);
     this.settings = new ChatRoomSettingsManager<T>(this.chatbot, this);
@@ -67,14 +74,6 @@ export class ChatRoom<T extends EventSubConnection> extends Base<T> {
    */
   public get id(){
     return this.data.broadcaster_id;
-  }
-
-  /**
-   * Fetches the channel of the chatroom.
-   * @returns The channel of the chatroom.
-   */
-  public async channel(){
-    return await this.chatbot.channels.fetch(this.id);
   }
 
   /**
