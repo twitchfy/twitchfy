@@ -39,9 +39,15 @@ export function optionsParser<T extends EventSubConnection>(chatbot: ChatBot<T>,
     const optionKey = key.slice(1);
 
     if (optionKey in options || Object.keys(args).some((existingKey) => optionKey.startsWith(existingKey))) {
+      
+      if(options[optionKey].type === 'boolean' && value === ''){
+        // @ts-expect-error
+        args[optionKey] = true;
+      }else {
       // @ts-expect-error
-      args[optionKey] = value !== '' ? value : null;
-      lastOption = optionKey;
+        args[optionKey] = value !== '' ? value : null;
+        lastOption = optionKey;
+      }
     } else if (lastOption) {
       args[lastOption] += ` ${key}`;
     }
@@ -64,7 +70,7 @@ export function optionsParser<T extends EventSubConnection>(chatbot: ChatBot<T>,
     // @ts-expect-error
     case 'number': args[i] = Number(args[i]); break;
       // @ts-expect-error
-    case 'boolean': args[i] = args[i] === 'true' ? true : args[i] === 'false' ? false : null; break;
+    case 'boolean': args[i] = typeof args[i] === 'boolean' ? args[i] : args[i] === 'true' ? true : args[i] === 'false' ? false : null; break;
 
     case 'mention': {
 

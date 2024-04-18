@@ -236,7 +236,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
     // @ts-expect-error
     this.eventsub.on(Events.SubscriptionMessage, listener);
 
-    const tokenInfo = await this.helixClient.getUserToken();
+    const tokenInfo = await this.helixClient.getUserToken(false);
 
     this.userID = tokenInfo.user_id;
 
