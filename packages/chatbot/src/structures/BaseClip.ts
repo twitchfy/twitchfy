@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import type { GetClip, PostCreateClip } from '@twitchapi/api-types';
+import type { GetClip, PostCreateClip } from '@twitchfy/api-types';
 import { Base } from './Base';
 import type { ChatBot } from './ChatBot';
 import type { EventSubConnection } from '../enums';

@@ -1,4 +1,4 @@
-import type { Video as VideoData, MutedSegment, VideoType } from '@twitchapi/api-types';
+import type { Video as VideoData, MutedSegment, VideoType } from '@twitchfy/api-types';
 import { Base } from './Base';
 import { BaseUser } from './BaseUser';
 import type { ChatBot } from './ChatBot';

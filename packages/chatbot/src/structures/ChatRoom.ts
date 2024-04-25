@@ -1,4 +1,4 @@
-import type { AnnouncementOptions } from '@twitchapi/helix';
+import type { AnnouncementOptions } from '@twitchfy/helix';
 import { Base } from './Base';
 import type { ChatBot } from './ChatBot';
 import { BaseUser } from './BaseUser';

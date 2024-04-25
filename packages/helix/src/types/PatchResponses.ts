@@ -1,3 +1,3 @@
-import type { GetChatSettingsResponse } from '@twitchapi/api-types';
+import type { GetChatSettingsResponse } from '@twitchfy/api-types';
 
 export type PatchResponses = GetChatSettingsResponse

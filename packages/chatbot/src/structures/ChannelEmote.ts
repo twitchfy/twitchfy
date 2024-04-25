@@ -1,4 +1,4 @@
-import type { ChannelEmote as ChannelEmoteData, EmoteType } from '@twitchapi/api-types';
+import type { ChannelEmote as ChannelEmoteData, EmoteType } from '@twitchfy/api-types';
 import type { ChatBot } from './ChatBot';
 import { Emote } from './Emote';
 import type { EventSubConnection } from '../enums';

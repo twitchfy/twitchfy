@@ -1,4 +1,4 @@
-import type { HelixClientOptions, UserTokenAdapter } from '@twitchapi/helix';
+import type { HelixClientOptions, UserTokenAdapter } from '@twitchfy/helix';
 import type { EventSubConnection } from '../enums';
 import type { EventSubOptions } from '../types';
 import type { TwitchContext } from '../structures';

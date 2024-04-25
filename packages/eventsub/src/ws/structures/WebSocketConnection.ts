@@ -1,4 +1,4 @@
-import type { TokenAdapter, UserTokenAdapter } from '@twitchapi/helix';
+import type { TokenAdapter, UserTokenAdapter } from '@twitchfy/helix';
 import { WebSocket } from './WebSocket';
 import { BaseConnection } from '../../structures/BaseConnection';
 import { Events, type SubscriptionTypes } from '../../enums';

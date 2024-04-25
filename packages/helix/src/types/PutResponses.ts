@@ -1,3 +1,3 @@
-import type { GetAutoModSettingsResponse } from '@twitchapi/api-types';
+import type { GetAutoModSettingsResponse } from '@twitchfy/api-types';
 
 export type PutResponses = GetAutoModSettingsResponse | void

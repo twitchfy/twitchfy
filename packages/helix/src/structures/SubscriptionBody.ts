@@ -1,4 +1,4 @@
-import type { PostEventSubSubscriptionBody, PostEventSubSubscriptionTransport } from '@twitchapi/api-types';
+import type { PostEventSubSubscriptionBody, PostEventSubSubscriptionTransport } from '@twitchfy/api-types';
 import type { SubscriptionOptions } from '../interfaces';
 
 export class SubscriptionBody implements PostEventSubSubscriptionBody {

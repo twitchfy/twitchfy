@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { AsyncEventEmitter } from '@vladfrangu/async_event_emitter';
-import { HelixClient } from '@twitchapi/helix';
+import { HelixClient } from '@twitchfy/helix';
 import { SubscriptionCollection } from './SubscriptionCollection';
 import type { ConnectionTypes, SubscriptionOptions, SubscriptionType, BaseConnectionOptions } from '../types';
 import type { WebhookEvents, WebSocketEvents } from '../interfaces';

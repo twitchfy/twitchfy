@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import type { Express } from 'express';
-import type { PostEventSubSubscription } from '@twitchapi/api-types';
-import type { TokenAdapter } from '@twitchapi/helix';
+import type { PostEventSubSubscription } from '@twitchfy/api-types';
+import type { TokenAdapter } from '@twitchfy/helix';
 import { WebhookSubscription } from './WebhookSubscription';
 import type { WebhookConnectionOptions } from '../types';
 import { makeMiddlewares, parseRoute } from '../util';

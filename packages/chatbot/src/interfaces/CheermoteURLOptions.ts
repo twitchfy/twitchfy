@@ -1,4 +1,4 @@
-import type { CheermoteSize } from '@twitchapi/api-types';
+import type { CheermoteSize } from '@twitchfy/api-types';
 
 /**
  * The options for generating a cheermote URL.

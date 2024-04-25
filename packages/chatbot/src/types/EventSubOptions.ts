@@ -1,4 +1,4 @@
-import type { WebhookConnectionOptions, WebSocketConnectionOptions } from '@twitchapi/eventsub';
+import type { WebhookConnectionOptions, WebSocketConnectionOptions } from '@twitchfy/eventsub';
 import type { Express } from 'express';
 import type { EventSubConnection } from '../enums';
 

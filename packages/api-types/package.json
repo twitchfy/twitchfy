@@ -1,11 +1,10 @@
 {
-  "name": "@twitchapi/api-types",
-  "version": "1.1.19",
+  "name": "@twitchfy/api-types",
+  "version": "1.0.0",
   "description": "A node module containing the Twitch Api types",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "docs": "typedoc --plugin typedoc-plugin-markdown",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "PabloRNC",

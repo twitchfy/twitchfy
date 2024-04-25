@@ -1,4 +1,4 @@
-import type { ChatSettings, PatchChatSettingsBody } from '@twitchapi/api-types';
+import type { ChatSettings, PatchChatSettingsBody } from '@twitchfy/api-types';
 import { Base } from './Base';
 import type { ChatBot } from './ChatBot';
 import type { ChatRoom } from './ChatRoom';

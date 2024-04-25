@@ -1,4 +1,4 @@
-import type { SubscriptionTypes } from '@twitchapi/eventsub';
+import type { SubscriptionTypes } from '@twitchfy/eventsub';
 
 /**
  * The EventSub events which the chatbot could listen.

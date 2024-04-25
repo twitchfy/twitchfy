@@ -1,4 +1,4 @@
-import type { ChannelFollowMessage } from '@twitchapi/eventsub';
+import type { ChannelFollowMessage } from '@twitchfy/eventsub';
 import { Base } from './Base';
 import type { ChatBot } from './ChatBot';
 import { BaseUser } from './BaseUser';

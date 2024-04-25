@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import type { GetStream } from '@twitchapi/api-types';
+import type { GetStream } from '@twitchfy/api-types';
 import type { ChatBot } from './ChatBot';
 import { BaseStream } from './BaseStream';
 import type { EventSubConnection } from '../enums';

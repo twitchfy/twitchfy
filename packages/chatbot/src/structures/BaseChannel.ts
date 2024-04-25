@@ -1,4 +1,4 @@
-import type { GetClipsOptions } from '@twitchapi/helix';
+import type { GetClipsOptions } from '@twitchfy/helix';
 import { Base } from './Base';
 import type { ChatRoom } from './ChatRoom';
 import { BaseUser } from './BaseUser';

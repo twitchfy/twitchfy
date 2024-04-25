@@ -1,4 +1,4 @@
-import type { StreamOnlineMessage } from '@twitchapi/eventsub';
+import type { StreamOnlineMessage } from '@twitchfy/eventsub';
 import type { ChatBot } from './ChatBot';
 import { Base } from './Base';
 import { BaseStream } from './BaseStream';

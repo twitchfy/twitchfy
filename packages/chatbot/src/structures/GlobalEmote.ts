@@ -1,4 +1,4 @@
-import type { GlobalEmote as GlobalEmoteData } from '@twitchapi/api-types';
+import type { GlobalEmote as GlobalEmoteData } from '@twitchfy/api-types';
 import type { ChatBot } from './ChatBot';
 import { Emote } from './Emote';
 import type { EventSubConnection } from '../enums';

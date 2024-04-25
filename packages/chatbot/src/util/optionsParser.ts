@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import type { ChannelChatMessageMessage } from '@twitchapi/eventsub';
+import type { ChannelChatMessageMessage } from '@twitchfy/eventsub';
 import type { EventSubConnectionMap } from '../interfaces';
 import type { EventSubConnection } from '../enums';
 import type { CommandOptionsAux, OptionsRecord } from '../types';

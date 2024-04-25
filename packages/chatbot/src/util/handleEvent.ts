@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import type { ChannelFollowMessage, SubscriptionType, ChannelChatClearMessage, ChannelUpdateMessage, StreamOnlineMessage, ChannelChatMessageMessage } from '@twitchapi/eventsub';
-import { SubscriptionTypes, type SubscriptionMessage } from '@twitchapi/eventsub';
+import type { ChannelFollowMessage, SubscriptionType, ChannelChatClearMessage, ChannelUpdateMessage, StreamOnlineMessage, ChannelChatMessageMessage } from '@twitchfy/eventsub';
+import { SubscriptionTypes, type SubscriptionMessage } from '@twitchfy/eventsub';
 import { ChannelChatClear, ChannelFollow, ChannelUpdate, ChatRoom, Message, StreamOnline, type ChatBot } from '../structures';
 import type { EventSubConnection } from '../enums';
 import type { EventSubConnectionMap } from '../interfaces';

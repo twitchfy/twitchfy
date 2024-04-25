@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import type { ChannelChatMessageMessage } from '@twitchapi/eventsub';
+import type { ChannelChatMessageMessage } from '@twitchfy/eventsub';
 import { resolvePermissions } from './resolvePermissions';
 import { optionsParser } from './optionsParser';
 import type { EventSubConnection } from '../enums';
@@ -23,7 +23,7 @@ export async function handleOnMessage<T extends EventSubConnection>(this: ChatBo
 
   // @ts-expect-error
 
-  const prefix = this.__prefix(new CommandContext<{}, T>(this, { ...data })).find((x) => content.startsWith(x));
+  const prefix = this.__prefix(new TwitchContext<{}, T>(this, { ...data })).find((x) => content.startsWith(x));
 
   if(!prefix) return;
 

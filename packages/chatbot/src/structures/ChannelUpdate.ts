@@ -1,4 +1,4 @@
-import type { ChannelUpdateMessage } from '@twitchapi/eventsub';
+import type { ChannelUpdateMessage } from '@twitchfy/eventsub';
 import { BaseUser } from './BaseUser';
 import { Base } from './Base';
 import type { ChatBot } from './ChatBot';

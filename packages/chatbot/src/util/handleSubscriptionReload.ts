@@ -1,5 +1,5 @@
-import type { WebhookConnection, WebhookSubscription, WebSocketSubscription } from '@twitchapi/eventsub';
-import { SubscriptionTypes } from '@twitchapi/eventsub';
+import type { WebhookConnection, WebhookSubscription, WebSocketSubscription } from '@twitchfy/eventsub';
+import { SubscriptionTypes } from '@twitchfy/eventsub';
 import { handleOnMessage } from './handleOnMessage';
 import { getSubscriptonKey } from './handleEvent';
 import type { ChatBot } from '../structures';

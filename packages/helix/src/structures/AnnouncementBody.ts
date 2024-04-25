@@ -1,4 +1,4 @@
-import type { PostAnnouncementBody } from '@twitchapi/api-types';
+import type { PostAnnouncementBody } from '@twitchfy/api-types';
 import type { AnnouncementOptions } from '../interfaces';
 import type { AnnouncementColor } from '../enums';
 

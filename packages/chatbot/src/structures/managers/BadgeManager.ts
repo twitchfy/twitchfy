@@ -1,4 +1,4 @@
-import type { Badge } from '@twitchapi/eventsub';
+import type { Badge } from '@twitchfy/eventsub';
 import type { ChatBot } from '../ChatBot';
 import { Base } from '../Base';
 import type { EventSubConnection } from '../../enums';

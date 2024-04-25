@@ -1,4 +1,4 @@
-import type { BanOptions } from '@twitchapi/helix';
+import type { BanOptions } from '@twitchfy/helix';
 
 /**
  * The options to timeout an user.

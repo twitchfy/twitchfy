@@ -4,7 +4,7 @@ import { Base } from './Base';
 import type { ChatBot } from './ChatBot';
 import type { AutoMod } from './AutoMod';
 import type { EventSubConnection } from '../enums';
-import type { AutoModSettings as AutoModSettingsData } from '@twitchapi/api-types';
+import type { AutoModSettings as AutoModSettingsData } from '@twitchfy/api-types';
 
 /**
  * Represents the settings of an automod.

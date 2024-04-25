@@ -1,4 +1,4 @@
-import type { PostEventSubSubscription } from '@twitchapi/api-types';
+import type { PostEventSubSubscription } from '@twitchfy/api-types';
 import type { WebSocketConnection } from './WebSocketConnection';
 import { WebSocketSubscriptionCallbackManager } from './WebSocketSubscriptionCallbackManager';
 import type { WebSocketSubscriptionCallback } from '../types';

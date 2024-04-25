@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { Events, WebhookConnection, WebSocketConnection } from '@twitchapi/eventsub';
-import type { GetClipsOptions, GetStreamsOptions } from '@twitchapi/helix';
-import { HelixClient } from '@twitchapi/helix';
+import { Events, WebhookConnection, WebSocketConnection } from '@twitchfy/eventsub';
+import type { GetClipsOptions, GetStreamsOptions } from '@twitchfy/helix';
+import { HelixClient } from '@twitchfy/helix';
 import { join } from 'path';
 import { BaseChannel } from './BaseChannel';
 import { Collection } from './Collection';

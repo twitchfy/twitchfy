@@ -1,4 +1,4 @@
-import type { GetClip } from '@twitchapi/api-types';
+import type { GetClip } from '@twitchfy/api-types';
 import type { ChatBot } from './ChatBot';
 import { BaseClip } from './BaseClip';
 import { Video } from './Video';

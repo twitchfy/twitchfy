@@ -1,4 +1,4 @@
-import type { GlobalEmote, ChannelEmote } from '@twitchapi/api-types';
+import type { GlobalEmote, ChannelEmote } from '@twitchfy/api-types';
 import type { ChatBot } from './ChatBot';
 import { BaseEmote } from './BaseEmote';
 import type { EmoteURLOptions } from '../interfaces';

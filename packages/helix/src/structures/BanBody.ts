@@ -1,4 +1,4 @@
-import type { PostBanData, PostBanBody } from '@twitchapi/api-types';
+import type { PostBanData, PostBanBody } from '@twitchfy/api-types';
 import type { BanOptions } from '../interfaces';
 
 export class BanBody implements PostBanBody{

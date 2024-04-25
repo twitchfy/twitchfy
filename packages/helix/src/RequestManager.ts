@@ -1,4 +1,4 @@
-import type { RefreshTokenResponse, TokenClientCredentialsFlowResponse, TokenCodeFlowResponse, ValidateTokenResponse } from '@twitchapi/api-types';
+import type { RefreshTokenResponse, TokenClientCredentialsFlowResponse, TokenCodeFlowResponse, ValidateTokenResponse } from '@twitchfy/api-types';
 import type { BaseClient } from './BaseClient';
 import { TokenAdapter } from './structures';
 import { TwitchHelixError } from './structures/TwitchHelixError';

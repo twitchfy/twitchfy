@@ -1,4 +1,4 @@
-import type { ChannelChatClearMessage } from '@twitchapi/eventsub';
+import type { ChannelChatClearMessage } from '@twitchfy/eventsub';
 import { Base } from './Base';
 import { BaseUser } from './BaseUser';
 import type { ChatBot } from './ChatBot';

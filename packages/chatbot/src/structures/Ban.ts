@@ -1,4 +1,4 @@
-import type { Ban as BanData } from '@twitchapi/api-types';
+import type { Ban as BanData } from '@twitchfy/api-types';
 import type { ChatBot } from './ChatBot';
 import { Base } from './Base';
 import type { EventSubConnection } from '../enums';

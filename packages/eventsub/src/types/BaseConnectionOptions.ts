@@ -1,4 +1,4 @@
-import type { HelixClientOptions } from '@twitchapi/helix';
+import type { HelixClientOptions } from '@twitchfy/helix';
 import type { ConnectionTypes } from './ConnectionTypes';
 import type { LoggerOptions } from '../logger';
 import type { StorageOptions } from '../interfaces';

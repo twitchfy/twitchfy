@@ -1,16 +1,15 @@
 {
-  "name": "@twitchapi/helix",
-  "version": "1.5.5",
+  "name": "@twitchfy/helix",
+  "version": "1.0.0",
   "description": "A powerful node module to interact with twitch api",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "docs": "typedoc --plugin typedoc-plugin-markdown",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "PabloRNC",
   "license": "ISC",
   "dependencies": {
-    "@twitchapi/api-types": "^1.1.19"
+    "@twitchfy/api-types": "^1.0.0"
   }
 }

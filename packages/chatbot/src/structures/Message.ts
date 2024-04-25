@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import type { MessageTypes } from '@twitchapi/eventsub';
+import type { MessageTypes } from '@twitchfy/eventsub';
 import type { ChatBot } from './ChatBot';
 import { BaseMessage } from './BaseMessage';
 import { BaseUser } from './BaseUser';

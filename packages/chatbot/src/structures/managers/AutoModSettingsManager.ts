@@ -1,4 +1,4 @@
-import type { PutAutoModSettingsBody } from '@twitchapi/api-types';
+import type { PutAutoModSettingsBody } from '@twitchfy/api-types';
 import type { AutoMod } from '../AutoMod';
 import { AutoModSettings } from '../AutoModSettings';
 import type { ChatBot } from '../ChatBot';

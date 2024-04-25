@@ -1,4 +1,4 @@
-import type { CheermoteTier as CheermoteTierData } from '@twitchapi/api-types';
+import type { CheermoteTier as CheermoteTierData } from '@twitchfy/api-types';
 import { Base } from './Base';
 import type { ChatBot } from './ChatBot';
 import type { Cheermote } from './Cheermote';

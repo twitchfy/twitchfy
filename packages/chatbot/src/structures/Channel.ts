@@ -1,4 +1,4 @@
-import type { Channel as ChannelData } from '@twitchapi/api-types';
+import type { Channel as ChannelData } from '@twitchfy/api-types';
 import type { ChatBot } from './ChatBot';
 import type { EventSubConnection } from '../enums';
 import type { Game } from '../interfaces';

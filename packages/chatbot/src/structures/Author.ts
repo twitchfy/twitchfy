@@ -1,4 +1,4 @@
-import type { Badge } from '@twitchapi/eventsub';
+import type { Badge } from '@twitchfy/eventsub';
 import type { BaseUserData } from './BaseUser';
 import { BaseUser } from './BaseUser';
 import type { ChatBot } from './ChatBot';

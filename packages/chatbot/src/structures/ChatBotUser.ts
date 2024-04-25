@@ -1,4 +1,4 @@
-import type { User as UserData } from '@twitchapi/api-types';
+import type { User as UserData } from '@twitchfy/api-types';
 import type { ChatBot } from './ChatBot';
 import { User } from './User';
 import type { EventSubConnection } from 'enums';

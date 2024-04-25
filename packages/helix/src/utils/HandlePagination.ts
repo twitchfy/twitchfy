@@ -1,4 +1,4 @@
-import type { Pagination } from '@twitchapi/api-types';
+import type { Pagination } from '@twitchfy/api-types';
 import type { HelixClient } from '../HelixClient';
 import type { PaginationResponses, RequestOptions } from '../types';
 

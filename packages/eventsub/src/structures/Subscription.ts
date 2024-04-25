@@ -1,4 +1,4 @@
-import type { PostEventSubSubscription } from '@twitchapi/api-types';
+import type { PostEventSubSubscription } from '@twitchfy/api-types';
 import type { SubscriptionOptions } from '../types';
 import type { SubscriptionTypes } from '../enums';
 import type { SubscriptionTypeOptions } from '../interfaces';

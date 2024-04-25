@@ -1,4 +1,4 @@
-import type { PatchChatSettingsBody } from '@twitchapi/api-types';
+import type { PatchChatSettingsBody } from '@twitchfy/api-types';
 import type { ChatSettingsOptions } from '../interfaces';
 
 export class ChatSettingsBody implements PatchChatSettingsBody{

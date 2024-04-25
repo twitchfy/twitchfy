@@ -1,4 +1,4 @@
-import type { VideoType } from '@twitchapi/api-types';
+import type { VideoType } from '@twitchfy/api-types';
 
 export interface GetVideosOptions<T extends boolean>{
     id?: T extends true ? string | string[] : string;

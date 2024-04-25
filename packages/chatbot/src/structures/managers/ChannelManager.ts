@@ -1,4 +1,4 @@
-import { SubscriptionTypes } from '@twitchapi/eventsub';
+import { SubscriptionTypes } from '@twitchfy/eventsub';
 import type { ChatBot } from '../ChatBot';
 import { Base } from '../Base';
 import { ChannelProfile } from '../ChannelProfile';
