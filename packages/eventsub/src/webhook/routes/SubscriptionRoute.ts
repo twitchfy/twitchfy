@@ -1,4 +1,4 @@
-import type { Request } from 'express';
+import type { Request , IRouter } from 'express';
 import { Router } from 'express';
 import type { BasePayload } from '../../interfaces';
 import type { SubscriptionTypes } from '../../enums';
@@ -6,7 +6,7 @@ import { notificationHandler } from '../../util';
 import type { WebhookConnection } from '../../webhook';
 
 
-export const SubscriptionRouter = Router();
+export const SubscriptionRouter: IRouter = Router();
 
 SubscriptionRouter.post('/', async(req: Request, res) => {
 
