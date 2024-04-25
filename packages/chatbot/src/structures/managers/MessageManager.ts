@@ -34,9 +34,9 @@ export class MessageManager<T extends EventSubConnection> extends Base<T> {
   }
 
   /**
-   * Fetches a message from the chatroom.
-   * @param id The id of the message to fetch.
-   * @returns The message fetched.
+   * Sends a message to the chatroom.
+   * @param message The message to send.
+   * @returns The message which was sent.
    */
   public async send(message: string){
     return await this.chatbot.messages.send(this.chatroom.id, message);

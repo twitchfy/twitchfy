@@ -65,8 +65,8 @@ export class ChannelProfile<T extends EventSubConnection> extends Base<T> {
    * @param event The event to check.
    * @returns 
    */
-  public get hasEvent(){
-    return (event: ChannelEvents) => this.events.includes(event);
+  public hasEvent(event: ChannelEvents){
+    return this.events.includes(event);
   }
 
   /**
