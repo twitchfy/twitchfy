@@ -12,7 +12,7 @@ import type { CommandOptionsAux, MessageData, OptionsRecord } from '../types';
 /**
  * The context of the command.
  */
-export class CommandContext<K extends OptionsRecord = {}, T extends EventSubConnection = EventSubConnection> extends Base<T>{
+export class TwitchContext<K extends OptionsRecord = {}, T extends EventSubConnection = EventSubConnection> extends Base<T>{
     
   /**
    * The message received when the command was run.

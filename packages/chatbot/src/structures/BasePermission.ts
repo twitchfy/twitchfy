@@ -1,4 +1,4 @@
-import type { CommandContext } from './CommandContext';
+import type { TwitchContext } from './TwitchContext';
 import type { EventSubConnection } from '../enums';
 
 /**
@@ -12,7 +12,7 @@ export abstract class BasePermission<T extends EventSubConnection> {
      * @returns If the user has the custom permission to run the command.
      */
     // eslint-disable-next-line @typescript-eslint/ban-types
-    abstract check(ctx: CommandContext<{}, T>): Promise<boolean> | boolean;
+    abstract check(ctx: TwitchContext<{}, T>): Promise<boolean> | boolean;
 
     /**
      * The value or identifier of the custom permission returned in `onPermissionsFallback`. See {@link Command}.

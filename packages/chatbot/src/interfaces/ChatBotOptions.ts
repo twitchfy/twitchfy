@@ -1,7 +1,7 @@
 import type { HelixClientOptions, UserTokenAdapter } from '@twitchapi/helix';
 import type { EventSubConnection } from '../enums';
 import type { EventSubOptions } from '../types';
-import type { CommandContext } from '../structures';
+import type { TwitchContext } from '../structures';
 
 /**
  * The options to build up a chatbot.
@@ -37,7 +37,7 @@ export interface ChatBotOptions<T extends EventSubConnection = EventSubConnectio
      * @returns The possible prefixes of the chatbot commands in an array.
      */
     // eslint-disable-next-line @typescript-eslint/ban-types
-    prefix?: (message: CommandContext<{}, T>) => string[]
+    prefix?: (message: TwitchContext<{}, T>) => string[]
     /**
      * The operator to separate the options in the command.
      */

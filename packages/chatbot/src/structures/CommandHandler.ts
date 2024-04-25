@@ -1,4 +1,4 @@
-import type { Command } from './Command';
+import type { ChatCommand } from './ChatCommand';
 import { loadFiles } from '../util';
 
 /**
@@ -24,7 +24,7 @@ export class CommandHandler{
    * @returns The loaded commands.
    */
   public async load(){
-    return (await loadFiles<typeof Command>(this.dir)).map((x) => x.default ?? x);
+    return (await loadFiles<typeof ChatCommand>(this.dir)).map((x) => x.default ?? x);
   }
 
 }

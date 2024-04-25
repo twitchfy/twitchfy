@@ -10,8 +10,8 @@ import { Collection } from './Collection';
 import { ChatBotUser } from './ChatBotUser';
 import { EventHandler } from './EventHandler';
 import { CommandHandler } from './CommandHandler';
-import type { Command } from './Command';
-import type { CommandContext } from './CommandContext';
+import type { ChatCommand } from './ChatCommand';
+import type { TwitchContext } from './TwitchContext';
 import type { ChannelProfile } from './ChannelProfile';
 import { Stream } from './Stream';
 import { Clip } from './Clip';
@@ -58,7 +58,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
   /**
    * A Collection of the chatbot commands.
    */
-  public readonly commands: Collection<string, Command<T>>;
+  public readonly commands: Collection<string, ChatCommand<T>>;
 
   /**
    * A Collection of the chatbot events.
@@ -124,7 +124,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
    * The prefix callback used to handle command prefixes.
    * @protected
    */
-  protected __prefix: (message: CommandContext<{}, T>) => string[];
+  protected __prefix: (message: TwitchContext<{}, T>) => string[];
 
   /**
    * Creates a new instance of the chatbot.
@@ -144,7 +144,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
       commands: new CommandHandler(join(process.cwd(), options.paths.output, options.paths.commands || '.')),
       events: new EventHandler(join(process.cwd(), options.paths.output, options.paths.events || '.'))
     };
-    this.commands = new Collection<string, Command<T>>();
+    this.commands = new Collection<string, ChatCommand<T>>();
     this.events = new Collection<ChatBotEvents, EventDataForConnection<T>[keyof EventDataForConnection<T>]>();
     this.connectionType = options.connectionType;
     this.optionOperator = options.optionOperator ?? '-';

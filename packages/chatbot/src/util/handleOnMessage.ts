@@ -5,7 +5,7 @@ import type { ChannelChatMessageMessage } from '@twitchapi/eventsub';
 import { resolvePermissions } from './resolvePermissions';
 import { optionsParser } from './optionsParser';
 import type { EventSubConnection } from '../enums';
-import { CommandContext, type ChatBot } from '../structures';
+import { TwitchContext, type ChatBot } from '../structures';
 import type { EventSubConnectionMap } from '../interfaces';
 
 
@@ -41,7 +41,7 @@ export async function handleOnMessage<T extends EventSubConnection>(this: ChatBo
 
   Object.keys(options).filter((x) => !command.options[x]).map((x) => delete options[x]);
 
-  const context = new CommandContext<typeof command.options, T>(this, { ...data, prefix, commandName: commandName!, options });
+  const context = new TwitchContext<typeof command.options, T>(this, { ...data, prefix, commandName: commandName!, options });
 
   if(command.permissions){
 

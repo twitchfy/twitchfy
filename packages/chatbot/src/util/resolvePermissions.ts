@@ -2,7 +2,7 @@
 
 import { validatePermission } from './validatePermission';
 import { BasePermission } from '../structures';
-import type { CommandContext } from '../structures';
+import type { TwitchContext } from '../structures';
 import type { PermissionOrArray, PermissionRecord, RequiredPerms } from '../types';
 import type { EventSubConnection } from '../enums';
 
@@ -29,7 +29,7 @@ export interface PermissionCheckResult {
  * @returns The result of the permission check.
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export async function resolvePermissions<T extends EventSubConnection>(permissions: PermissionOrArray<T>[], ctx: CommandContext<{}, T>) {
+export async function resolvePermissions<T extends EventSubConnection>(permissions: PermissionOrArray<T>[], ctx: TwitchContext<{}, T>) {
 
   const requiredPerms: RequiredPerms = [];
 

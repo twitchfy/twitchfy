@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { CommandContext } from './CommandContext';
+import type { TwitchContext } from './TwitchContext';
 import type { OptionsRecord, PermissionOrArray, RequiredPerms } from '../types';
 import type { EventSubConnection } from '../enums';
 
 /**
  * The command structure.
  */
-export class Command<T extends EventSubConnection = EventSubConnection> {
+export class ChatCommand<T extends EventSubConnection = EventSubConnection> {
 
   /**
    * The name of the command.
@@ -27,11 +27,11 @@ export class Command<T extends EventSubConnection = EventSubConnection> {
   /**
    * The run function of the command.
    */
-  run?(ctx: CommandContext<typeof this.options, T>): any;
+  run?(ctx: TwitchContext<typeof this.options, T>): any;
 
   /**
    * The fallback function of the command if the permissions aren't satisfied.
    */
-  onPermissionFallback?(ctx: CommandContext<typeof this.options, T>, permissions: RequiredPerms): any;
+  onPermissionFallback?(ctx: TwitchContext<typeof this.options, T>, permissions: RequiredPerms): any;
 
 }

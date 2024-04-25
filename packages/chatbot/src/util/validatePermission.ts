@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { BasePermission } from '../structures';
-import type { CommandContext } from '../structures';
+import type { TwitchContext } from '../structures';
 import { Permission } from '../enums';
 import type { EventSubConnection } from '../enums';
 
@@ -12,7 +12,7 @@ import type { EventSubConnection } from '../enums';
  * @returns Whether the user has passed the permission.
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export async function validatePermission<T extends EventSubConnection>(permission: typeof BasePermission<T> | Permission, ctx: CommandContext<{}, T>){
+export async function validatePermission<T extends EventSubConnection>(permission: typeof BasePermission<T> | Permission, ctx: TwitchContext<{}, T>){
   const badges = ctx.author.badges;
 
   if(badges.has('broadcaster')) return true;
