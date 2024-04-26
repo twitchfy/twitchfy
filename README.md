@@ -16,5 +16,5 @@ If you need to report a bug or you have some doubts about the package feel free 
 
 If you want to contribute you can create a pull request.
 
-**For more information see the [official website](https://twitchfy-docs.vercel.app)**
+**For more information see the [official website](https://twitchfy-docs.vercel.app).**
 
