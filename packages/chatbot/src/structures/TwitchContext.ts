@@ -7,12 +7,12 @@ import { Author } from './Author';
 import type { ChatBot } from './ChatBot';
 import { ChatRoom } from './ChatRoom';
 import type { EventSubConnection } from '../enums';
-import type { CommandOptionsAux, MessageData, OptionsRecord } from '../types';
+import type { DefaultConnection, CommandOptionsAux, MessageData, OptionsRecord } from '../types';
 
 /**
  * The context of the command.
  */
-export class TwitchContext<K extends OptionsRecord = {}, T extends EventSubConnection = EventSubConnection> extends Base<T>{
+export class TwitchContext<K extends OptionsRecord = {}, T extends EventSubConnection = DefaultConnection> extends Base<T>{
     
   /**
    * The message received when the command was run.

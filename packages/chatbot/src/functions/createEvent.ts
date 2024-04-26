@@ -1,5 +1,5 @@
 import type { EventSubConnection } from '../enums';
-import type { EventData, Events } from '../types';
+import type { DefaultConnection, EventData, Events } from '../types';
 
 /**
  * The data received from an event.
@@ -12,6 +12,6 @@ export type EventDataForConnection<T extends EventSubConnection> = {
  * Function to create an event.
  * @param data The {@link EventData} to create the event.
  */
-export function createEvent<T extends EventSubConnection = EventSubConnection>(data: EventDataForConnection<T>[keyof EventDataForConnection<T>]){
+export function createEvent<T extends EventSubConnection = DefaultConnection>(data: EventDataForConnection<T>[keyof EventDataForConnection<T>]){
   return data;
 }

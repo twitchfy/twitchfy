@@ -8,3 +8,4 @@ export * from './ChannelEvents';
 export * from './EventData';
 export * from './FetchEmote';
 export * from './Events';
+export * from './DefaultConnection';

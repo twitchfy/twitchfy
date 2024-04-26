@@ -1,4 +1,4 @@
-import type { OptionsRecord } from '../types';
+import type { DefaultConnection, OptionsRecord } from '../types';
 import type { EventSubConnection } from '../enums';
 import type { ChatCommand } from '../structures';
 
@@ -21,7 +21,7 @@ export interface CommandOptions {
  * @param {CommandOptions} options The options to build up the command.
  * @returns {Function} The decorator function.
  */
-export function SetCommand<T extends EventSubConnection = EventSubConnection>(options: CommandOptions){
+export function SetCommand<T extends EventSubConnection = DefaultConnection>(options: CommandOptions){
   return function(constructor: new () => ChatCommand<T>){
     constructor.prototype.name = options.name;
     constructor.prototype.options = options.options;
