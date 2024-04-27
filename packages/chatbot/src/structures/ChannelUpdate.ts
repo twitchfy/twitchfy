@@ -56,9 +56,9 @@ export class ChannelUpdate<T extends EventSubConnection> extends Base<T> {
   }
 
   /**
-   * The ID of the broadcaster who was updated.
+   * The Id of the broadcaster who was updated.
    */
-  public get broadcasterID(){
+  public get broadcasterId(){
     return this.data.broadcaster.id;
   }
 
@@ -67,6 +67,6 @@ export class ChannelUpdate<T extends EventSubConnection> extends Base<T> {
    * @returns The fetched channel from the API.
    */
   public async channel(){
-    return this.chatbot.channels.fetch(this.broadcasterID);
+    return this.chatbot.channels.fetch(this.broadcasterId);
   }
 }

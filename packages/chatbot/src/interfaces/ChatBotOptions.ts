@@ -8,9 +8,9 @@ import type { TwitchContext } from '../structures';
  */
 export interface ChatBotOptions<T extends EventSubConnection = EventSubConnection> {
     /**
-     * The client ID of the Twitch's application.
+     * The client Id of the Twitch's application.
      */
-    clientID: string
+    clientId: string
     /**
      * The client secret of the Twitch's application.
      */

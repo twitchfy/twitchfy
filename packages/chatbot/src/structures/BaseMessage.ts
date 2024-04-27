@@ -55,13 +55,13 @@ export class BaseMessage<T extends EventSubConnection> extends Base<T>{
    * @returns The message that was sent as a reply.
    */
   public async reply(message: string){
-    return await this.chatbot.messages.send(this.data.chatroom_id, message, { replyMessageID: this.id });
+    return await this.chatbot.messages.send(this.data.chatroom_id, message, { replyMessageId: this.id });
   }
 
   /**
-   * The ID of the chatroom where the message was sent.
+   * The Id of the chatroom where the message was sent.
    */
-  public get chatroomID(){
+  public get chatroomId(){
     return this.data.chatroom_id;
   }
 
@@ -69,7 +69,7 @@ export class BaseMessage<T extends EventSubConnection> extends Base<T>{
    * Whether the message was sent by the chatbot.
    */
   public get self(){
-    return this.author.id === this.chatbot.userID;
+    return this.author.id === this.chatbot.userId;
   }
 }
 

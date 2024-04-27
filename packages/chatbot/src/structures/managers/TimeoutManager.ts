@@ -35,11 +35,11 @@ export class TimeoutManager<T extends EventSubConnection> extends Base<T>{
 
   /**
    * Deletes the timeout of a specific user within the chatroom.
-   * @param userID The id of the user to remove from the timeout.
+   * @param userId The id of the user to remove from the timeout.
    * @returns 
    */
-  public async delete(userID: string){
-    return await this.chatbot.timeouts.delete(this.chatroom.id, userID);
+  public async delete(userId: string){
+    return await this.chatbot.timeouts.delete(this.chatroom.id, userId);
   }
 
 }

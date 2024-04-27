@@ -52,9 +52,9 @@ export class Message<T extends EventSubConnection> extends BaseMessage<T>{
   public readonly bits: number;
 
   /**
-   * The reward ID of the message. Null if the message doesn't have a reward redemption.
+   * The reward Id of the message. Null if the message doesn't have a reward redemption.
    */
-  public readonly rewardID: string | null;
+  public readonly rewardId: string | null;
 
   /**
    * The message reply of the message. Null if the message doesn't have a reply.
@@ -84,13 +84,13 @@ export class Message<T extends EventSubConnection> extends BaseMessage<T>{
     this.cheermotes = this.__parseCheermotes();
     this.bits = data.message.bits;
     this.messageReply = data.message.reply ? new MessageReply<T>(chatbot, data.message.reply, chatroom) : null;
-    this.rewardID = data.message.channelRewardId;
+    this.rewardId = data.message.channelRewardId;
   }
 
   /**
-   * The ID of the author of the message.
+   * The Id of the author of the message.
    */
-  public get authorID(){
+  public get authorId(){
     return this.author.id;
   }
 
@@ -140,7 +140,7 @@ export class Message<T extends EventSubConnection> extends BaseMessage<T>{
    * Whether the message has a reward reedemption.
    */
   public get hasRewardRedeemption(){
-    return !!this.rewardID;
+    return !!this.rewardId;
   }
 
   /**
@@ -178,7 +178,7 @@ export class Message<T extends EventSubConnection> extends BaseMessage<T>{
    * @internal
    */
   private __parseCheermotes(){
-    const data = this.commandData.message.fragments.filter((x) => x.type === 'cheermote').map((x) => new BaseCheermote(this.chatbot, { ...x.cheermote!, broadcaster_id: this.chatroomID }));
+    const data = this.commandData.message.fragments.filter((x) => x.type === 'cheermote').map((x) => new BaseCheermote(this.chatbot, { ...x.cheermote!, broadcaster_id: this.chatroomId }));
     return new Collection<string, BaseCheermote<T>>(data.map((x) => [x.prefix, x]));
   }
 }

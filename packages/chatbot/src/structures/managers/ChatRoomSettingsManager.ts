@@ -31,7 +31,7 @@ export class ChatRoomSettingsManager<T extends EventSubConnection> extends Base<
    * @returns The new settings of the chatroom.
    */
   public async edit(options: PatchChatSettingsBody){
-    return new ChatRoomSettings(this.chatbot, this.chatroom, await this.chatbot.helixClient.updateChatSettings(this.chatroom.id, this.chatbot.userID, options));
+    return new ChatRoomSettings(this.chatbot, this.chatroom, await this.chatbot.helixClient.updateChatSettings(this.chatroom.id, this.chatbot.userId, options));
   }
 
   /**
@@ -39,7 +39,7 @@ export class ChatRoomSettingsManager<T extends EventSubConnection> extends Base<
    * @returns The current settings of the chatroom.
    */
   public async fetch(){
-    return new ChatRoomSettings(this.chatbot, this.chatroom, await this.chatbot.helixClient.getChatSettings(this.chatroom.id, this.chatbot.userID));
+    return new ChatRoomSettings(this.chatbot, this.chatroom, await this.chatbot.helixClient.getChatSettings(this.chatroom.id, this.chatbot.userId));
   }
 
 }

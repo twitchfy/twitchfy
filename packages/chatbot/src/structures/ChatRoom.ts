@@ -70,7 +70,7 @@ export class ChatRoom<T extends EventSubConnection> extends Base<T> {
   }
 
   /**
-   * The ID of the chatroom. Its id is the same as the broadcaster id.
+   * The Id of the chatroom. Its id is the same as the broadcaster id.
    */
   public get id(){
     return this.data.broadcaster_id;
@@ -145,22 +145,22 @@ export class ChatRoom<T extends EventSubConnection> extends Base<T> {
    * @returns The announcement that was sent.
    */
   public async announce(options: AnnouncementOptions){
-    return await this.chatbot.helixClient.sendAnnouncement(this.id, this.chatbot.userID, options);
+    return await this.chatbot.helixClient.sendAnnouncement(this.id, this.chatbot.userId, options);
   }
 
   /**
    * Sends a shoutout to a user in the chatroom.
-   * @param receiverID The ID of the user to shoutout.
+   * @param receiverId The Id of the user to shoutout.
    * @returns The shoutout that was sent.
    */
-  public async shoutout(receiverID: string){
-    return await this.chatbot.helixClient.sendShoutout(this.id, receiverID, this.chatbot.userID);
+  public async shoutout(receiverId: string){
+    return await this.chatbot.helixClient.sendShoutout(this.id, receiverId, this.chatbot.userId);
   }
 }
 
 /**
  * The data of the chatroom.
- * @param broadcaster_id The ID of the broadcaster.
+ * @param broadcaster_id The Id of the broadcaster.
  * @param broadcaster_name The name of the broadcaster.
  * @param broadcaster_login The login of the broadcaster.
  */

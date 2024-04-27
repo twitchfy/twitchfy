@@ -9,7 +9,7 @@ export async function startup(this: WebSocketConnection) {
 
     for (const data of await this.storage.getAll()) {
 
-      const subscriptionData = await this.helixClient.subscribeToEventSub({ type: data.type, condition: data.options, transport: { method: 'websocket', session_id: this.sessionID }, version: SubscriptionVersionsObject[data.type] }, { useTokenType: 'user' });
+      const subscriptionData = await this.helixClient.subscribeToEventSub({ type: data.type, condition: data.options, transport: { method: 'websocket', session_id: this.sessionId }, version: SubscriptionVersionsObject[data.type] }, { useTokenType: 'user' });
 
       const subscription = new WebSocketSubscription<typeof data.type>(this, data, subscriptionData);
 

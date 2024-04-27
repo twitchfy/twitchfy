@@ -1,6 +1,6 @@
 export interface SendChatMessageOptions {
-    broadcasterID: string
-    senderID: string
+    broadcasterId: string
+    senderId: string
     message: string
-    replyMessageID?: string
+    replyMessageId?: string
 }

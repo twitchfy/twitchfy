@@ -3,9 +3,9 @@
 */
 export interface BanOptions {
     /**
-     * The user ID of the user to ban.
+     * The user Id of the user to ban.
      */
-    userID: string;
+    userId: string;
     /**
      * The reason of the ban. If not provided, there will be no reason.
      */

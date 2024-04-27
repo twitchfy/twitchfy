@@ -159,7 +159,7 @@ export class RequestManager {
 
   public async refreshToken(refreshToken: string) {
 
-    const res = await fetch(this.authURL + `/oauth2/token?${new URLSearchParams({ client_id: this.client.clientID, client_secret: this.client.clientSecret, grant_type: 'refresh_token', refresh_token: refreshToken }).toString()}`, { method: 'POST' });
+    const res = await fetch(this.authURL + `/oauth2/token?${new URLSearchParams({ client_id: this.client.clientId, client_secret: this.client.clientSecret, grant_type: 'refresh_token', refresh_token: refreshToken }).toString()}`, { method: 'POST' });
 
     if (!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
@@ -167,18 +167,18 @@ export class RequestManager {
 
   }
 
-  public static async generateAppToken(options: PickRequired<GenerateAppTokenOptions, 'clientID' | 'clientSecret'>){
+  public static async generateAppToken(options: PickRequired<GenerateAppTokenOptions, 'clientId' | 'clientSecret'>){
 
-    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: options?.clientID, client_secret: options?.clientSecret, grant_type: 'client_credentials' }).toString()}`, { method: 'POST' });
+    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: options?.clientId, client_secret: options?.clientSecret, grant_type: 'client_credentials' }).toString()}`, { method: 'POST' });
 
     if (!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
     return await res.json() as TokenClientCredentialsFlowResponse;
   }
 
-  public static async generateUserToken(options: PickRequired<GenerateUserTokenOptions, 'clientID' | 'clientSecret'>) {
+  public static async generateUserToken(options: PickRequired<GenerateUserTokenOptions, 'clientId' | 'clientSecret'>) {
 
-    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: options.clientID, client_secret: options.clientSecret, grant_type: 'authorization_code', redirect_uri: options.redirectURI, code: options.code }).toString()}`, { method: 'POST' });
+    const res = await fetch(`https://id.twitch.tv/oauth2/token?${new URLSearchParams({ client_id: options.clientId, client_secret: options.clientSecret, grant_type: 'authorization_code', redirect_uri: options.redirectURI, code: options.code }).toString()}`, { method: 'POST' });
 
     if (!res.ok) throw new TwitchHelixError(res, await res.json() as Error, 'POST');
 
@@ -189,7 +189,7 @@ export class RequestManager {
 
     const token = this.getToken(requestOptions);
 
-    const headers = { 'Authorization': `Bearer ${token?.token}`, 'Client-Id': this.client.clientID, 'Content-Type': 'application/json' };
+    const headers = { 'Authorization': `Bearer ${token?.token}`, 'Client-Id': this.client.clientId, 'Content-Type': 'application/json' };
 
     return headers;
 

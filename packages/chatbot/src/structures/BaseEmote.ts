@@ -36,16 +36,16 @@ export class BaseEmote<T extends EventSubConnection, K extends EmoteType = Emote
   }
 
   /**
-   * The ID of the owner of the emote.
+   * The Id of the owner of the emote.
    */
-  public get ownerID(){
+  public get ownerId(){
     return this.data.owner_id === '0' ? null : this.data.owner_id;
   }
 
   /**
-   * The ID of the emote set.
+   * The Id of the emote set.
    */
-  public get setID(){
+  public get setId(){
     return this.data.emote_set_id === '0' ? null : this.data.emote_set_id;
   }
 

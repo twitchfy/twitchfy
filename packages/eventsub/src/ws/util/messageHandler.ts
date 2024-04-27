@@ -20,7 +20,7 @@ export async function messageHandler(this: WebSocket, message: WSMessage) {
 
       setMessageType<WelcomeMessage>(parsedMessage);
 
-      this.connection.sessionID = parsedMessage.payload.session.id;
+      this.connection.sessionId = parsedMessage.payload.session.id;
 
       this.connection.makeDebug(`Received session_welcome message and estabilished sessionId to ${parsedMessage.payload.session.id}`);
 

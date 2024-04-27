@@ -3,7 +3,7 @@
  */
 export interface Category {
     /**
-     * The category ID.
+     * The category Id.
      */
     id: string
     /**

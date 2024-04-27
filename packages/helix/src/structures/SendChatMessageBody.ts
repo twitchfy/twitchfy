@@ -12,13 +12,13 @@ export class SendChatMessageBody {
 
   public constructor(options: SendChatMessageOptions){
 
-    this.broadcaster_id = options.broadcasterID;
+    this.broadcaster_id = options.broadcasterId;
 
-    this.sender_id = options.senderID;
+    this.sender_id = options.senderId;
 
     this.message = options.message;
 
-    this.reply_parent_message_id = options.replyMessageID ?? null;
+    this.reply_parent_message_id = options.replyMessageId ?? null;
 
   }
 

@@ -5,7 +5,7 @@ export class TimeoutBody implements PostBanBody{
   public data: PostBanData;
   public constructor(options: TimeoutOptions){
 
-    this.data = { user_id: options.userID, duration: options.duration, reason: options.reason ?? null };
+    this.data = { user_id: options.userId, duration: options.duration, reason: options.reason ?? null };
 
   }
 }

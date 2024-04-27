@@ -9,14 +9,14 @@ import type { EventSubConnection } from '../enums';
 export class Ban<T extends EventSubConnection> extends Base<T> {
    
   /**
-   * The ID of the user who was banned.
+   * The Id of the user who was banned.
    */
-  public readonly userID: string;
+  public readonly userId: string;
 
   /**
-   * The ID of the moderator who banned the user.
+   * The Id of the moderator who banned the user.
    */
-  public readonly moderatorID: string;
+  public readonly moderatorId: string;
 
   /**
    * The data of the ban returned from the API.
@@ -31,8 +31,8 @@ export class Ban<T extends EventSubConnection> extends Base<T> {
   public constructor(chatbot: ChatBot<T>, data: BanData){
     super(chatbot);
     this.data = data;
-    this.userID = data.user_id;
-    this.moderatorID = data.moderator_id;
+    this.userId = data.user_id;
+    this.moderatorId = data.moderator_id;
   }
 
   /**
@@ -40,13 +40,13 @@ export class Ban<T extends EventSubConnection> extends Base<T> {
    * @returns
    */
   public async delete(){
-    return await this.chatbot.helixClient.unBanUser(this.chatroomID, this.moderatorID, this.userID);
+    return await this.chatbot.helixClient.unBanUser(this.chatroomId, this.moderatorId, this.userId);
   }
 
   /**
-   * The ID of the chatroom where the ban was made.
+   * The Id of the chatroom where the ban was made.
    */
-  public get chatroomID(){
+  public get chatroomId(){
     return this.data.broadcaster_id;
   }
 

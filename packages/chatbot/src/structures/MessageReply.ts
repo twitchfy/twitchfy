@@ -38,6 +38,6 @@ export class MessageReply<T extends EventSubConnection> extends Base<T> {
     super(chatbot);
     this.data = data;
     this.parent = new MessageReplyParent(chatbot, { id: data.parent.message.id, content: data.parent.message.content, user_id: data.parent.user.id, user_name: data.parent.user.displayName, user_login: data.parent.user.login, chatroom_id: chatroom.id }, chatroom);
-    this.thread = new MessageReplyThread(chatbot, { id: data.thread.messageID, content: null, user_id: data.thread.user.id, user_name: data.thread.user.displayName, user_login: data.thread.user.login, chatroom_id: chatroom.id }, chatroom);
+    this.thread = new MessageReplyThread(chatbot, { id: data.thread.messageId, content: null, user_id: data.thread.user.id, user_name: data.thread.user.displayName, user_login: data.thread.user.login, chatroom_id: chatroom.id }, chatroom);
   }
 }

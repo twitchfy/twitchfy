@@ -19,7 +19,7 @@ export class Video<T extends EventSubConnection> extends Base<T> {
   /**
    * The id of the stream the video was created from. If the stream was ended this will be null.
    */
-  public readonly streamID: string | null;
+  public readonly streamId: string | null;
 
   /**
    * The user who created the video.
@@ -73,7 +73,7 @@ export class Video<T extends EventSubConnection> extends Base<T> {
     super(chatbot);
     this.data = data;
     this.id = data.id;
-    this.streamID = data.stream_id;
+    this.streamId = data.stream_id;
     this.user = new BaseUser<T>(chatbot, { id: data.user_id, login: data.user_login, display_name: data.user_name });
     this.title = data.title;
     this.description = data.description;

@@ -37,13 +37,13 @@ export class ChatRoomSettings<T extends EventSubConnection> extends Base<T>{
    * @returns The updated chatroom settings.
    */
   public async edit(options: PatchChatSettingsBody){
-    return new ChatRoomSettings(this.chatbot, this.chatroom, await this.chatbot.helixClient.updateChatSettings(this.chatroom.id, this.chatbot.userID, options));
+    return new ChatRoomSettings(this.chatbot, this.chatroom, await this.chatbot.helixClient.updateChatSettings(this.chatroom.id, this.chatbot.userId, options));
   }
     
   /**
-   * The ID of the chatroom.
+   * The Id of the chatroom.
    */
-  public get chatroomID(){
+  public get chatroomId(){
     return this.chatroom.id;
   }
 

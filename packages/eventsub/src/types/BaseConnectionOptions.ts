@@ -4,7 +4,7 @@ import type { LoggerOptions } from '../logger';
 import type { StorageOptions } from '../interfaces';
 
 export type BaseConnectionOptions<K extends ConnectionTypes> = {
-    clientID: string
+    clientId: string
     clientSecret: string
     storage: StorageOptions<K>
     maintainSubscriptions?: true
@@ -12,7 +12,7 @@ export type BaseConnectionOptions<K extends ConnectionTypes> = {
     logger?: LoggerOptions
     debug?: boolean
 } | {
-    clientID: string
+    clientId: string
     clientSecret: string
     maintainSubscriptions: false
     helix?: Partial<HelixClientOptions>

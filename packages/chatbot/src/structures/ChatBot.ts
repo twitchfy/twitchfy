@@ -30,9 +30,9 @@ import type { EventDataForConnection } from '../functions';
 export class ChatBot<T extends EventSubConnection = EventSubConnection> {
 
   /**
-   * The client ID of the Twitch's application.
+   * The client Id of the Twitch's application.
    */
-  public readonly clientID: string;
+  public readonly clientId: string;
 
   /**
    * The client secret of the Twitch's application.
@@ -91,9 +91,9 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
   public user: ChatBotUser<T>;
 
   /**
-   * The user ID of the chatbot.
+   * The user Id of the chatbot.
    */
-  public userID: string;
+  public userId: string;
 
   /**
    * The operator to separate the options in the command.
@@ -132,7 +132,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
    */
   public constructor(options: ChatBotOptions<T>) {
     this.options = options;
-    this.clientID = options.clientID;
+    this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
     this.profiles = new Collection<string, ChannelProfile<T>>();
     this.channels = new ChannelManager<T>(this);
@@ -170,25 +170,25 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
 
     case EventSubConnection.WebSocket: {
 
-      const { clientID, clientSecret, userToken, eventsub } = options as ChatBotOptions<EventSubConnection.WebSocket>;
+      const { clientId, clientSecret, userToken, eventsub } = options as ChatBotOptions<EventSubConnection.WebSocket>;
 
       this.helixClient.preferedToken = 'user';
 
       // @ts-expect-error
 
-      return new WebSocketConnection({ clientID, clientSecret, userToken, ...eventsub });
+      return new WebSocketConnection({ clientId, clientSecret, userToken, ...eventsub });
     }
 
       break;
 
     case EventSubConnection.Webhook: {
 
-      const { clientID, clientSecret, eventsub } = options as ChatBotOptions<EventSubConnection.Webhook>;
+      const { clientId, clientSecret, eventsub } = options as ChatBotOptions<EventSubConnection.Webhook>;
 
       this.helixClient.setAppToken(eventsub.appToken);
       // @ts-expect-error
 
-      return new WebhookConnection({ clientID, clientSecret, ...eventsub }, eventsub.server);
+      return new WebhookConnection({ clientId, clientSecret, ...eventsub }, eventsub.server);
     }
 
       break;
@@ -240,9 +240,9 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
 
     const tokenInfo = await this.helixClient.getUserToken(false);
 
-    this.userID = tokenInfo.user_id;
+    this.userId = tokenInfo.user_id;
 
-    this.user = new ChatBotUser(this, await this.helixClient.getUser(this.userID));
+    this.user = new ChatBotUser(this, await this.helixClient.getUser(this.userId));
 
     // @ts-expect-error
     await (this.eventsub instanceof WebhookConnection ? this.eventsub.start(options.port, options.callback) : this.eventsub.connect());
@@ -314,13 +314,13 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
 
   /**
    * Checks whether the chatbot is moderator in a specific channel.
-   * @param channelID The ID of the channel to check.
+   * @param channelId The Id of the channel to check.
    * @returns A boolean indicating whether the chatbot is moderator in the channel.
    */
-  public async isModerator(channelID: string){
+  public async isModerator(channelId: string){
     const data = await this.moderatedChannels();
 
-    return data.some((x) => x.id === channelID);
+    return data.some((x) => x.id === channelId);
   }
 
   /**
@@ -329,7 +329,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
    */
   public async moderatedChannels(){
 
-    const data = await this.helixClient.getModeratedChannels(this.userID);
+    const data = await this.helixClient.getModeratedChannels(this.userId);
 
     return data.map((x) => new BaseChannel<T>(this, x, new ChatRoom<T>(this, x)));
   }

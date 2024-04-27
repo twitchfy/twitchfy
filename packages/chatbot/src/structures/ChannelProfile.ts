@@ -11,7 +11,7 @@ import { Channel } from './Channel';
 export class ChannelProfile<T extends EventSubConnection> extends Base<T> {
     
   /**
-   * The ID of the channel.
+   * The Id of the channel.
    */
   public readonly id: string;
 
@@ -45,7 +45,7 @@ export class ChannelProfile<T extends EventSubConnection> extends Base<T> {
     }else {
       if(this.hasEvent(event)) return;
       this.events.push(event);
-      await this.chatbot.eventsub.subscribe({ type: SubscriptionTypes[event], options: { broadcaster_user_id: this.id, moderator_user_id: this.chatbot.userID, user_id: this.chatbot.userID }});
+      await this.chatbot.eventsub.subscribe({ type: SubscriptionTypes[event], options: { broadcaster_user_id: this.id, moderator_user_id: this.chatbot.userId, user_id: this.chatbot.userId }});
     }
   }
 
@@ -57,7 +57,7 @@ export class ChannelProfile<T extends EventSubConnection> extends Base<T> {
   public async removeEvent(event: ChannelEvents){
     if(!this.hasEvent(event)) return;
     this.events.splice(this.events.indexOf(event), 1);
-    await this.chatbot.eventsub.subscriptions.exist(SubscriptionTypes[event], { broadcaster_user_id: this.id, moderator_user_id: this.chatbot.userID, user_id: this.chatbot.userID })?.delete();
+    await this.chatbot.eventsub.subscriptions.exist(SubscriptionTypes[event], { broadcaster_user_id: this.id, moderator_user_id: this.chatbot.userId, user_id: this.chatbot.userId })?.delete();
   }
 
   /**
@@ -92,7 +92,7 @@ export class ChannelProfile<T extends EventSubConnection> extends Base<T> {
 
 /**
  * The data of the channel profile.
- * @param id The ID of the channel.
+ * @param id The Id of the channel.
  * @param events The events from the channel that the chatbot is subscribed to.
  */
 export interface ChannelProfileData {

@@ -22,7 +22,7 @@ export function handleSubscriptionReload<T extends EventSubConnection>(this: Cha
     this.profiles.set(subscription.options.broadcaster_user_id, profile);
   }
 
-  if (subscription.checkSubscriptionType(SubscriptionTypes.ChannelChatMessage) && subscription.options.user_id === this.userID) {
+  if (subscription.checkSubscriptionType(SubscriptionTypes.ChannelChatMessage) && subscription.options.user_id === this.userId) {
 
     const fn = handleOnMessage.bind(this);
 

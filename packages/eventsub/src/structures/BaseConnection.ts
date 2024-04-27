@@ -20,7 +20,7 @@ export class EventSubEventEmitter<U extends WebhookEvents | WebSocketEvents> ext
 
 export abstract class BaseConnection<K extends ConnectionTypes, U extends WebhookEvents | WebSocketEvents> extends EventSubEventEmitter<U>{
 
-  public readonly clientID: string;
+  public readonly clientId: string;
 
   public readonly clientSecret: string;
 
@@ -40,11 +40,11 @@ export abstract class BaseConnection<K extends ConnectionTypes, U extends Webhoo
 
     super();
 
-    this.clientID = options.clientID;
+    this.clientId = options.clientId;
 
     this.clientSecret = options.clientSecret;
 
-    this.helixClient = new HelixClient({ clientID: options.clientID, clientSecret: options.clientSecret, ...options.helix });
+    this.helixClient = new HelixClient({ clientId: options.clientId, clientSecret: options.clientSecret, ...options.helix });
 
     this.subscriptions = new SubscriptionCollection<K>();
 

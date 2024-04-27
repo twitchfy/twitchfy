@@ -44,23 +44,23 @@ export class ChannelFollow<T extends EventSubConnection> extends Base<T> {
   }
 
   /**
-   * The ID of the broadcaster who was followed.
+   * The Id of the broadcaster who was followed.
    */
-  public get broadcasterID(){
+  public get broadcasterId(){
     return this.data.broadcaster.id;
   }
 
   /**
-   * The ID of the follower who followed the channel.
+   * The Id of the follower who followed the channel.
    */
-  public get followerID(){
+  public get followerId(){
     return this.data.follower.id;
   }
 
   /**
-   * The ID of the chatroom where the follow event occurred.
+   * The Id of the chatroom where the follow event occurred.
    */
-  public get chatroomID(){
+  public get chatroomId(){
     return this.data.broadcaster.id;
   }
 }

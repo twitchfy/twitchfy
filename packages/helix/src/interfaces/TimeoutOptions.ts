@@ -1,5 +1,5 @@
 export interface TimeoutOptions {
-    userID: string
+    userId: string
     duration: number
     reason?: string
 }

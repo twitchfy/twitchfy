@@ -98,9 +98,9 @@ export class TwitchContext<K extends OptionsRecord = {}, T extends EventSubConne
   }
 
   /**
-   * The ID of the author of the command.
+   * The Id of the author of the command.
    */
-  public get authorID(){
+  public get authorId(){
     return this.author.id;
   }
 
@@ -112,9 +112,9 @@ export class TwitchContext<K extends OptionsRecord = {}, T extends EventSubConne
   }
 
   /**
-   * The ID of the context's chatroom.
+   * The Id of the context's chatroom.
    */
-  public get chatroomID(){
+  public get chatroomId(){
     return this.chatroom.id;
   }
   

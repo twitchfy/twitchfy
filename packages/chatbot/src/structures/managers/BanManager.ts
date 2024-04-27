@@ -35,11 +35,11 @@ export class BanManager<T extends EventSubConnection> extends Base<T>{
 
   /**
    * Deletes the ban of a specific user.
-   * @param userID The id of the user to unban. 
+   * @param userId The id of the user to unban. 
    * @returns 
    */
-  public async delete(userID: string){
-    return await this.chatbot.bans.delete(this.chatroom.id, userID);
+  public async delete(userId: string){
+    return await this.chatbot.bans.delete(this.chatroom.id, userId);
   }
 
 }

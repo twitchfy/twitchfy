@@ -26,9 +26,9 @@ export class Clip<T extends EventSubConnection> extends BaseClip<T>{
   public readonly broadcaster: BaseUserWithoutUsername<T>;
 
   /**
-   * The ID of the game which was played in the clip.
+   * The Id of the game which was played in the clip.
    */
-  public readonly gameID: string;
+  public readonly gameId: string;
 
   /**
    * The language of the clip.
@@ -81,7 +81,7 @@ export class Clip<T extends EventSubConnection> extends BaseClip<T>{
     this.embedURL = data.embed_url;
     this.creator = new BaseUserWithoutUsername(chatbot, { id: data.creator_id, display_name: data.creator_name });
     this.broadcaster = new BaseUserWithoutUsername(chatbot, { id: data.broadcaster_id, display_name: data.broadcaster_name });
-    this.gameID = data.game_id;
+    this.gameId = data.game_id;
     this.language = data.language;
     this.title = data.title;
     this.viewCount = data.view_count;
@@ -99,9 +99,9 @@ export class Clip<T extends EventSubConnection> extends BaseClip<T>{
   }
 
   /**
-   * The ID of the video of the clip.
+   * The Id of the video of the clip.
    */
-  public get videoID(){
+  public get videoId(){
     return this.data.video_id.length? this.data.video_id : null;
   }
 
@@ -110,8 +110,8 @@ export class Clip<T extends EventSubConnection> extends BaseClip<T>{
    * @returns The video of the clip. Returns null if the video doesn't exist.
    */
   public async video(){
-    if(!this.videoID) return null;
-    return new Video<T>(this.chatbot, await this.chatbot.helixClient.getVideo({ id: this.videoID }));
+    if(!this.videoId) return null;
+    return new Video<T>(this.chatbot, await this.chatbot.helixClient.getVideo({ id: this.videoId }));
   }
 
   /**

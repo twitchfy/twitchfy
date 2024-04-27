@@ -17,7 +17,7 @@ import type { EventSubConnectionMap } from '../interfaces';
  */
 export async function handleOnMessage<T extends EventSubConnection>(this: ChatBot<T>, data: ChannelChatMessageMessage<EventSubConnectionMap[T]>){
 
-  if(this.userID === data.chatter.id) return;
+  if(this.userId === data.chatter.id) return;
 
   const content = data.message.content;
 

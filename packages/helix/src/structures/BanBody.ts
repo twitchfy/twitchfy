@@ -5,7 +5,7 @@ export class BanBody implements PostBanBody{
   public data: PostBanData;
   public constructor(options: BanOptions){
         
-    this.data = { user_id: options.userID, reason: options.reason ?? null };
+    this.data = { user_id: options.userId, reason: options.reason ?? null };
         
   }
 }

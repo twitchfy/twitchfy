@@ -32,16 +32,16 @@ export class ChannelChatClear<T extends EventSubConnection> extends Base<T> {
   }
 
   /**
-   * The ID of the broadcaster whose chat was cleared.
+   * The Id of the broadcaster whose chat was cleared.
    */
-  public get broadcasterID(){
+  public get broadcasterId(){
     return this.data.broadcaster.id;
   }
 
   /**
-   * The ID of the chatroom where the chat was cleared.
+   * The Id of the chatroom where the chat was cleared.
    */
-  public get chatroomID() {
+  public get chatroomId() {
     return this.data.broadcaster.id;
   }
 }

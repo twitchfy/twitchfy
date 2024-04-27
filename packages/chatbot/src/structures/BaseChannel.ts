@@ -34,14 +34,14 @@ export class BaseChannel<T extends EventSubConnection = EventSubConnection> exte
   /**
      * The id of the broadcaster who owns the channel.
      */
-  public get broadcasterID() {
+  public get broadcasterId() {
     return this.broadcaster.id;
   }
 
   /**
      * The id of the chatroom of the channel.
      */
-  public get chatroomID() {
+  public get chatroomId() {
     return this.broadcaster.id;
   }
 

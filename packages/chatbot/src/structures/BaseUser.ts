@@ -86,7 +86,7 @@ export class BaseUser<T extends EventSubConnection> extends Base<T> {
    * @returns
    */
   public async whisper(message: string){
-    return await this.chatbot.helixClient.sendWhisper(this.chatbot.userID, this.id, { message });
+    return await this.chatbot.helixClient.sendWhisper(this.chatbot.userId, this.id, { message });
   }
 }
 

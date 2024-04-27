@@ -39,16 +39,16 @@ export class StreamOnline<T extends EventSubConnection> extends Base<T> {
   }
 
   /**
-   * The ID of the broadcaster whose stream went online.
+   * The Id of the broadcaster whose stream went online.
    */
-  public get broadcasterID(){
+  public get broadcasterId(){
     return this.data.broadcaster.id;
   }
 
   /**
-   * The ID of the chatroom where the stream went online.
+   * The Id of the chatroom where the stream went online.
    */
-  public get chatroomID(){
+  public get chatroomId(){
     return this.data.broadcaster.id;
   }
 

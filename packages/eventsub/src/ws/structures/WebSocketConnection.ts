@@ -17,7 +17,7 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
 
   public ws: WebSocket;
 
-  public sessionID: string | null;
+  public sessionId: string | null;
 
   public constructor(options: WebSocketConnectionOptions){
 
@@ -42,7 +42,7 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
 
     this.ws = new WebSocket(this);
 
-    this.sessionID = null;
+    this.sessionId = null;
 
   }
 
@@ -57,7 +57,7 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
 
     const { type, options: subscriptionOptions } = options;
 
-    const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions }, { useTokenType: 'user' });
+    const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'websocket', session_id: this.sessionId }, condition: subscriptionOptions }, { useTokenType: 'user' });
 
     const subscription = new WebSocketSubscription<T>(this, options, data);
 
@@ -82,7 +82,7 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
       
       const { type, options: subscriptionOptions } = sub;
  
-      const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'websocket', session_id: this.sessionID }, condition: subscriptionOptions });
+      const data = await this.helixClient.subscribeToEventSub({ type , version: SubscriptionVersionsObject[type], transport: { method: 'websocket', session_id: this.sessionId }, condition: subscriptionOptions });
 
       const subscription = new WebSocketSubscription<T>(this, sub, data);
 

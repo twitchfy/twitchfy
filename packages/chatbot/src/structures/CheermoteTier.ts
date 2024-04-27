@@ -57,7 +57,7 @@ export class CheermoteTier<T extends EventSubConnection> extends Base<T> {
   }
 
   /**
-   * The ID of the cheermote tier.
+   * The Id of the cheermote tier.
    */
   public get id(){
     return Number(this.data.id);

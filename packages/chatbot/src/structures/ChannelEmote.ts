@@ -14,14 +14,14 @@ export class ChannelEmote<T extends EventSubConnection> extends Emote<T, 'channe
   public readonly type: EmoteType;
 
   /**
-   * The ID of the emote set.
+   * The Id of the emote set.
    */
-  public readonly emoteSetID: string;
+  public readonly emoteSetId: string;
 
   public constructor(chatbot: ChatBot<T>, data: ChannelEmoteData & { template: string, owner_id: string }){
     super(chatbot, data);
     this.type = data.emote_type;
-    this.emoteSetID = data.emote_set_id;
+    this.emoteSetId = data.emote_set_id;
   }
 
   /**

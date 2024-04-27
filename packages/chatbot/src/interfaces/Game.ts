@@ -3,7 +3,7 @@
  */
 export interface Game {
     /**
-     * The game ID.
+     * The game Id.
      */
     id: string;
     /**

@@ -34,7 +34,7 @@ export class ChannelManager<T extends EventSubConnection> extends Base<T> {
 
     const profile = new ChannelProfile<T>(this.chatbot, { id, events: events || ['ChannelChatMessage'] });
 
-    const subscription = await this.chatbot.eventsub.subscribe({ type: SubscriptionTypes.ChannelChatMessage, options: { broadcaster_user_id: id, user_id: this.chatbot.userID }});
+    const subscription = await this.chatbot.eventsub.subscribe({ type: SubscriptionTypes.ChannelChatMessage, options: { broadcaster_user_id: id, user_id: this.chatbot.userId }});
 
     const fn = handleOnMessage.bind(this.chatbot);
 
@@ -53,7 +53,7 @@ export class ChannelManager<T extends EventSubConnection> extends Base<T> {
 
         if(!type) continue;
 
-        await this.chatbot.eventsub.subscribe({ type, options: { moderator_user_id: this.chatbot.userID, user_id: this.chatbot.userID, broadcaster_user_id: id }});
+        await this.chatbot.eventsub.subscribe({ type, options: { moderator_user_id: this.chatbot.userId, user_id: this.chatbot.userId, broadcaster_user_id: id }});
 
       }
     }
@@ -69,7 +69,7 @@ export class ChannelManager<T extends EventSubConnection> extends Base<T> {
    */
   public async leave(id: string){
 
-    const subscription = this.chatbot.eventsub.subscriptions.exist(SubscriptionTypes.ChannelChatMessage, { broadcaster_user_id: id, user_id: this.chatbot.userID });
+    const subscription = this.chatbot.eventsub.subscriptions.exist(SubscriptionTypes.ChannelChatMessage, { broadcaster_user_id: id, user_id: this.chatbot.userId });
     
     if(!subscription) return;
 
@@ -85,7 +85,7 @@ export class ChannelManager<T extends EventSubConnection> extends Base<T> {
 
       if(!type) continue;
 
-      const subscription = this.chatbot.eventsub.subscriptions.exist(type, { broadcaster_user_id: id, user_id: this.chatbot.userID, moderator_user_id: this.chatbot.userID });
+      const subscription = this.chatbot.eventsub.subscriptions.exist(type, { broadcaster_user_id: id, user_id: this.chatbot.userId, moderator_user_id: this.chatbot.userId });
 
       if(subscription) await subscription.delete();
 

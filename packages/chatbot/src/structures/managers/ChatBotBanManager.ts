@@ -19,21 +19,21 @@ export class ChatBotBanManager<T extends EventSubConnection> extends Base<T>{
 
   /**
    * Ban a specific user.
-   * @param chatroomID The id of the chatroom where the user will be banned.
+   * @param chatroomId The id of the chatroom where the user will be banned.
    * @param options The options required for banning an user. See {@link BanOptions}.
    * @returns A class representation of the ban. See {@link Ban}. 
    */
-  public async add(chatroomID: string, options: BanOptions){
-    return new Ban(this.chatbot, await this.chatbot.helixClient.banUser(chatroomID, this.chatbot.userID, { data: { user_id: options.userID, ...options } }));
+  public async add(chatroomId: string, options: BanOptions){
+    return new Ban(this.chatbot, await this.chatbot.helixClient.banUser(chatroomId, this.chatbot.userId, { data: { user_id: options.userId, ...options } }));
   }
 
   /**
    * Deletes the ban of a specific user.
-   * @param chatroomID The id of the chatroom where the user will be unbanned.
-   * @param userID The id of the user to unban.
+   * @param chatroomId The id of the chatroom where the user will be unbanned.
+   * @param userId The id of the user to unban.
    * @returns 
    */
-  public async delete(chatroomID: string, userID: string){
-    return await this.chatbot.helixClient.unBanUser(chatroomID, this.chatbot.userID, userID);
+  public async delete(chatroomId: string, userId: string){
+    return await this.chatbot.helixClient.unBanUser(chatroomId, this.chatbot.userId, userId);
   }
 }

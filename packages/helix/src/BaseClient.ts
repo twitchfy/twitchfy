@@ -11,7 +11,7 @@ import type { ModifyType, PickRequired, RequestOptions, UserTokenAdapter } from 
 
 export class BaseClient {
 
-  public clientID: string;
+  public clientId: string;
   public clientSecret: string;
   public preferedToken: 'app' | 'user';
   public appToken?: TokenAdapter<'app', boolean>;
@@ -23,7 +23,7 @@ export class BaseClient {
 
   public constructor(options: HelixClientOptions) {
 
-    this.clientID = options.clientID;
+    this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
     this.preferedToken = options.preferedToken ?? 'app';
     this.appToken = options.appToken;
@@ -60,9 +60,9 @@ export class BaseClient {
     return data.data;
   }
 
-  public async getChannel(channelID: string, requestOptions?: RequestOptions): Promise<Channel> {
+  public async getChannel(channelId: string, requestOptions?: RequestOptions): Promise<Channel> {
 
-    const data = await this.requestManager.get('/channels', new URLSearchParams({ broadcaster_id: channelID }).toString(), requestOptions) as ChannelResponse;
+    const data = await this.requestManager.get('/channels', new URLSearchParams({ broadcaster_id: channelId }).toString(), requestOptions) as ChannelResponse;
 
     return data.data[0];
   }
@@ -84,9 +84,9 @@ export class BaseClient {
 
   }
 
-  public async sendWhisper(senderUserID: string, receiverUserID: string, body: WhisperBody, requestOptions?: RequestOptions<'user'>) {
+  public async sendWhisper(senderUserId: string, receiverUserId: string, body: WhisperBody, requestOptions?: RequestOptions<'user'>) {
 
-    await this.requestManager.post('/whispers', new URLSearchParams({ from_user_id: senderUserID, to_user_id: receiverUserID }).toString(), body, { ...requestOptions, useTokenType: 'user' });
+    await this.requestManager.post('/whispers', new URLSearchParams({ from_user_id: senderUserId, to_user_id: receiverUserId }).toString(), body, { ...requestOptions, useTokenType: 'user' });
   }
 
   public async banUser(broadcaster_id: string, moderator_id: string, body: BanBody, requestOptions?: RequestOptions<'user'>): Promise<Ban> {
@@ -380,14 +380,14 @@ export class BaseClient {
   }
 
   public async generateUserToken<T extends boolean = true, K extends boolean = false>(options?: GenerateUserTokenOptions<T, K>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
-    return await BaseClient.generateUserToken<T, K>({ ...options, clientID: this.clientID, clientSecret: this.clientSecret });
+    return await BaseClient.generateUserToken<T, K>({ ...options, clientId: this.clientId, clientSecret: this.clientSecret });
   }
 
   public async generateAppToken<T extends boolean = true, K extends boolean = false>(options?: GenerateAppTokenOptions<T, K>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)> {
-    return await BaseClient.generateAppToken<T, K>({ ...options, clientID: this.clientID, clientSecret: this.clientSecret });
+    return await BaseClient.generateAppToken<T, K>({ ...options, clientId: this.clientId, clientSecret: this.clientSecret });
   }
 
-  public static async generateAppToken<T extends boolean = true, K extends boolean = false>(options: PickRequired<GenerateAppTokenOptions<T, K>, 'clientID' | 'clientSecret'>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)>{
+  public static async generateAppToken<T extends boolean = true, K extends boolean = false>(options: PickRequired<GenerateAppTokenOptions<T, K>, 'clientId' | 'clientSecret'>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)>{
 
     const data = await RequestManager.generateAppToken(options);
 
@@ -397,7 +397,7 @@ export class BaseClient {
 
   }
 
-  public static async generateUserToken<T extends boolean = true, K extends boolean = false>(options: PickRequired<GenerateUserTokenOptions<T, K>, 'clientID' | 'clientSecret'>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
+  public static async generateUserToken<T extends boolean = true, K extends boolean = false>(options: PickRequired<GenerateUserTokenOptions<T, K>, 'clientId' | 'clientSecret'>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
 
     const data = await RequestManager.generateUserToken(options);
 

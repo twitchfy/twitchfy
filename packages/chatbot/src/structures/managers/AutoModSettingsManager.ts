@@ -31,7 +31,7 @@ export class AutoModSettingsManager<T extends EventSubConnection> extends Base<T
    * @returns The new settings of the automod.
    */
   public async edit(options: PutAutoModSettingsBody){
-    return new AutoModSettings(this.chatbot, this.automod, await this.chatbot.helixClient.updateAutoModSettings(this.automod.chatroom.id, this.chatbot.userID, options));
+    return new AutoModSettings(this.chatbot, this.automod, await this.chatbot.helixClient.updateAutoModSettings(this.automod.chatroom.id, this.chatbot.userId, options));
   }
 
   /**
@@ -39,7 +39,7 @@ export class AutoModSettingsManager<T extends EventSubConnection> extends Base<T
    * @returns The current settings of the automod.
    */
   public async fetch(){
-    return new AutoModSettings(this.chatbot, this.automod, await this.chatbot.helixClient.getAutoModSettings(this.automod.chatroom.id, this.chatbot.userID));
+    return new AutoModSettings(this.chatbot, this.automod, await this.chatbot.helixClient.getAutoModSettings(this.automod.chatroom.id, this.chatbot.userId));
   }
 
 }
