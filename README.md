@@ -10,7 +10,7 @@ This set of package offers full compatibility with Twitch.
 * [`@twitchfy/api-types`](/packages/api-types) Contains the needed types for the other packages.
 
 > [!WARNING]
-> All the package excluding @twitchfy/chatbot are not fulled updated as they are built as helpers of the chatbot package. Those packages will be updated until there are full compatible.
+> All the packages except @twitchfy/chatbot are not fulled updated as they are built as helpers of the chatbot package. Those packages will be updated in the feature to be full compatible.
 
 If you need to report a bug or you have some doubts about the package feel free for submitting an issue.
 
