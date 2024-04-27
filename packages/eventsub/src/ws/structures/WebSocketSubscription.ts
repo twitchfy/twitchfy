@@ -40,7 +40,7 @@ export class WebSocketSubscription<T extends SubscriptionTypes = SubscriptionTyp
 
   public async delete() {
 
-    await this.connection.helixClient.deleteSubscription(this.id, { useTokenType: 'user' });
+    await this.connection.helixClient.deleteEventSubSubscription(this.id, { useTokenType: 'user' });
 
     this.connection.subscriptions.delete(this.id);
 

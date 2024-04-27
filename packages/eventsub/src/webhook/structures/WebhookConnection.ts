@@ -130,11 +130,11 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
   private async startup() {
 
-    if(this.dropSubsAtStart) await processChunks(this, chunkArray(await this.helixClient.getSubscriptions(), 30));
+    if(this.dropSubsAtStart) await processChunks(this, chunkArray(await this.helixClient.getEventSubSubscriptions(), 30));
 
     if(this.maintainSubscriptions){
 
-      const apiSubs = await this.helixClient.getSubscriptions({ status: 'enabled' });
+      const apiSubs = await this.helixClient.getEventSubSubscriptions({ status: 'enabled' });
 
       const filteredSubs = apiSubs.filter((x) => x.transport.callback === `${this.baseURL}${this.subscriptionRoute}`);
 
@@ -232,7 +232,7 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
 
     for(const subscription of chunk){
 
-      connection.helixClient.deleteSubscription(subscription.id);
+      connection.helixClient.deleteEventSubSubscription(subscription.id);
 
       connection.makeDebug(`Drop subscription (${subscription.id}) at start because dropSubsAtStart was enabled.`);
 

@@ -1,12 +1,10 @@
-import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse, GetCheermotesResponse, GetChannelEmotesResponse, GetGlobalEmotesResponse, GetClipsResponse, GetVideosResponse, GetModeratedChannelsResponse } from '@twitchfy/api-types';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse, GetCheermotesResponse, GetChannelEmotesResponse, GetGlobalEmotesResponse, GetClipsResponse, GetVideosResponse, GetModeratedChannelsResponse, PostCreateConduitResponse, PatchUpdateConduitShardsResponse, PatchUpdateConduitResponse, GetConduitsResponse, ConduitShardData } from '@twitchfy/api-types';
 import { RequestManager } from './RequestManager';
-import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody } from './structures';
+import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody, UpdateConduitShardsBody, UpdateConduitBody } from './structures';
 import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
 import type { HelixClientOptions, GetSubscriptionFilter, GenerateUserTokenOptions, GenerateAppTokenOptions, HelixClientCallbacks, GetStreamsOptions, GetClipsOptions, GetVideosOptions } from './interfaces';
 import type { ModifyType, PickRequired, RequestOptions, UserTokenAdapter } from './types';
-
-
 
 
 export class BaseClient {
@@ -252,13 +250,13 @@ export class BaseClient {
 
   }
 
-  public async deleteSubscription(id: string, requestOptions?: RequestOptions) : Promise<void>{
+  public async deleteEventSubSubscription(id: string, requestOptions?: RequestOptions) : Promise<void>{
 
     await this.requestManager.delete('/eventsub/subscriptions', new URLSearchParams({ id }).toString(), requestOptions);
 
   }
 
-  public async getSubscriptions(filter?: GetSubscriptionFilter, requestOptions?: RequestOptions<'user' | 'app', true>){
+  public async getEventSubSubscriptions(filter?: GetSubscriptionFilter, requestOptions?: RequestOptions<'user' | 'app', true>){
 
     const params = new URLSearchParams;
 
@@ -366,6 +364,47 @@ export class BaseClient {
     return await handlePagination(this, '/moderation/channels', new URLSearchParams({ user_id }).toString(), 'GET', { ...requestOptions, useTokenType: 'user' }) as GetModeratedChannelsResponse['data'];
   }
 
+  public async createConduit(shard_count: number, requestOptions?: RequestOptions<'app'>){
+    const data = await this.requestManager.post('/eventsub/conduits', '', { shard_count }, { ...requestOptions, useTokenType: 'app' }) as PostCreateConduitResponse;
+    return data.data[0];
+  }
+
+  public async updateConduitShards(body: UpdateConduitShardsBody, requestOptions?: RequestOptions<'app'>){
+    const data = await this.requestManager.patch('/eventsub/conduits/shards', '', body, { ...requestOptions, useTokenType: 'app' }) as PatchUpdateConduitShardsResponse;
+    if(data.errors.length){
+
+      const error = new Error(`One or more errors have occurred while updating conduit shards:\n\n${data.errors.map((x) => `On Shard ${x.id}: ${x.message}`).join('\n')}`);
+    
+      error.name = '\x1b[31mError while updating shards\x1b[0m';
+
+      throw error;
+
+    }
+    return data.data;
+  }
+
+  public async getConduits(requestOptions?: RequestOptions<'app'>){
+    const data = await this.requestManager.get('/eventsub/conduits', '', { ...requestOptions, useTokenType: 'app' }) as GetConduitsResponse;
+    return data.data;
+  }
+
+  public async deleteConduit(conduit_id: string, requestOptions?: RequestOptions<'app'>){
+    await this.requestManager.delete('/eventsub/conduits', new URLSearchParams({ id: conduit_id }).toString(), { ...requestOptions, useTokenType: 'app' });
+  }
+
+  public async updateConduit(body: UpdateConduitBody, requestOptions?: RequestOptions<'app'>){
+    const data = await this.requestManager.patch('/eventsub/conduits', '', body, { ...requestOptions, useTokenType: 'app' }) as PatchUpdateConduitResponse;
+    return data.data[0];
+  }
+
+  public async getConduitShards(conduit_id: string, status?: string, requestOptions?: RequestOptions<'app', true>){
+
+    const params = new URLSearchParams({ conduit_id });
+
+    if(status) params.append('status', status);
+
+    return await handlePagination(this, '/eventsub/conduits/shards', params.toString(), 'GET', { ...requestOptions, useTokenType: 'app' }) as ConduitShardData[];
+  }
   
   public async refreshToken(token: TokenAdapter<'code', true>){
 

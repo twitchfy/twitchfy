@@ -16,8 +16,6 @@ export class EventSubEventEmitter<U extends WebhookEvents | WebSocketEvents> ext
   }
 }
 
-
-
 export abstract class BaseConnection<K extends ConnectionTypes, U extends WebhookEvents | WebSocketEvents> extends EventSubEventEmitter<U>{
 
   public readonly clientId: string;

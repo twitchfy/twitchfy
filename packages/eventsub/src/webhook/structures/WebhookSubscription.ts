@@ -44,7 +44,7 @@ export class WebhookSubscription<T extends SubscriptionTypes = SubscriptionTypes
 
   public async delete() {
 
-    await this.connection.helixClient.deleteSubscription(this.id);
+    await this.connection.helixClient.deleteEventSubSubscription(this.id);
 
     this.connection.subscriptions.delete(this.id);
 

@@ -8,3 +8,5 @@ export * from './TwitchHelixError';
 export * from './WhisperBody';
 export * from './SendChatMessageBody';
 export * from './SubscriptionBody';
+export * from './UpdateConduitShardsBody';
+export * from './UpdateConduitBody';
