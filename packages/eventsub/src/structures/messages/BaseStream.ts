@@ -11,18 +11,23 @@ export class BaseStream<T extends SubscriptionTypes, K extends ConnectionTypes =
 
   public startedAt: Date;
   
-  public constructor(connection: K, subscription: SubscriptionType<T, K>, id: string, type: StreamTypes, started_at: string){
+  public constructor(connection: K, subscription: SubscriptionType<T, K>, data: BaseStreamData){
   
     super(connection, subscription);
   
-    this.id = id;
+    this.id = data.id;
 
-    this.type = type;
+    this.type = data.type;
 
-    this.startedAt = new Date(started_at);
-  
-    
+    this.startedAt = new Date(data.started_at);
+
   
   }
   
+}
+
+export interface BaseStreamData {
+  id: string;
+  type: StreamTypes;
+  started_at: string;
 }

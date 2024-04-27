@@ -10,16 +10,22 @@ export class BaseUser<T extends SubscriptionTypes, K extends ConnectionTypes = C
 
   public displayName: string;
 
-  public constructor(connection: K, subscription: SubscriptionType<T, K>, id: string, login: string, displayName: string){
+  public constructor(connection: K, subscription: SubscriptionType<T, K>, data: BaseUserData){
 
     super(connection, subscription);
 
-    this.id = id;
+    this.id = data.id;
 
-    this.login = login;
+    this.login = data.login;
 
-    this.displayName = displayName;
+    this.displayName = data.display_name;
 
   }
 
+}
+
+export interface BaseUserData {
+  id: string;
+  login: string;
+  display_name: string;
 }

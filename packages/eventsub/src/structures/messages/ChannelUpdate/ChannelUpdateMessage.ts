@@ -1,4 +1,4 @@
-import { ChannelUpdateBroadcaster } from './ChannelUpdateBroadcaster';
+import { BaseUser } from '../BaseUser';
 import { ChannelUpdateCategory } from './ChannelUpdateCategory';
 import { Base } from '../Base';
 import type { SubscriptionTypes } from '../../../enums';
@@ -8,7 +8,7 @@ import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
 export class ChannelUpdateMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelUpdate, K>{
 
-  public broadcaster: ChannelUpdateBroadcaster<K>;
+  public broadcaster: BaseUser<SubscriptionTypes.ChannelUpdate, K>;
 
   public title: string;
 
@@ -22,7 +22,7 @@ export class ChannelUpdateMessage<K extends ConnectionTypes = ConnectionTypes> e
 
     super(connection, subscription);
 
-    this.broadcaster = new ChannelUpdateBroadcaster(connection, subscription, data.broadcaster_user_id, data.broadcaster_user_login, data.broadcaster_user_name);
+    this.broadcaster = new BaseUser(connection, subscription, { id: data.broadcaster_user_id, login: data.broadcaster_user_login, display_name: data.broadcaster_user_name });
 
     this.title = data.title;
 

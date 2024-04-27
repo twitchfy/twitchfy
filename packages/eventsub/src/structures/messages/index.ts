@@ -6,8 +6,6 @@ export * from './ChannelUpdate';
 export * from './ChannelChatMessage';
 export * from './StreamOnline';
 export * from './Base';
-export * from './BaseBroadcaster';
-export * from './BaseRequester';
 export * from './BaseStream';
 export * from './BaseUser';
 export * from './BaseMessage';
