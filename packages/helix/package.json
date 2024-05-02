@@ -1,6 +1,6 @@
 {
   "name": "@twitchfy/helix",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A powerful node module to interact with twitch api",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/twitchfy/twitchfy#readme",
   "dependencies": {
-    "@twitchfy/api-types": "^1.0.0"
+    "@twitchfy/api-types": "^1.0.1"
   },
   "keywords": [
     "twitch",
