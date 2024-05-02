@@ -10,3 +10,7 @@ export * from './EmoteFormat';
 export * from './StorageAdapterGet';
 export * from './SubscriptionType';
 export * from './BaseConnectionOptions';
+export * from './ConduitOptions';
+export * from './ShardMessages';
+export * from './ParentMessages';
+export * from './ConduitSubscriptionCallback';

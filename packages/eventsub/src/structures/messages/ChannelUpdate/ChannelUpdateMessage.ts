@@ -1,12 +1,13 @@
+import { BaseSubscriptionMessage } from '../BaseSubscriptionMessage';
 import { BaseUser } from '../BaseUser';
 import { ChannelUpdateCategory } from './ChannelUpdateCategory';
-import { Base } from '../Base';
 import type { SubscriptionTypes } from '../../../enums';
 import type { ChannelUpdateEvent } from '../../../interfaces';
 import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
 
-export class ChannelUpdateMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelUpdate, K>{
+
+export class ChannelUpdateMessage<K extends ConnectionTypes = ConnectionTypes> extends BaseSubscriptionMessage<SubscriptionTypes.ChannelUpdate, K>{
 
   public broadcaster: BaseUser<SubscriptionTypes.ChannelUpdate, K>;
 

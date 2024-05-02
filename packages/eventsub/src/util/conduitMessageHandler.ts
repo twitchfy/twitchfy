@@ -1,15 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type Message as WSMessage } from 'websocket';
-import { startup } from './startup';
-import { notificationHandler } from '../../util';
-import type { Message } from '../../types';
-import { WebSocket } from '../structures';
-import type { ReconnectMessage} from '../interfaces';
-import { type WelcomeMessage } from '../interfaces';
-import type { BaseNotification } from '../../interfaces';
-import { Events } from '../../enums';
+import { conduitNotificationHandler } from './conduitNotificationHandler';
+import { WebSocketConduitConnector } from '../structures';
+import type { ReconnectMessage } from '../ws';
+import { type WelcomeMessage } from '../ws';
+import type { BaseNotification } from '../interfaces';
+import type { Message } from '../types';
 
-export async function messageHandler(this: { connector: WebSocket, resolve: () => any }, message: WSMessage) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function conduitMessageHandler(this: { connector: WebSocketConduitConnector, resolve: () => any }, message: WSMessage) {
 
   if (message.type === 'utf8') {
 
@@ -25,23 +23,7 @@ export async function messageHandler(this: { connector: WebSocket, resolve: () =
 
       this.connector.connection.makeDebug(`Received session_welcome message and estabilished sessionId to ${parsedMessage.payload.session.id}`);
 
-      if(!this.connector._oldConnection){
-
-        const fn = startup.bind(this.connector.connection);
-      
-        await fn();
-
-        this.connector.connection.emit(Events.ConnectionReady, (this.connector.connection));
-
-      } else {
-
-        this.connector.connection.makeDebug('Reconnected to another session. No need to start subscriptions again.');
-
-        this.connector.connection.emit(Events.ConnectionReconnect, this.connector.connection, this.connector.connectionURL);
-      }
-
       this.resolve();
-
     }
 
       break;
@@ -50,7 +32,9 @@ export async function messageHandler(this: { connector: WebSocket, resolve: () =
         
       setMessageType<BaseNotification>(parsedMessage);
 
-      await notificationHandler(this.connector.connection, parsedMessage.payload);
+      const fn = conduitNotificationHandler.bind(this.connector.connection);
+
+      await fn(parsedMessage.payload);
         
     }
 
@@ -62,7 +46,7 @@ export async function messageHandler(this: { connector: WebSocket, resolve: () =
 
       this.connector.connection.makeDebug(`Received session_reconnect message. Reconnecting to new reconnect url (${parsedMessage.payload.session.reconnect_url}).`);
 
-      const newConnection = new WebSocket(this.connector.connection);
+      const newConnection = new WebSocketConduitConnector(this.connector.connection);
 
       newConnection._oldConnection = this.connector; 
 

@@ -1,4 +1,4 @@
-import type { TokenAdapter, UserTokenAdapter } from '@twitchfy/helix';
+import type { TokenAdapter } from '@twitchfy/helix';
 import { WebSocket } from './WebSocket';
 import { BaseConnection } from '../../structures/BaseConnection';
 import { Events, type SubscriptionTypes } from '../../enums';
@@ -11,8 +11,6 @@ import { WebSocketSubscription } from './WebSocketSubscription';
 
 export class WebSocketConnection extends BaseConnection<WebSocketConnection, WebSocketEvents>{
 
-  protected userToken: UserTokenAdapter<boolean>;
-
   public readonly proxy?: string;
 
   public ws: WebSocket;
@@ -23,22 +21,11 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
 
     super(options);
 
-    this.userToken = options.userToken;
-
     this.proxy = options.proxy;
 
     this.helixClient.setUserToken(options.userToken);
 
     this.helixClient.preferedToken = 'user';
-
-    const onUserTokenRefresh = this.helixClient.callbacks.onUserTokenRefresh;
-
-    this.helixClient.callbacks.onUserTokenRefresh = (oldToken, newToken) => {
-
-      this.userToken = newToken;
-
-      if(onUserTokenRefresh) onUserTokenRefresh(oldToken, newToken);
-    };
 
     this.ws = new WebSocket(this);
 
@@ -47,9 +34,9 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
   }
 
 
-  public connect() {
+  public async connect() {
 
-    this.ws.connect();
+    await this.ws.connect();
 
   }
 
@@ -104,9 +91,13 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
 
   public setAuth(userToken: TokenAdapter<'code' | 'implicit', boolean>){
     
-    this.userToken = userToken;
+    this.helixClient.setUserToken(userToken);
 
     return this;
+  }
+
+  public get userToken() {
+    return this.helixClient.userToken;
   }
 
 }

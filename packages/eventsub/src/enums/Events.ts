@@ -3,5 +3,6 @@ export enum Events {
     ConnectionReconnect = 'reconnect',
     SubscriptionCreate = 'subscriptionCreate',
     SubscriptionMessage = 'subscriptionMessage',
-    SubscriptionReload = 'subscriptionReload'
+    SubscriptionReload = 'subscriptionReload',
+    ShardConnect = 'shardConnect'
 }

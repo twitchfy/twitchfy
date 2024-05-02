@@ -20,3 +20,4 @@ export * from './Thread';
 export * from './UncompleteMessage';
 export * from './UncompleteUser';
 export * from './Badge';
+export * from './BaseSubscriptionMessage';

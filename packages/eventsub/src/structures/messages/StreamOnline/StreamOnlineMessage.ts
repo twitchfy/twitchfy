@@ -1,12 +1,12 @@
+import { BaseSubscriptionMessage } from '../BaseSubscriptionMessage';
 import { BaseUser } from '../BaseUser';
-import { Base } from '../Base';
 import { BaseStream } from '../BaseStream';
 import type { SubscriptionTypes } from '../../../enums';
 import type { StreamOnlineEvent } from '../../../interfaces';
 import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
 
-export class StreamOnlineMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.StreamOnline, K>{
+export class StreamOnlineMessage<K extends ConnectionTypes = ConnectionTypes> extends BaseSubscriptionMessage<SubscriptionTypes.StreamOnline, K>{
 
   public broadcaster: BaseUser<SubscriptionTypes.StreamOnline, K>;
   public stream: BaseStream<SubscriptionTypes.StreamOnline, K>;

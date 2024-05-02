@@ -1,10 +1,10 @@
-import { Base } from '../Base';
+import { BaseSubscriptionMessage } from '../BaseSubscriptionMessage';
 import { BaseUser } from '../BaseUser';
 import type { ChannelAdBreakBeginEvent } from '../../../interfaces';
 import type { SubscriptionTypes } from '../../../enums';
 import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
-export class ChannelAdBreakBeginMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelAdBreakBegin, K> {
+export class ChannelAdBreakBeginMessage<K extends ConnectionTypes = ConnectionTypes> extends BaseSubscriptionMessage<SubscriptionTypes.ChannelAdBreakBegin, K>{
    
   public broadcaster: BaseUser<SubscriptionTypes.ChannelAdBreakBegin, K>; 
   public requester: BaseUser<SubscriptionTypes.ChannelAdBreakBegin, K>;

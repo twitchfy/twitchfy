@@ -4,19 +4,19 @@ import { AsyncEventEmitter } from '@vladfrangu/async_event_emitter';
 import { HelixClient } from '@twitchfy/helix';
 import { SubscriptionCollection } from './SubscriptionCollection';
 import type { ConnectionTypes, SubscriptionOptions, SubscriptionType, BaseConnectionOptions } from '../types';
-import type { WebhookEvents, WebSocketEvents } from '../interfaces';
+import type { ConduitEvents, WebhookEvents, WebSocketEvents } from '../interfaces';
 import type { SubscriptionTypes } from '../enums';
 import { Logger } from '../logger';
 import type { StorageAdapter } from '../storage';
 
 
-export class EventSubEventEmitter<U extends WebhookEvents | WebSocketEvents> extends AsyncEventEmitter<U> {
+export class EventSubEventEmitter<U extends WebhookEvents | WebSocketEvents | ConduitEvents> extends AsyncEventEmitter<U> {
   public constructor() {
     super();
   }
 }
 
-export abstract class BaseConnection<K extends ConnectionTypes, U extends WebhookEvents | WebSocketEvents> extends EventSubEventEmitter<U>{
+export abstract class BaseConnection<K extends ConnectionTypes, U extends WebhookEvents | WebSocketEvents | ConduitEvents> extends EventSubEventEmitter<U>{
 
   public readonly clientId: string;
 

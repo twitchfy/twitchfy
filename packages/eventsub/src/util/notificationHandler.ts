@@ -2,9 +2,10 @@
 import { ChannelUpdateMessage, ChannelFollowMessage, ChannelChatClearMessage, StreamOnlineMessage, ChannelAdBreakBeginMessage, ChannelChatClearUserMessagesMessage, ChannelChatMessageMessage } from '../structures';
 import { SubscriptionTypes } from '../enums';
 import type { BasePayload } from '../interfaces';
-import type { ConnectionTypes } from '../types';
+import type { WebhookConnection } from '../webhook';
+import type { WebSocketConnection } from '../ws';
 
-export async function notificationHandler(connection: ConnectionTypes, payload: BasePayload<SubscriptionTypes>){
+export async function notificationHandler(connection: WebhookConnection | WebSocketConnection, payload: BasePayload<SubscriptionTypes>){
 
   switch(payload.subscription.type){
 

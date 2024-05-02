@@ -15,11 +15,11 @@ export class SubscriptionCollection<K extends ConnectionTypes = ConnectionTypes,
     return super.set(key, value) as any;
   }
 
-  public exist<U extends T>(type: U, options: SubscriptionTypeOptions[U]){
+  public exist<U extends T>(type: U, options: SubscriptionTypeOptions[U]): SubscriptionType<U, K>{
 
     const subscriptions = Array.from(this.values());
 
-    return subscriptions.find((x) => x.checkSubscriptionType(type) && JSON.stringify(x.options) === JSON.stringify(options)); 
+    return subscriptions.find((x) => x.checkSubscriptionType(type) && JSON.stringify(x.options) === JSON.stringify(options)) as SubscriptionType<U, K>; 
 
   }
 }

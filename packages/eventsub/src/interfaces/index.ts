@@ -8,3 +8,4 @@ export * from './StorageOptions';
 export * from './EventSubEvents';
 export * from './WebhookEvents';
 export * from './WebSocketEvents';
+export * from './ConduitEvents';

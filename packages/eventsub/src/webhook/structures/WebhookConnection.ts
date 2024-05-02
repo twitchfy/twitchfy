@@ -11,7 +11,7 @@ import { SubscriptionRouter } from '../routes';
 import { BaseConnection } from '../../structures/BaseConnection';
 import { Events, type SubscriptionTypes } from '../../enums';
 import { SubscriptionVersionsObject } from '../../util';
-import type { SubscriptionOptions } from '../../types';
+import type { StorageAdapterGet, SubscriptionOptions } from '../../types';
 import type { WebhookEvents } from '../../interfaces';
 
 export class WebhookConnection extends BaseConnection<WebhookConnection, WebhookEvents> {
@@ -19,8 +19,6 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
   public readonly server: Express;
 
   public readonly baseURL: string;
-
-  protected appToken: TokenAdapter<'app', boolean>;
 
   public readonly secret: string;
 
@@ -37,19 +35,6 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
     this.baseURL = options.baseURL;
 
-    this.appToken = options.appToken;
-
-    this.helixClient.setAppToken(options.appToken);
-
-    const onAppTokenRefresh = this.helixClient.callbacks.onAppTokenRefresh;
-    
-    this.helixClient.callbacks.onAppTokenRefresh = (oldToken, newToken) => {
-
-      this.appToken = newToken;
-
-      if(onAppTokenRefresh) onAppTokenRefresh(oldToken, newToken);
-    };
-
     this.secret = options.secret;
 
     this.subscriptionRoute = options.subscriptionRoute ? parseRoute(options.subscriptionRoute) : '/subscriptions';
@@ -58,7 +43,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
     this.server = server;
 
-    this.dropSubsAtStart = typeof options.dropSubsAtStart === 'boolean'? options.dropSubsAtStart : this.maintainSubscriptions? false : true;
+    this.dropSubsAtStart = typeof options.dropSubsAtStart === 'boolean'? options.dropSubsAtStart : false;
 
   }
 
@@ -122,10 +107,14 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
   public setAuth(appToken: TokenAdapter<'app', boolean>){
 
-    this.appToken = appToken;
+    this.helixClient.setAppToken(appToken);
 
     return this;
 
+  }
+
+  public get appToken(){
+    return this.helixClient.appToken;
   }
 
   private async startup() {
@@ -140,7 +129,13 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
       this.makeDebug(`Fetched a total of ${apiSubs.length} API Subscriptions. Filtered to ${filteredSubs.length} for this callback ${this.baseURL}${this.subscriptionRoute}.`);
 
-      for await(const data of await this.storage.getAll()){
+      const storage = (await this.storage.getAll()).reduce((acc: StorageAdapterGet<WebhookConnection>[], x: StorageAdapterGet<WebhookConnection>) => {
+        const equal = acc.find((i) => i.type === x.type && JSON.stringify(i.options) === JSON.stringify(x.options));
+        if(!equal) acc.push(x);
+        return acc;
+      }, []);
+
+      for await(const data of storage){
 
         if(!data.secret){
           
@@ -174,7 +169,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
           this.subscriptions.set(subscription.id, subscription);
 
-          this.makeDebug(`Created subscription as it couldn't be reloaded (${subscription.type}) (not exist or it's status was revoked) ${subscription.id}`);
+          this.makeDebug(`Created subscription as it couldn't be reloaded (${subscription.type}) (not exist or it status was revoked) ${subscription.id}`);
 
           this.emit(Events.SubscriptionReload, subscription);
 

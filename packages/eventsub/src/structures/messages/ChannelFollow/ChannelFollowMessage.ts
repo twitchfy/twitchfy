@@ -1,10 +1,10 @@
+import { BaseSubscriptionMessage } from '../BaseSubscriptionMessage';
 import { BaseUser } from '../BaseUser';
-import { Base } from '../Base';
 import type { SubscriptionTypes } from '../../../enums';
 import type { ChannelFollowEvent } from '../../../interfaces';
 import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
-export class ChannelFollowMessage<K extends ConnectionTypes = ConnectionTypes> extends Base<SubscriptionTypes.ChannelFollow, K>{
+export class ChannelFollowMessage<K extends ConnectionTypes = ConnectionTypes> extends BaseSubscriptionMessage<SubscriptionTypes.ChannelFollow, K>{
 
   public broadcaster: BaseUser<SubscriptionTypes.ChannelFollow, K>;
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { Express} from 'express';
 import { urlencoded, json } from 'express';
 import { parseRoute } from './parseRoute';
