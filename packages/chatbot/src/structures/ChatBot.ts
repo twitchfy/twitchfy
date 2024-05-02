@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { Events, WebhookConnection, WebSocketConnection } from '@twitchfy/eventsub';
+import { Conduit, Events, WebhookConnection, WebSocketConnection } from '@twitchfy/eventsub';
 import type { GetClipsOptions, GetStreamsOptions } from '@twitchfy/helix';
 import { HelixClient } from '@twitchfy/helix';
 import { join } from 'path';
@@ -186,12 +186,24 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
       const { clientId, clientSecret, eventsub } = options as ChatBotOptions<EventSubConnection.Webhook>;
 
       this.helixClient.setAppToken(eventsub.appToken);
+
       // @ts-expect-error
 
       return new WebhookConnection({ clientId, clientSecret, ...eventsub }, eventsub.server);
     }
 
       break;
+
+    case EventSubConnection.Conduit: {
+
+      const { clientId, clientSecret, eventsub } = options as ChatBotOptions<EventSubConnection.Conduit>;
+
+      this.helixClient.setAppToken(eventsub.appToken);
+
+      // @ts-expect-error
+      return new Conduit({ clientId, clientSecret, ...eventsub });
+
+    }
 
     }
 
@@ -245,7 +257,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
     this.user = new ChatBotUser(this, await this.helixClient.getUser(this.userId));
 
     // @ts-expect-error
-    await (this.eventsub instanceof WebhookConnection ? this.eventsub.start(options.port, options.callback) : this.eventsub.connect());
+    await ((this.eventsub instanceof WebhookConnection || this.eventsub instanceof Conduit) ? this.eventsub.start(options.port, options.callback) : this.eventsub.connect());
   
     const readyEvent = this.events.get('ChatBotReady');
 

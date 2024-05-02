@@ -1,4 +1,4 @@
-import type { WebhookConnection, WebSocketConnection } from '@twitchfy/eventsub';
+import type { Conduit, WebhookConnection, WebSocketConnection } from '@twitchfy/eventsub';
 import type { EventSubConnection } from '../enums';
 
 /**
@@ -8,4 +8,5 @@ import type { EventSubConnection } from '../enums';
 export interface EventSubConnectionMap{
     [EventSubConnection.WebSocket]: WebSocketConnection
     [EventSubConnection.Webhook]: WebhookConnection
+    [EventSubConnection.Conduit]: Conduit
 }

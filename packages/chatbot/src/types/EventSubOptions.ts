@@ -1,4 +1,4 @@
-import type { WebhookConnectionOptions, WebSocketConnectionOptions } from '@twitchfy/eventsub';
+import type { ConduitOptions, WebhookConnectionOptions, WebSocketConnectionOptions } from '@twitchfy/eventsub';
 import type { Express } from 'express';
 import type { EventSubConnection } from '../enums';
 
@@ -11,6 +11,6 @@ type OmitClientProps<T> = T extends { clientId: string; clientSecret: string } ?
  * The options for the EventSub connection.
  */
 export type EventSubOptions<T extends EventSubConnection> =
-  (T extends EventSubConnection.WebSocket ? OmitClientProps<WebSocketConnectionOptions> :
-    OmitClientProps<WebhookConnectionOptions> & { server: Express });
+  (T extends EventSubConnection.WebSocket ? OmitClientProps<WebSocketConnectionOptions> : T extends EventSubConnection.Webhook ?
+    OmitClientProps<WebhookConnectionOptions> & { server: Express } : OmitClientProps<ConduitOptions>);
 

@@ -3,5 +3,6 @@
  */
 export enum EventSubConnection{
     'WebSocket' = 0,
-    'Webhook' = 1
+    'Webhook' = 1,
+    'Conduit' = 2
 }

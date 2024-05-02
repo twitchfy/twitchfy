@@ -41,6 +41,7 @@ export async function handleOnMessage<T extends EventSubConnection>(this: ChatBo
 
   Object.keys(options).filter((x) => !command.options[x]).map((x) => delete options[x]);
 
+  // @ts-expect-error
   const context = new TwitchContext<typeof command.options, T>(this, { ...data, prefix, commandName: commandName!, options });
 
   if(command.permissions){
