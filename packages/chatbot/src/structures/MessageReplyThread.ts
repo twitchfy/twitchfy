@@ -20,8 +20,8 @@ export class MessageReplyThread<T extends EventSubConnection> extends BaseMessag
    * @param data The data of the message.
    * @param chatroom The chatroom where the message was sent.
    */
-  public constructor(chatbot: ChatBot<T>, data: BaseMessageData, chatroom: ChatRoom<T>){
-    super(chatbot, data);
+  public constructor(chatbot: ChatBot<T>, data: Omit<BaseMessageData, 'content'>, chatroom: ChatRoom<T>){
+    super(chatbot, { ...data, content: null });
     this.chatroom = chatroom;
   }
 }
