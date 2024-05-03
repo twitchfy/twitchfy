@@ -1,7 +1,7 @@
 {
   "name": "@twitchfy/eventsub",
-  "version": "1.0.2",
-  "description": "A powerful node module to interact with the EventSub on Twitch.",
+  "version": "1.0.3",
+  "description": "A powerful node module to interact with the EventSub API over Twitch.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "readme": "README.md",
