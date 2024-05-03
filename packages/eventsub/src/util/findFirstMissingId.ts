@@ -1,5 +1,9 @@
 import type { ConduitShardData } from '@twitchfy/api-types';
 
+/**
+ * Finds the first unused or disable shard in a conduit and returns its id.
+ * @param shards The id that was found.
+ */
 export function findFirstMissingId(shards: ConduitShardData[]) {
   shards.sort((a, b) => parseInt(a.id) - parseInt(b.id));
   for (let i = 0; i < shards.length - 1; i++) {

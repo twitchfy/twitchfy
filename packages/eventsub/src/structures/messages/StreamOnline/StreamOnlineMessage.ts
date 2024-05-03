@@ -5,12 +5,26 @@ import type { SubscriptionTypes } from '../../../enums';
 import type { StreamOnlineEvent } from '../../../interfaces';
 import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
-
+/**
+ * The message received by the StreamOnline event.
+ */
 export class StreamOnlineMessage<K extends ConnectionTypes = ConnectionTypes> extends BaseSubscriptionMessage<SubscriptionTypes.StreamOnline, K>{
 
-  public broadcaster: BaseUser<SubscriptionTypes.StreamOnline, K>;
-  public stream: BaseStream<SubscriptionTypes.StreamOnline, K>;
+  /**
+   * The broadcaster of the stream which went online.
+   */
+  public readonly broadcaster: BaseUser<SubscriptionTypes.StreamOnline, K>;
+  /**
+   * The stream which went online.
+   */
+  public readonly stream: BaseStream<SubscriptionTypes.StreamOnline, K>;
 
+  /**
+   * Builds up a StreamOnline message.
+   * @param connection The EventSub connection used.
+   * @param subscription The subscription which trigger this message.
+   * @param data The event data received with the subscription.
+   */
   public constructor(connection: K, subscription: SubscriptionType<SubscriptionTypes.StreamOnline, K>, data: StreamOnlineEvent){
 
     super(connection, subscription);

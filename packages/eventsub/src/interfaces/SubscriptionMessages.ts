@@ -2,6 +2,9 @@ import type { ChannelUpdateMessage, ChannelFollowMessage, ChannelChatClearMessag
 import type { SubscriptionTypes } from '../enums';
 import type { ConnectionTypes } from '../types';
 
+/**
+ * The messages from every EventSub event.
+ */
 export interface SubscriptionMessages<K extends ConnectionTypes = ConnectionTypes> {
     [SubscriptionTypes.ChannelFollow]: ChannelFollowMessage<K>
     [SubscriptionTypes.ChannelUpdate]: ChannelUpdateMessage<K>

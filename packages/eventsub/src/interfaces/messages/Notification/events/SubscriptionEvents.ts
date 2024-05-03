@@ -7,6 +7,10 @@ import type { ChannelChatClearUserMessagesEvent } from './ChannelChatClearUserMe
 import type { ChannelChatMessageEvent } from './ChannelChatMessage/ChannelChatMessageEvent';
 import type { SubscriptionTypes } from '../../../../enums';
 
+/**
+ * The events that can be sent by Twitch and are supported by the package.
+ 
+ */
 export interface SubscriptionEvents {
     [SubscriptionTypes.ChannelFollow]: ChannelFollowEvent;
     [SubscriptionTypes.ChannelUpdate]: ChannelUpdateEvent;

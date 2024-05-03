@@ -6,12 +6,25 @@ import type { SubscriptionMessages } from '../../interfaces';
 import type { SubscriptionTypes}  from '../../enums';
 import type { SubscriptionCallback } from '../../types';
 
+/**
+ * The callback manager for a WebSocketSubscription.
+ */
 export class WebSocketSubscriptionCallbackManager<T extends SubscriptionTypes>{
 
-  public connection: WebSocketConnection;
+  /**
+   * The connection that created this manager.
+   */
+  public readonly connection: WebSocketConnection;
 
+  /**
+   * The callbacks for this manager.
+   */
   private callbacks: SubscriptionCallback<T>[];
 
+  /**
+   * Creates a new WebSocketSubscriptionCallbackManager.
+   * @param connection The connection that created this manager.
+   */
   public constructor(connection: WebSocketConnection){
 
     this.connection = connection;
@@ -19,6 +32,11 @@ export class WebSocketSubscriptionCallbackManager<T extends SubscriptionTypes>{
     this.callbacks = [];
   }
 
+  /**
+   * Adds a callback to the manager.
+   * @param callback The callback to add.
+   * @returns The manager.
+   */
   public add(callback: WebSocketSubscriptionCallback<T>): this {
         
     this.callbacks.push(callback);
@@ -27,6 +45,10 @@ export class WebSocketSubscriptionCallbackManager<T extends SubscriptionTypes>{
 
   }
 
+  /**
+   * Executes all the callbacks with the message.
+   * @param message The message to execute the callbacks with.
+   */
   public async execute(message: SubscriptionMessages<WebSocketConnection>[T]){
 
     for await(const callback of this.callbacks){

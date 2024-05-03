@@ -8,15 +8,30 @@ import type { SubscriptionOptions } from '../../types';
 import type { WebSocketEvents } from '../../interfaces';
 import { WebSocketSubscription } from './WebSocketSubscription';
 
-
+/**
+ * The WebSocket connection used for EventSub.
+ */
 export class WebSocketConnection extends BaseConnection<WebSocketConnection, WebSocketEvents>{
 
+  /**
+   * The proxy url used for the connection.
+   */
   public readonly proxy?: string;
 
+  /**
+   * The WebSocket client used for the connection.
+   */
   public ws: WebSocket;
 
+  /**
+   * The session id of the connection.
+   */
   public sessionId: string | null;
 
+  /**
+   * Builds up a new WebSocketConnection.
+   * @param options The options for the connection.
+   */
   public constructor(options: WebSocketConnectionOptions){
 
     super(options);
@@ -33,7 +48,9 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
 
   }
 
-
+  /**
+   * Connects to the WebSocket server.
+   */
   public async connect() {
 
     await this.ws.connect();
@@ -88,7 +105,11 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
 
   }
   
-
+  /**
+   * Sets the user token for the connection.
+   * @param userToken The new user token to set.
+   * @returns The connection.
+   */
   public setAuth(userToken: TokenAdapter<'code' | 'implicit', boolean>){
     
     this.helixClient.setUserToken(userToken);
@@ -96,6 +117,9 @@ export class WebSocketConnection extends BaseConnection<WebSocketConnection, Web
     return this;
   }
 
+  /**
+   * Gets the user token that is being used for the connection.
+   */
   public get userToken() {
     return this.helixClient.userToken;
   }

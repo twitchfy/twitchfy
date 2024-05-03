@@ -6,7 +6,6 @@ export * from './SubscriptionMessage';
 export * from './SubscriptionOptions';
 export * from './FragmentTypes';
 export * from './MessageTypes';
-export * from './EmoteFormat';
 export * from './StorageAdapterGet';
 export * from './SubscriptionType';
 export * from './BaseConnectionOptions';

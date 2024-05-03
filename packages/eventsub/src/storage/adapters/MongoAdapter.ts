@@ -4,7 +4,9 @@ import type { SubscriptionTypes } from '../../enums';
 import type { ConnectionTypes, SubscriptionType, StorageAdapterGet } from '../../types';
 import { WebhookSubscription } from '../../webhook';
 
-
+/**
+ * The MongoDB storage adapter.
+ */
 export class MongoAdapter<K extends ConnectionTypes> extends StorageAdapter<K> {
 
   public constructor(){

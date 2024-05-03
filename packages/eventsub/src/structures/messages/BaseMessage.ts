@@ -6,22 +6,52 @@ import type { ConnectionTypes, MessageTypes, SubscriptionType } from '../../type
 import type { ChannelChatMessageEvent } from '../../interfaces';
 
 
+/**
+ * The message sent by the ChannelChatMessage event.
+ */
 export class BaseMessage<T extends SubscriptionTypes, K extends ConnectionTypes = ConnectionTypes> extends Base<T, K> {
 
-  public id: string;
+  /**
+   * The ID of the message.
+   */
+  public readonly id: string;
 
-  public type: MessageTypes;
+  /**
+   * The type of the message.
+   */
+  public readonly type: MessageTypes;
 
-  public content: string;
+  /**
+   * The content of the message.
+   */
+  public readonly content: string;
 
-  public fragments: Fragment[];
+  /**
+   * The fragments of the message.
+   */
+  public readonly fragments: Fragment[];
   
-  public reply: MessageReply;
+  /**
+   * The reply to the message. Null if there is no reply.
+   */
+  public readonly reply: MessageReply | null;
 
-  public bits: number;
+  /**
+   * The number of bits sent with the message.
+   */
+  public readonly bits: number;
 
-  public channelRewardId: string | null;
+  /**
+   * The ID of the channel points reward used to send the message. Null if the message was not sent using a channel points reward.
+   */
+  public readonly channelRewardId: string | null;
 
+  /**
+   * Builds up a BaseMessage.
+   * @param connection The EventSub connection used.
+   * @param subscription The subscription which trigger this message.
+   * @param data The event data received with the subscription.
+   */
   public constructor(connection: K, subscription: SubscriptionType<T, K>, data: ChannelChatMessageEvent){
 
     super(connection, subscription);

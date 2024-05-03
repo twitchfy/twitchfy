@@ -8,12 +8,25 @@ import type { SubscriptionTypes}  from '../../enums';
 import type { SubscriptionCallback } from '../../types';
 
 
+/**
+ * The Webhook Subscription Callback Manager.
+ */
 export class WebhookSubscriptionCallbackManager<T extends SubscriptionTypes>{
 
-  public connection: WebhookConnection;
+  /**
+   * The connection used for this subscription.
+   */
+  public readonly connection: WebhookConnection;
 
+  /**
+   * The callbacks for this subscription.
+   */
   private callbacks: SubscriptionCallback<T>[];
 
+  /**
+   * Builds up a new WebhookSubscriptionCallbackManager.
+   * @param connection The connection used for this subscription.
+   */
   public constructor(connection: WebhookConnection){
 
     this.connection = connection;
@@ -21,6 +34,11 @@ export class WebhookSubscriptionCallbackManager<T extends SubscriptionTypes>{
     this.callbacks = [];
   }
 
+  /**
+   * Adds a new callback to the subscription. This callback will be executed when a message within this subscription is received.
+   * @param callback The callback to add.
+   * @returns The manager.
+   */
   public add(callback: WebhookSubscriptionCallback<T>): this {
         
     this.callbacks.push(callback);
@@ -29,9 +47,18 @@ export class WebhookSubscriptionCallbackManager<T extends SubscriptionTypes>{
 
   }
 
-  public execute(message: SubscriptionMessages[T]){
+  /**
+   * Executes all the callbacks of the subscription.
+   * @param message The message to execute the callbacks with.
+   * @returns
+   */
+  public async execute(message: SubscriptionMessages[T]){
 
-    this.callbacks.forEach((c) => c(message));
+    for(const callback of this.callbacks){
+    
+      await callback(message);
+    
+    }
 
   }
 

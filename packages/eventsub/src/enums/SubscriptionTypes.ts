@@ -1,3 +1,6 @@
+/**
+ * Types of subscriptions that can be created.
+ */
 export enum SubscriptionTypes {
     ChannelUpdate = 'channel.update',
     ChannelFollow = 'channel.follow',

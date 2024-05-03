@@ -1,18 +1,37 @@
+import type { BaseUserData } from './BaseUser';
+
+/**
+ * Represents a user that is not fully completed as it doesn't have connection and subscription fields from BaseUser.
+ */
 export class UncompleteUser {
 
-  public id: string;
+  /**
+   * The ID of the user.
+   */
+  public readonly id: string;
 
-  public login: string;
+  /**
+   * The login name of the user.
+   */
+  public readonly login: string;
 
-  public displayName: string;
 
-  public constructor(id: string, login: string, displayName: string){
+  /**
+   * The display name of the user.
+   */
+  public readonly displayName: string;
 
-    this.id = id;
+  /**
+   * Builds up a user that is not fully complete.
+   * @param data The data of the user.
+   */
+  public constructor(data: BaseUserData){
 
-    this.login = login;
+    this.id = data.id;
 
-    this.displayName = displayName;
+    this.login = data.login;
+
+    this.displayName = data.display_name;
 
   }
 

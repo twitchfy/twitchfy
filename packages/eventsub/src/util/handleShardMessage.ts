@@ -6,6 +6,11 @@ import type { BasePayload } from '../interfaces';
 import type { SubscriptionTypes } from '../enums';
 import { Events } from '../enums';
 
+/**
+ * Handles a shard message received by the parent process.
+ *
+ * @param message The message to handle.
+ */
 export async function handleShardMessage(this: { conduit: Conduit, worker: Worker, resolve: () => void }, message: ShardMessages) {
 
   switch (message.topic) {

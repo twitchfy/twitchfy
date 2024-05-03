@@ -4,12 +4,27 @@ import type { SubscriptionTypes } from '../../../enums';
 import type { ChannelChatClearUserMessagesEvent } from '../../../interfaces';
 import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
+/**
+ * The message received by the ChannelChatClearUserMessages event.
+ */
 export class ChannelChatClearUserMessagesMessage<K extends ConnectionTypes = ConnectionTypes> extends BaseSubscriptionMessage<SubscriptionTypes.ChannelChatClearUserMessages, K>{
 
-  public broadcaster: BaseUser<SubscriptionTypes.ChannelChatClearUserMessages, K>;
+  /**
+   * The broadcaster of the channel where the user chat messages were cleared.
+   */
+  public readonly broadcaster: BaseUser<SubscriptionTypes.ChannelChatClearUserMessages, K>;
     
-  public user: BaseUser<SubscriptionTypes.ChannelChatClearUserMessages, K>;
+  /**
+   * The user whose messages were cleared.
+   */
+  public readonly user: BaseUser<SubscriptionTypes.ChannelChatClearUserMessages, K>;
 
+  /**
+   * Builds up a ChannelChatClearUserMessages message.
+   * @param connection The EventSub connection used.
+   * @param subscription The subscription which trigger this message.
+   * @param data The event data received with the subscription.
+   */
   public constructor(connection: K, subscription: SubscriptionType<SubscriptionTypes.ChannelChatClearUserMessages, K>, data: ChannelChatClearUserMessagesEvent){
 
     super(connection, subscription);

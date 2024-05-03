@@ -6,19 +6,42 @@ import type { ChannelUpdateEvent } from '../../../interfaces';
 import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
 
-
+/**
+ * The message received by the ChannelUpdate event.
+ */
 export class ChannelUpdateMessage<K extends ConnectionTypes = ConnectionTypes> extends BaseSubscriptionMessage<SubscriptionTypes.ChannelUpdate, K>{
 
-  public broadcaster: BaseUser<SubscriptionTypes.ChannelUpdate, K>;
+  /**
+   * The broadcaster of the channel which was updated.
+   */
+  public readonly broadcaster: BaseUser<SubscriptionTypes.ChannelUpdate, K>;
 
-  public title: string;
+  /**
+   * The title of the channel after it was updated.
+   */
+  public readonly title: string;
 
-  public language: string;
+  /**
+   * The language of the channel after it was updated.
+   */
+  public readonly language: string;
 
-  public category: ChannelUpdateCategory<K>;
+  /**
+   * The category of the channel after it was updated.
+   */
+  public readonly category: ChannelUpdateCategory<K>;
 
-  public labels: string[];
+  /**
+   * The content classification labels of the channel after it was updated.
+   */
+  public readonly labels: string[];
 
+  /**
+   * Builds up a ChannelUpdate message.
+   * @param connection The EventSub connection used.
+   * @param subscription The subscription which trigger this message.
+   * @param data The event data received with the subscription.
+   */
   public constructor(connection: K, subscription: SubscriptionType<SubscriptionTypes.ChannelUpdate, K>, data: ChannelUpdateEvent){
 
     super(connection, subscription);

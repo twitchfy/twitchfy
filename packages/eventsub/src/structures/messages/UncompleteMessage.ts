@@ -1,15 +1,39 @@
+/**
+ * Represents a message that is not fully complete.
+ */
 export class UncompleteMessage {
 
-  public id: string;
+  /**
+   * The ID of the message.
+   */
+  public readonly id: string;
 
-  public content: string;
+  /**
+   * The content of the message.
+   */
+  public readonly content: string;
 
-  public constructor(id: string, content: string){
+  /**
+   * Builds up a message that is not fully complete.
+   * @param data The data of the message.
+   */
+  public constructor(data: UncompleteMessageData){
 
-    this.id = id;
+    this.id = data.id;
 
-    this.content = content;
+    this.content = data.content;
 
   }
 
+}
+
+export interface UncompleteMessageData {
+    /**
+     * The ID of the message.
+     */
+    id: string;
+    /**
+     * The content of the message.
+     */
+    content: string;
 }

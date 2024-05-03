@@ -9,6 +9,11 @@ import { type WelcomeMessage } from '../interfaces';
 import type { BaseNotification } from '../../interfaces';
 import { Events } from '../../enums';
 
+/**
+ * Handles a message received from the websocket server.
+ * @param this The this object
+ * @param message The message received from the websocket server.
+ */
 export async function messageHandler(this: { connector: WebSocket, resolve: () => any }, message: WSMessage) {
 
   if (message.type === 'utf8') {

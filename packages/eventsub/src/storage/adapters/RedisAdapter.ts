@@ -6,11 +6,17 @@ import type { SubscriptionTypes } from '../../enums';
 import { WebhookSubscription } from '../../webhook';
 import type { ConnectionTypes, StorageAdapterGet, SubscriptionType } from '../../types';
 
-
+/**
+ * The Redis storage adapter.
+ */
 export class RedisAdapter<K extends ConnectionTypes> extends StorageAdapter<K>{
     
   public client: Redis;
 
+  /**
+   * Builds up the Redis storage adapter.
+   * @param data The data for the redis connection.
+   */
   public constructor(data: ({ options: RedisOptions} | { client: Redis } | {}) = {}){
 
     super();

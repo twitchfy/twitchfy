@@ -1,6 +1,11 @@
 import { readdir, stat } from 'fs/promises';
 import { extname, join, resolve } from 'path';
 
+/**
+ * Loads all shards path from the specified paths and directories.
+ *
+ * @param paths The paths to load the shards from.
+ */
 export async function loadShards(paths: string[]): Promise<string[]> {
   const jsFiles: string[] = [];
 

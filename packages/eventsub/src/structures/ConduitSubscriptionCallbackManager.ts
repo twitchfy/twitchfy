@@ -3,10 +3,19 @@ import type { SubscriptionMessages } from '../interfaces';
 import type { ConduitSubscriptionCallback, SubscriptionCallback } from '../types';
 import type { SubscriptionTypes } from '../enums';
 
+/**
+ * The callback manager for a ConduitSubscription.
+ */
 export class ConduitSubscriptionCallbackManager<T extends SubscriptionTypes> {
 
-  public conduit: Conduit;
+  /**
+   * The Conduit that created this manager.
+   */
+  public readonly conduit: Conduit;
     
+  /**
+   * The callbacks for this manager.
+   */
   private callbacks: SubscriptionCallback<T>[];
   
   public constructor(conduit: Conduit){
@@ -16,6 +25,11 @@ export class ConduitSubscriptionCallbackManager<T extends SubscriptionTypes> {
     this.callbacks = [];
   }
   
+  /**
+   * Adds a callback to the manager.
+   * @param callback The callback to add.
+   * @returns The manager.
+   */
   public add(callback: ConduitSubscriptionCallback<T>): this {
           
     this.callbacks.push(callback);
@@ -24,9 +38,17 @@ export class ConduitSubscriptionCallbackManager<T extends SubscriptionTypes> {
   
   }
   
-  public execute(message: SubscriptionMessages[T]){
+  /**
+   * Executes all the callbacks with the message.
+   * @param message The message to execute the callbacks with.
+   */
+  public async execute(message: SubscriptionMessages[T]){
   
-    this.callbacks.forEach((c) => c(message));
+    for(const callback of this.callbacks){
+    
+      await callback(message);
+    
+    }
   
   }
   

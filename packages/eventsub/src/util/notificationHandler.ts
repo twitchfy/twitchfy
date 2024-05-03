@@ -5,6 +5,11 @@ import type { BasePayload } from '../interfaces';
 import type { WebhookConnection } from '../webhook';
 import type { WebSocketConnection } from '../ws';
 
+/**
+ * Handles a subscription notification in a connection excluding the conduit.
+ * @param connection The connection to handle the notification in.
+ * @param payload The payload of the notification.
+ */
 export async function notificationHandler(connection: WebhookConnection | WebSocketConnection, payload: BasePayload<SubscriptionTypes>){
 
   switch(payload.subscription.type){

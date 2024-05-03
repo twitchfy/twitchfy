@@ -1,3 +1,6 @@
+/**
+ * A helper for determining the latest version of a subscription type.
+ */
 export const SubscriptionVersionsObject = {
   'channel.update': '2',
   'channel.follow': '2',

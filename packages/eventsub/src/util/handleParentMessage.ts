@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import type { WebhookConduit, WebSocketConduit } from '../structures';
+import type { WebhookShard, WebSocketShard } from '../structures';
 import type { ParentMessages } from '../types';
 
-export async function handleParentMessage(this: WebhookConduit | WebSocketConduit, message: ParentMessages){
+/**
+ * Handles a parent message within a shard.
+ *
+ * @param message The message to handle.
+ */
+export async function handleParentMessage(this: WebhookShard | WebSocketShard, message: ParentMessages){
   switch(message.topic){
     
   case 'shardId.replace': {

@@ -3,14 +3,16 @@ import { Router } from 'express';
 import { conduitNotificationHandler } from './conduitNotificationHandler';
 import type { BasePayload } from '../interfaces';
 import type { SubscriptionTypes } from '../enums';
-import type { WebhookConduit } from '../structures';
+import type { WebhookShard } from '../structures';
 
-
+/**
+ * The router for the conduit subscription route.
+ */
 export const ConduitSubscriptionRouter: IRouter = Router();
 
 ConduitSubscriptionRouter.post('/', async(req: Request, res) => {
 
-  const connection = res.locals.webhookConnection as WebhookConduit;
+  const connection = res.locals.webhookConnection as WebhookShard;
 
   const body = req.body;
 

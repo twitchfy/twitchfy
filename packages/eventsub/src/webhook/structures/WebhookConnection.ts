@@ -14,21 +14,48 @@ import { SubscriptionVersionsObject } from '../../util';
 import type { StorageAdapterGet, SubscriptionOptions } from '../../types';
 import type { WebhookEvents } from '../../interfaces';
 
+/**
+ * A Webhook Connection.
+ */
 export class WebhookConnection extends BaseConnection<WebhookConnection, WebhookEvents> {
 
+  /**
+   * The express server used for receiving Twitch data.
+   */
   public readonly server: Express;
 
+  /**
+   * The base URL for the webhook callback.
+   */
   public readonly baseURL: string;
 
+  /**
+   * The secret used for creating subscriptions within this connection.
+   */
   public readonly secret: string;
 
+  /**
+   * Whether to start the server when the connection is started.
+   */
   public readonly startServer: boolean;
 
+  /**
+   * The route for receiving Twitch messages.
+   * @default /subscriptions
+   */
   public readonly subscriptionRoute: string;
 
+  /**
+   * Whether to drop subscriptions at start. This will delete all subscriptions that are currently active within the client (only webhook created) to avoid duplicated subscriptions if any storage was set.
+   */
   public readonly dropSubsAtStart: boolean;
-  
 
+
+  /**
+   * Builds up a new WebhookConnection.
+   * @param options The options for the connection.
+   * @param server The express server used for receiving Twitch data.
+   */
   public constructor(options: WebhookConnectionOptions, server: Express){
 
     super(options);
@@ -47,11 +74,19 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
   }
 
+
+  /**
+   * The URL for the webhook callback. This is a join between the base url and the subscription route.
+   */
+  public get url(){
+    return `${this.baseURL}${this.subscriptionRoute}`;
+  }
+
   public async subscribe<T extends SubscriptionTypes>(options: SubscriptionOptions<T>){
 
     const { type, options: subscriptionOptions } = options;
  
-    const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret: this.secret }, condition: subscriptionOptions }, { useTokenType: 'app' });
+    const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: this.url, secret: this.secret }, condition: subscriptionOptions }, { useTokenType: 'app' });
 
     const subscription = new WebhookSubscription<T>(this, options, data, this.secret);
 
@@ -76,7 +111,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
       
       const { type, options: subscriptionOptions } = sub;
  
-      const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: `${this.baseURL}${this.subscriptionRoute}`, secret: this.secret }, condition: subscriptionOptions }, { useTokenType: 'app' });
+      const data = await this.helixClient.subscribeToEventSub({ type, version: SubscriptionVersionsObject[type], transport: { method: 'webhook', callback: this.url, secret: this.secret }, condition: subscriptionOptions }, { useTokenType: 'app' });
 
       const subscription = new WebhookSubscription<T>(this, sub, data, this.secret);
 
@@ -95,6 +130,11 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
   }
 
+  /**
+   * Starts the Webhook Connection.
+   * @param port The port to start the server at if the startServer option is set to true.
+   * @param callback A callback to be called when the server is started if the startServer option is set to true.
+   */
   public async start(port?: number, callback?: () => void){
 
     if(this.startServer) this.server.listen(port, callback);
@@ -105,18 +145,30 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
   }
 
+  /**
+   * Sets a new app token for the connection.
+   * @param appToken The new app token.
+   * @returns The connection.
+   */
   public setAuth(appToken: TokenAdapter<'app', boolean>){
 
     this.helixClient.setAppToken(appToken);
 
     return this;
-
   }
 
+  /**
+   * The app token used for the connection.
+   */
   public get appToken(){
     return this.helixClient.appToken;
   }
 
+  /**
+   * Startup the connection. Reloading subscriptions if an storage was set.
+   * @returns 
+   * @private
+   */
   private async startup() {
 
     if(this.dropSubsAtStart) await processChunks(this, chunkArray(await this.helixClient.getEventSubSubscriptions(), 30));
@@ -125,7 +177,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
       const apiSubs = await this.helixClient.getEventSubSubscriptions({ status: 'enabled' });
 
-      const filteredSubs = apiSubs.filter((x) => x.transport.callback === `${this.baseURL}${this.subscriptionRoute}`);
+      const filteredSubs = apiSubs.filter((x) => x.transport.callback === this.url);
 
       this.makeDebug(`Fetched a total of ${apiSubs.length} API Subscriptions. Filtered to ${filteredSubs.length} for this callback ${this.baseURL}${this.subscriptionRoute}.`);
 
@@ -155,11 +207,11 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
           continue;
         }
         
-        const filteredSub = filteredSubs.find((x) => x.id === data.id || (x.type === data.type && JSON.stringify(x.condition) === JSON.stringify(data.options) && x.transport.callback === `${this.baseURL}${this.subscriptionRoute}`));
+        const filteredSub = filteredSubs.find((x) => x.id === data.id || (x.type === data.type && JSON.stringify(x.condition) === JSON.stringify(data.options) && x.transport.callback === this.url));
 
         if(!filteredSub){
 
-          const subscriptionData = await this.helixClient.subscribeToEventSub({ type: data.type, condition: data.options, transport: { method: 'webhook', secret: data.secret, callback: `${this.baseURL}${this.subscriptionRoute}` }, version: SubscriptionVersionsObject[data.type] });
+          const subscriptionData = await this.helixClient.subscribeToEventSub({ type: data.type, condition: data.options, transport: { method: 'webhook', secret: data.secret, callback: this.url }, version: SubscriptionVersionsObject[data.type] });
 
           const subscription = new WebhookSubscription<typeof data.type>(this, data, subscriptionData, data.secret);
 
@@ -226,6 +278,8 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
     const chunk = chunks[index];
 
     for(const subscription of chunk){
+
+      if(subscription.transport.method !== 'webhook') continue;
 
       connection.helixClient.deleteEventSubSubscription(subscription.id);
 

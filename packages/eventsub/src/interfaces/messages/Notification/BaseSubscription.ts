@@ -3,6 +3,9 @@ import type { SubscriptionVersions } from '../../SubscriptionVersions';
 import type { SubscriptionTypeOptions } from '../../SubscriptionTypeOptions';
 import type { SubscriptionTypes } from '../../../enums/';
 
+/**
+ * The base subscription for all notification messages.
+ */
 export interface BaseSubscription<T extends SubscriptionTypes> {
     id: string
     status: 'enabled'

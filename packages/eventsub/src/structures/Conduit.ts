@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { TokenAdapter } from '@twitchfy/helix';
 import type { PostEventSubSubscription } from '@twitchfy/api-types';
 import { Worker } from 'node:worker_threads';
 import { BaseConnection } from './BaseConnection';
@@ -12,23 +13,52 @@ import { Events } from '../enums';
 import type { SubscriptionTypes } from '../enums';
 
 
-
+/**
+ * Represents a Conduit connection.
+ */
 export class Conduit extends BaseConnection<Conduit, ConduitEvents>{
 
+  /**
+   * The id of the conduit.
+   * @private
+   */
   private _id: string | null;
 
+  /**
+   * The shards of the conduit.
+   */
   public readonly shards: Map<string, Shard>;
 
+  /**
+   * The workers of the conduit.
+   */
   public readonly workers: Map<string, Worker>;
 
+  /**
+   * The paths of the shards to connect with.
+   * @private
+   */
   private shardPaths: string[];
 
+  /**
+   * Whether drop all subscriptions of the current conduit at start or not. Default is false.
+   */
   public readonly dropSubsAtStart: boolean;
 
+  /**
+   * Whether to delete the conduit when you are going to delete the last shard of the conduit. Default is false. 
+   */
   public readonly deleteConduitOnNoShards: boolean;
 
+  /**
+   * Whether to cleanup the conduit shards at start avoiding duplicate shards. Default is true.
+   */
   public readonly conduitCleanup: boolean;
 
+  /**
+   * Builds up a new Conduit.
+   * @param options The options of the conduit.
+   */
   public constructor(options: ConduitOptions){
     
     super(options);
@@ -50,18 +80,31 @@ export class Conduit extends BaseConnection<Conduit, ConduitEvents>{
     this.conduitCleanup = typeof options.conduitCleanup === 'boolean' ? options.conduitCleanup : true;
   }
 
+  /**
+   * The app token used to manage the conduit and its subscriptions.
+   */
   public get appToken(){
     return this.helixClient.appToken;
   }
 
+  /**
+   * The id of the conduit.
+   */
   public get id(){
     return this._id;
   }
 
+  /**
+   * The number of shards of the conduit created by this process. This number is not synchronized with the API.
+   */
   public get shardCount(){
     return this.shards.size;
   }
 
+  /**
+   * Starts the conduit and all the shards in the Conduit's options. The promise will resolve when all the shards are fully enabled within the API.
+   * @returns 
+   */
   public async start(){
     return await this.startup();
   }
@@ -121,6 +164,11 @@ export class Conduit extends BaseConnection<Conduit, ConduitEvents>{
 
   }
 
+  /**
+   * Starts all the conduit and reload all the subscriptions that were stored in the storage.
+   * @internal
+   * @private
+   */
   private async startup(){
 
     if(!this._id) {
@@ -140,7 +188,7 @@ export class Conduit extends BaseConnection<Conduit, ConduitEvents>{
 
     }
 
-    if(this.dropSubsAtStart) await processChunks(this, chunkArray(await this.helixClient.getEventSubSubscriptions(), 30));
+    if(this.dropSubsAtStart) await processChunks(this, chunkArray((await this.helixClient.getEventSubSubscriptions()).filter((x) => x.transport.conduit_id === this._id), 30));
 
     if(this.maintainSubscriptions){
 
@@ -216,6 +264,9 @@ export class Conduit extends BaseConnection<Conduit, ConduitEvents>{
     this.emit(Events.ConnectionReady, this);
   }
 
+  /**
+   * Deletes a shard of a conduit. This operation is not recommended as it could result in an error unless all the shards of the conduit are being created within the same process.
+   */
   public async deleteShard(shardId: string){
       
     const shards = await this.helixClient.getConduitShards(this._id);
@@ -228,6 +279,9 @@ export class Conduit extends BaseConnection<Conduit, ConduitEvents>{
       throw Error('You can\'t delete the last shard of a conduit.');
     } else if(shards.length === 1){
       await this.helixClient.deleteConduit(this._id);
+      this.shards.clear();
+      await [...this.workers.values()][0].terminate();
+      this.workers.clear();
       return [];
     }
 
@@ -279,6 +333,9 @@ export class Conduit extends BaseConnection<Conduit, ConduitEvents>{
     return (await this.helixClient.getConduitShards(this._id)).map((x) => new Shard(this, x));
   }
 
+  /**
+   * Adds a shard to the conduit.
+   */
   public async addShard(shard: string){
 
     await new Promise((resolve) => {
@@ -291,6 +348,18 @@ export class Conduit extends BaseConnection<Conduit, ConduitEvents>{
 
     });
 
+  }
+
+  /**
+   * Sets a new app token for the conduit.
+   * @param appToken The new app token.
+   * @returns The conduit.
+   */
+  public setAuth(appToken: TokenAdapter<'app'>){
+
+    this.helixClient.setAppToken(appToken);
+
+    return this;
   }
 }
 
@@ -312,6 +381,8 @@ async function processChunks(conduit: Conduit, chunks: PostEventSubSubscription[
     const chunk = chunks[index];
 
     for(const subscription of chunk){
+
+      if(subscription.transport.method !== 'conduit') continue;
 
       conduit.helixClient.deleteEventSubSubscription(subscription.id);
 

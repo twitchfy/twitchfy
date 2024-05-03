@@ -4,14 +4,32 @@ import type { SubscriptionTypes } from '../../../enums';
 import type { ChannelFollowEvent } from '../../../interfaces';
 import type { ConnectionTypes, SubscriptionType } from '../../../types';
 
+/**
+ * The message received by the ChannelFollow event.
+ */
 export class ChannelFollowMessage<K extends ConnectionTypes = ConnectionTypes> extends BaseSubscriptionMessage<SubscriptionTypes.ChannelFollow, K>{
 
-  public broadcaster: BaseUser<SubscriptionTypes.ChannelFollow, K>;
+  /**
+   * The broadcaster of the channel who was followed.
+   */
+  public readonly broadcaster: BaseUser<SubscriptionTypes.ChannelFollow, K>;
 
-  public follower: BaseUser<SubscriptionTypes.ChannelFollow, K>;
+  /**
+   * The follower who followed the channel.
+   */
+  public readonly follower: BaseUser<SubscriptionTypes.ChannelFollow, K>;
 
-  public followedAt: Date;
+  /**
+   * The Date object when the follow occurred.
+   */
+  public readonly followedAt: Date;
 
+  /**
+   * Builds up a ChannelFollow message.
+   * @param connection The EventSub connection used.
+   * @param subscription The subscription which trigger this message.
+   * @param data The event data received with the subscription.
+   */
   public constructor(connection: K, subscription: SubscriptionType<SubscriptionTypes.ChannelFollow, K>, data: ChannelFollowEvent){
 
     super(connection, subscription);

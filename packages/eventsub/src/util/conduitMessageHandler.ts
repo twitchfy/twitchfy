@@ -1,13 +1,17 @@
 import { type Message as WSMessage } from 'websocket';
 import { conduitNotificationHandler } from './conduitNotificationHandler';
-import { WebSocketConduitConnector } from '../structures';
+import { WebSocketShardConnector } from '../structures';
 import type { ReconnectMessage } from '../ws';
 import { type WelcomeMessage } from '../ws';
 import type { BaseNotification } from '../interfaces';
 import type { Message } from '../types';
 
+/**
+ * Handles the messages received from the conduit.
+ * @param message The message received from the conduit.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function conduitMessageHandler(this: { connector: WebSocketConduitConnector, resolve: () => any }, message: WSMessage) {
+export async function conduitMessageHandler(this: { connector: WebSocketShardConnector, resolve: () => any }, message: WSMessage) {
 
   if (message.type === 'utf8') {
 
@@ -46,7 +50,7 @@ export async function conduitMessageHandler(this: { connector: WebSocketConduitC
 
       this.connector.connection.makeDebug(`Received session_reconnect message. Reconnecting to new reconnect url (${parsedMessage.payload.session.reconnect_url}).`);
 
-      const newConnection = new WebSocketConduitConnector(this.connector.connection);
+      const newConnection = new WebSocketShardConnector(this.connector.connection);
 
       newConnection._oldConnection = this.connector; 
 

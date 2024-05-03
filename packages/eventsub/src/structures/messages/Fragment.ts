@@ -4,14 +4,36 @@ import { Mention } from './Mention';
 import type { FragmentData } from '../../interfaces';
 import type { FragmentTypes } from '../../types';
 
+/**
+ * A fragment of a message.
+ */
 export class Fragment<T extends FragmentTypes = FragmentTypes> {
 
-  public type: T;
-  public content: string;
-  public cheermote: T extends 'cheermote' ? Cheermote : null;
-  public emote: T extends 'emote' ? Emote : null;
-  public mention: T extends 'mention' ? Mention : null;
+  /**
+   * The type of the fragment.
+   */
+  public readonly type: T;
+  /**
+   * The content of the fragment.
+   */
+  public readonly content: string;
+  /**
+   * The cheermote in the fragment. Null if the fragment's type isn't cheermote.
+   */
+  public readonly cheermote: T extends 'cheermote' ? Cheermote : null;
+  /**
+   * The emote in the fragment. Null if the fragment's type isn't emote.
+   */
+  public readonly emote: T extends 'emote' ? Emote : null;
+  /**
+   * The mention in the fragment. Null if the fragment's type isn't mention.
+   */
+  public readonly mention: T extends 'mention' ? Mention : null;
 
+  /**
+   * Builds up a fragment.
+   * @param data The data of the fragment.
+   */
   public constructor(data: FragmentData<T>){
 
     this.type = data.type as T;

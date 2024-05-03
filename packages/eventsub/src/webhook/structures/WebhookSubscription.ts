@@ -8,14 +8,33 @@ import { Subscription } from '../../structures/Subscription';
 import type { SubscriptionOptions } from '../../types';
 
 
+/**
+ * A subscription created within a WebhookConnection.
+ */
 export class WebhookSubscription<T extends SubscriptionTypes = SubscriptionTypes> extends Subscription<T> {
 
+  /**
+   * The connection used for this subscription.
+   */
   public readonly connection: WebhookConnection;
 
+  /**
+   * The secret used for creating this subscription.
+   */
   public readonly secret: string;
 
-  public callbacks: WebhookSubscriptionCallbackManager<T>;
+  /**
+   * The callbacks for this subscription.
+   */
+  public readonly callbacks: WebhookSubscriptionCallbackManager<T>;
 
+  /**
+   * Builds up a new WebhookSubscription.
+   * @param connection The connection used for this subscription.
+   * @param options The options for the subscription.
+   * @param data The data for the subscription.
+   * @param secret The secret used for creating this subscription.
+   */
   public constructor(connection: WebhookConnection, options: SubscriptionOptions<T>, data: PostEventSubSubscription, secret: string) {
 
     super(options, data);
@@ -32,16 +51,29 @@ export class WebhookSubscription<T extends SubscriptionTypes = SubscriptionTypes
 
   }
 
+  /**
+   * Adds a new callback to the subscription. This callback will be executed when a message within this subscription is received.
+   * @param callback The callback to add.
+   * @returns
+   */
   public onMessage(callback: WebhookSubscriptionCallback<T>) {
 
     this.callbacks.add(callback);
 
   }
 
+  /**
+   * Checks if the subscription is of a specific type.
+   * @param type The type to check.
+   * @returns Whether the subscription is of the type.
+   */
   public checkSubscriptionType<U extends T>(type: U): this is WebhookSubscription<U> {
     return this.type === type;
   }
 
+  /**
+   * Deletes the subscription.
+   */
   public async delete() {
 
     await this.connection.helixClient.deleteEventSubSubscription(this.id);

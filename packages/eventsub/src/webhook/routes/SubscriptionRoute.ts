@@ -6,6 +6,9 @@ import { notificationHandler } from '../../util';
 import type { WebhookConnection } from '../../webhook';
 
 
+/**
+ * The router for the subscription route.
+ */
 export const SubscriptionRouter: IRouter = Router();
 
 SubscriptionRouter.post('/', async(req: Request, res) => {

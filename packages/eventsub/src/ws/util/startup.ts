@@ -3,6 +3,10 @@ import { WebSocketSubscription } from '../structures';
 import { Events } from '../../enums';
 import { SubscriptionVersionsObject } from '../../util';
 
+/**
+ * Used to start up the connection and reload subscriptions if the maintainSubscriptions option is enabled.
+ * @param this The WebSocket connection.
+ */
 export async function startup(this: WebSocketConnection) {
 
   if (this.maintainSubscriptions) {
