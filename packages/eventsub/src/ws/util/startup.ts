@@ -1,6 +1,7 @@
 import type { WebSocketConnection } from '../structures';
 import { WebSocketSubscription } from '../structures';
 import { Events } from '../../enums';
+import type { StorageAdapterGet } from '../../types';
 import { SubscriptionVersionsObject } from '../../util';
 
 /**
@@ -11,7 +12,13 @@ export async function startup(this: WebSocketConnection) {
 
   if (this.maintainSubscriptions) {
 
-    for (const data of await this.storage.getAll()) {
+    const storage = (await this.storage.getAll()).reduce((acc: StorageAdapterGet<WebSocketConnection>[], x: StorageAdapterGet<WebSocketConnection>) => {
+      const equal = acc.find((i) => i.type === x.type && JSON.stringify(i.options) === JSON.stringify(x.options));
+      if(!equal) acc.push(x);
+      return acc;
+    }, []);
+
+    for (const data of storage) {
 
       const subscriptionData = await this.helixClient.subscribeToEventSub({ type: data.type, condition: data.options, transport: { method: 'websocket', session_id: this.sessionId }, version: SubscriptionVersionsObject[data.type] }, { useTokenType: 'user' });
 

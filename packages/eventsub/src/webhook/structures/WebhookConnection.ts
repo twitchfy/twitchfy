@@ -171,7 +171,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
    */
   private async startup() {
 
-    if(this.dropSubsAtStart) await processChunks(this, chunkArray(await this.helixClient.getEventSubSubscriptions(), 30));
+    if(this.dropSubsAtStart) await processChunks(this, chunkArray((await this.helixClient.getEventSubSubscriptions()).filter((x) => x.transport.method === 'webhook'), 30));
 
     if(this.maintainSubscriptions){
 

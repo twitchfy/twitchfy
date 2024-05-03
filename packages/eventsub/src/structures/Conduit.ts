@@ -188,7 +188,7 @@ export class Conduit extends BaseConnection<Conduit, ConduitEvents>{
 
     }
 
-    if(this.dropSubsAtStart) await processChunks(this, chunkArray((await this.helixClient.getEventSubSubscriptions()).filter((x) => x.transport.conduit_id === this._id), 30));
+    if(this.dropSubsAtStart) await processChunks(this, chunkArray((await this.helixClient.getEventSubSubscriptions()).filter((x) => x.transport.method === 'conduit'), 30));
 
     if(this.maintainSubscriptions){
 
@@ -381,8 +381,6 @@ async function processChunks(conduit: Conduit, chunks: PostEventSubSubscription[
     const chunk = chunks[index];
 
     for(const subscription of chunk){
-
-      if(subscription.transport.method !== 'conduit') continue;
 
       conduit.helixClient.deleteEventSubSubscription(subscription.id);
 
