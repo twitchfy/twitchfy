@@ -34,7 +34,7 @@ export class MessageReply<T extends EventSubConnection> extends Base<T> {
    * @param data The data of the reply.
    * @param chatroom The chatroom where the reply was sent.
    */
-  public constructor(chatbot: ChatBot<T>, data: MessageData<T>['message']['reply'], chatroom: ChatRoom<T>){
+  public constructor(chatbot: ChatBot<T>, data: NonNullable<MessageData<T>['message']['reply']>, chatroom: ChatRoom<T>){
     super(chatbot);
     this.data = data;
     this.parent = new MessageReplyParent(chatbot, { id: data.parent.message.id, content: data.parent.message.content, user_id: data.parent.user.id, user_name: data.parent.user.displayName, user_login: data.parent.user.login, chatroom_id: chatroom.id }, chatroom);
