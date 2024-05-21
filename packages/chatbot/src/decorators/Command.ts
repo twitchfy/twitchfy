@@ -22,8 +22,10 @@ export interface CommandOptions {
  * @returns {Function} The decorator function.
  */
 export function SetCommand<T extends EventSubConnection = DefaultConnection>(options: CommandOptions){
-  return function(constructor: new () => ChatCommand<T>){
-    constructor.prototype.name = options.name;
-    constructor.prototype.options = options.options;
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
+  return <K extends { new (...args: any[]): ChatCommand<T> }>(target: K) =>
+    class extends target {
+      override name = options.name;
+      override options = options.options;
+    };
 }

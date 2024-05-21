@@ -17,12 +17,13 @@ export function handleSubscriptionReload<T extends EventSubConnection>(this: Cha
 
   let profile = this.profiles.get(subscription.options.broadcaster_user_id);
 
-  if(!profile){
-    profile = new ChannelProfile<T>(this, { id: subscription.options.broadcaster_user_id, events: ['ChannelChatMessage'] });
-    this.profiles.set(subscription.options.broadcaster_user_id, profile);
-  }
 
   if (subscription.checkSubscriptionType(SubscriptionTypes.ChannelChatMessage) && subscription.options.user_id === this.userId) {
+
+    if(!profile){
+      profile = new ChannelProfile<T>(this, { id: subscription.options.broadcaster_user_id, events: ['ChannelChatMessage'] });
+      this.profiles.set(subscription.options.broadcaster_user_id, profile);
+    }
 
     const fn = handleOnMessage.bind(this);
 
@@ -32,11 +33,13 @@ export function handleSubscriptionReload<T extends EventSubConnection>(this: Cha
     
   }
 
-  initEvent(profile, subscription.type);
+  initEvent(profile ?? null, subscription.type);
 
 }
 
-export function initEvent<T extends EventSubConnection>(profile: ChannelProfile<T>, type: SubscriptionTypes){
+export function initEvent<T extends EventSubConnection>(profile: ChannelProfile<T> | null, type: SubscriptionTypes){
+
+  if(!profile) return;
 
   const key = getSubscriptonKey(type) as ChannelEvents;
 

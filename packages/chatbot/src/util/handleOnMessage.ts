@@ -37,9 +37,11 @@ export async function handleOnMessage<T extends EventSubConnection>(this: ChatBo
 
   if(!command) return;
 
-  const options = optionsParser<T>(this, args.join(' '), command.options, data, this.optionOperator);
+  const options = optionsParser<T>(this, args.join(' '), command.options || {}, data, this.optionOperator);
 
-  Object.keys(options).filter((x) => !command.options[x]).map((x) => delete options[x]);
+  const commandOptions = command.options || {};
+
+  Object.keys(options).filter((x) => !commandOptions[x]).map((x) => delete options[x]);
 
   // @ts-expect-error
   const context = new TwitchContext<typeof command.options, T>(this, { ...data, prefix, commandName: commandName!, options });

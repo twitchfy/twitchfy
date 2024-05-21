@@ -257,7 +257,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
     this.user = new ChatBotUser(this, await this.helixClient.getUser(this.userId));
 
     // @ts-expect-error
-    await ((this.eventsub instanceof WebhookConnection || this.eventsub instanceof Conduit) ? this.eventsub.start(options.port, options.callback) : this.eventsub.connect());
+    await ((this.eventsub instanceof WebhookConnection || this.eventsub instanceof Conduit) ? this.eventsub.start(options?.port, options?.callback) : this.eventsub.connect());
   
     const readyEvent = this.events.get('ChatBotReady');
 
