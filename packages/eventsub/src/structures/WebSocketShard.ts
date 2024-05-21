@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HelixClient } from '@twitchfy/helix';
+import type { HelixClient } from '@twitchfy/helix';
 import { workerData, parentPort } from 'node:worker_threads';
 import { WebSocketShardConnector } from './WebSocketShardConnector';
 import type { Conduit } from './Conduit';
-import { findFirstMissingId, handleParentMessage } from '../util';
+import { handleParentMessage } from '../util';
 import type { WebSocketConnectionOptions } from '../ws';
 
 /**
@@ -108,32 +108,7 @@ export class WebSocketShard {
 
     this._conduit = workerData.conduit;
 
-    this._helixClient = new HelixClient(this._conduit.helixClient);
-
-    const conduit = (await this._helixClient.getConduits()).find((conduit) => conduit.id === this.conduitId);
-
-    const shards = await this._helixClient.getConduitShards(this.conduitId);
-
-    const missingId = findFirstMissingId(shards);
-
-    if(conduit.shard_count === shards.length && !missingId) await this._helixClient.updateConduit({ id: this.conduitId, shard_count: shards.length + 1 });
-
-    const data = await this._helixClient.updateConduitShards({
-      conduit_id: this.conduitId,
-      shards: [
-        {
-          id: missingId || shards.length.toString(),
-          transport: {
-            method: 'websocket',
-            session_id: this.sessionId
-          }
-        }
-      ]
-    });
-
-    this._shardId = data[0].id;
-
-    parentPort.postMessage({ topic: 'shard.websocket.start', shard: data[0] });
+    parentPort.postMessage({ topic: 'shard.websocket.start', shard: { transport: { session_id: this.sessionId }} });
 
     const fn = handleParentMessage.bind(this);
 

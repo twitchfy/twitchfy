@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Express } from 'express';
-import { HelixClient } from '@twitchfy/helix';
+import type { IncomingHttpHeaders } from 'node:http';
+import type { Express, Request } from 'express';
 import { workerData, parentPort } from 'node:worker_threads';
 import type { Conduit } from './Conduit';
-import { parseRoute } from '../webhook';
-import type { WebhookConnectionOptions } from '../webhook';
-import { conduitMakeMiddlewares, ConduitSubscriptionRouter, findFirstMissingId, handleParentMessage } from '../util';
+import type { SubscriptionTypes } from '../enums';
+import type { BasePayload } from '../interfaces';
+import { parseRoute, verifySignature } from '../webhook';
+import type { WebhookConnectionOptions , Body } from '../webhook';
+import { conduitMakeMiddlewares, conduitNotificationHandler, ConduitSubscriptionRouter, handleParentMessage } from '../util';
 
 /**
  * A Webhook Shard created within a Conduit.
@@ -36,19 +38,13 @@ export class WebhookShard {
   /**
    * The Express server to handle the subscription notifications.
    */
-  public readonly server: Express;
+  public readonly server: Express | null;
 
   /**
    * Whether to start the server at start.
    * @default false
    */
   public readonly startServer: boolean;
-
-  /**
-   * The HelixClient to interact with the Twitch API.
-   * @private
-   */
-  private _helixClient: HelixClient = null;
 
   /**
    * The id of the shard.
@@ -68,13 +64,13 @@ export class WebhookShard {
    * @param options The options for the shard.
    * @param server The Express server to handle the subscription notifications.
    */
-  public constructor(options: Pick<WebhookConnectionOptions, 'baseURL' | 'subscriptionRoute' | 'startServer' | 'secret'>, server: Express){
+  public constructor(options: Pick<WebhookConnectionOptions, 'baseURL' | 'subscriptionRoute' | 'startServer' | 'secret'>, server?: Express){
 
     this.baseURL = options.baseURL;
 
     this.subscriptionRoute = options.subscriptionRoute ? parseRoute(options.subscriptionRoute) : '/subscriptions';
 
-    this.server = server;
+    this.server = server ?? null;
 
     this.secret = options.secret;
 
@@ -98,17 +94,56 @@ export class WebhookShard {
   }
 
   /**
-   * The HelixClient to interact with the Twitch API of this shard.
-   */
-  public get helixClient(){
-    return this._helixClient;
-  }
-
-  /**
    * The id of the shard.
    */
   public get shardId(){
     return this._shardId;
+  }
+
+  /**
+   * Used for handling incoming Twitch requests in your custom non-Express server.
+   * @param headers The headers of the request.
+   * @param body The body of the request.
+   * @param verification A callback to be called when the request is a webhook callback verification and you need to send the challenge.
+   * @param success A callback to be called when the handling has suceeded. You will need to send a 200 status in the response after that.
+   * @param invalidSignature A callback which is executed when the signature that has been sent by the requester is incorrect.
+   * @returns 
+   */
+  public async post(headers: IncomingHttpHeaders, body: any, verification: (challenge: string) => any, success: () => any, invalidSignature?: () => any){
+    
+    if(!headers['twitch-eventsub-message-signature']) return invalidSignature?.();
+
+    setBodyType(body);
+
+    if(!verifySignature(headers, body, this.secret)){
+      this.makeWarn('Received a request with an invalid signature.');
+      return invalidSignature?.();
+    }
+
+    switch(headers['twitch-eventsub-message-type']){
+    case 'notification': {
+      await conduitNotificationHandler.bind(this)(body);
+      return success();
+    }
+      break;
+    case 'revocation': {
+      this.makeWarn(`Subscription was revoked (${body.subscription.id})`);
+      return success();
+    }
+      break;
+    case 'webhook_callback_verification': {
+      this.makeDebug(`Get webhook callback verification for shard (${this._shardId})`);
+      verification((body as Body<'webhook_callback_verification'>).challenge);
+      let shardId = this._shardId;
+      while(!shardId){
+        shardId = this._shardId;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+      parentPort.postMessage({ topic: 'webhook.callback.verified', shardId : this._shardId });
+      return;
+    }
+    }
+
   }
 
   /**
@@ -119,51 +154,23 @@ export class WebhookShard {
   public async start(port?: number, callback?: () => void){
 
     this._conduit = workerData.conduit;
-
-    this._helixClient = new HelixClient(this._conduit.helixClient);
-
-    const conduit = (await this._helixClient.getConduits()).find((conduit) => conduit.id === this.conduitId);
-
-    const shards = await this._helixClient.getConduitShards(this.conduitId);
-
-    const foundShard = shards.find((shard) => shard.transport.callback === this.url);
-    if(foundShard){
-      this._shardId = foundShard.id;
-      parentPort.postMessage({ topic: 'shard.webhook.start', shard: { ...foundShard, transport: { ...foundShard.transport, secret: this.secret }}});
-    } else {
-
-      const missingId = findFirstMissingId(shards);
-
-      if(conduit.shard_count === shards.length && !missingId) await this.helixClient.updateConduit({ id: this.conduitId, shard_count: shards.length + 1  });
-      const data = await this._helixClient.updateConduitShards({
-        conduit_id: this.conduitId,
-        shards: [
-          {
-            id: missingId || shards.length.toString(),
-            transport: {
-              method: 'webhook',
-              callback: this.url,
-              secret: this.secret
-            }
-          }
-        ]
-      });
-
-      this._shardId = data[0].id;
-
-      parentPort.postMessage({ topic: 'shard.webhook.start', shard: { ...data[0], transport: { ...data[0].transport, secret: this.secret }}});
-    }
-
-
+  
     const fn = handleParentMessage.bind(this);
 
     parentPort.on('message', fn);
 
-    if(this.startServer) this.server.listen(port, callback);
+    if(this.startServer && this.server) this.server?.listen(port, callback);
 
-    conduitMakeMiddlewares.bind(this)(this.server);
+    if(this.server){
 
-    this.server.use(this.subscriptionRoute, ConduitSubscriptionRouter);
+      conduitMakeMiddlewares.bind(this)(this.server);
+
+      this.server.use(this.subscriptionRoute, ConduitSubscriptionRouter);
+    }
+
+    parentPort.postMessage({ topic: 'shard.webhook.start', shard: { transport: { callback: this.url, secret: this.secret }}});
+
+  
   }
 
   /**
@@ -175,6 +182,14 @@ export class WebhookShard {
   }
 
   /**
+   * Sends a warn packet to the parent thread to make a warning.
+   * @param args The arguments to send.
+   */
+  public makeWarn(...args: any[]){
+    this.sendPacket({ topic: 'warn', args });
+  }
+
+  /**
    * Sends a packet to the parent thread.
    * @param packet The packet to send.
    */
@@ -182,3 +197,5 @@ export class WebhookShard {
     parentPort.postMessage(packet);
   }
 }
+
+function setBodyType<T extends SubscriptionTypes>(body: Request['body']): asserts body is BasePayload<T> {}

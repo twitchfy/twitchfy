@@ -1,18 +1,21 @@
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
-import type { Express } from 'express';
+import type { IncomingHttpHeaders } from 'node:http';
+import type { Express, Request } from 'express';
 import type { PostEventSubSubscription } from '@twitchfy/api-types';
 import type { TokenAdapter } from '@twitchfy/helix';
 import { WebhookSubscription } from './WebhookSubscription';
+import type { Body } from '../interfaces';
 import type { WebhookConnectionOptions } from '../types';
-import { makeMiddlewares, parseRoute } from '../util';
+import { makeMiddlewares, parseRoute, verifySignature } from '../util';
 import { SubscriptionRouter } from '../routes';
 import { BaseConnection } from '../../structures/BaseConnection';
 import { Events, type SubscriptionTypes } from '../../enums';
-import { SubscriptionVersionsObject } from '../../util';
+import { notificationHandler, SubscriptionVersionsObject } from '../../util';
 import type { StorageAdapterGet, SubscriptionOptions } from '../../types';
-import type { WebhookEvents } from '../../interfaces';
+import type { WebhookEvents, BasePayload } from '../../interfaces';
 
 /**
  * A Webhook Connection.
@@ -22,7 +25,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
   /**
    * The express server used for receiving Twitch data.
    */
-  public readonly server: Express;
+  public readonly server: Express | null;
 
   /**
    * The base URL for the webhook callback.
@@ -56,7 +59,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
    * @param options The options for the connection.
    * @param server The express server used for receiving Twitch data.
    */
-  public constructor(options: WebhookConnectionOptions, server: Express){
+  public constructor(options: WebhookConnectionOptions, server?: Express){
 
     super(options);
 
@@ -68,9 +71,11 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
     this.startServer = typeof options.startServer === 'boolean' ? options.startServer : false;
 
-    this.server = server;
+    this.server = server ?? null;
 
     this.dropSubsAtStart = typeof options.dropSubsAtStart === 'boolean'? options.dropSubsAtStart : false;
+
+    this.helixClient.setAppToken(options.appToken);
 
   }
 
@@ -137,7 +142,7 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
    */
   public async start(port?: number, callback?: () => void){
 
-    if(this.startServer) this.server.listen(port, callback);
+    if(this.startServer && this.server) this.server.listen(port, callback);
 
     await this.startup();
 
@@ -162,6 +167,51 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
    */
   public get appToken(){
     return this.helixClient.appToken;
+  }
+
+  /**
+   * Used for handling incoming Twitch requests in your custom non-Express server.
+   * @param headers The headers of the request.
+   * @param body The body of the request.
+   * @param verification A callback to be called when the request is a webhook callback verification and you need to send the challenge.
+   * @param success A callback to be called when the handling has suceeded. You will need to send a 200 status in the response after that.
+   * @param invalidSignature A callback which is executed when the signature that has been sent by the requester is incorrect.
+   * @returns 
+   */
+  public async post(headers: IncomingHttpHeaders, body: any, verification: (challenge: string) => any, success: () => any, invalidSignature?: () => any){
+    
+    if(!headers['twitch-eventsub-message-signature']) return invalidSignature?.();
+
+    setBodyType(body);
+
+    const subscription = this.subscriptions.get(body.subscription.id);
+
+    if(!subscription) return this.makeDebug(`Incoming non-listed subscription ${body.subscription.id} (${headers['twitch-eventsub-message-type']}). If you are using an storage check it's functionality.`);
+
+    if(!verifySignature(headers, body, subscription.secret)){
+      this.makeWarn('Received a request with an invalid signature.');
+      return invalidSignature?.();
+    }
+
+    switch(headers['twitch-eventsub-message-type']){
+    case 'notification': {
+      await notificationHandler(this, body);
+      return success();
+    }
+      break;
+    case 'revocation': {
+      this.makeWarn(`Subscription was revoked (${body.subscription.id})`);
+      return success();
+    }
+      break;
+    case 'webhook_callback_verification': {
+      this.makeDebug(`Get webhook callback verification for ${body.subscription.id}`);
+      verification((body as Body<'webhook_callback_verification'>).challenge);
+      subscription.status = 'enabled';
+      this.subscriptions.set(subscription.id, subscription);
+      return;
+    }
+    }
   }
 
   /**
@@ -249,12 +299,12 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
 
     }
     
-    makeMiddlewares(this, this.server);
 
-    this.server.use(this.subscriptionRoute, SubscriptionRouter);
-
-    this.makeDebug('Default middlewares have been set into the express server.');
-
+    if(this.server){
+      makeMiddlewares(this, this.server);
+      this.server?.use(this.subscriptionRoute, SubscriptionRouter);
+      this.makeDebug('Default middlewares have been set into the express server.');
+    }
     return;
 
   }
@@ -292,3 +342,5 @@ async function processChunks(connection: WebhookConnection, chunks: PostEventSub
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 }
+
+function setBodyType<T extends SubscriptionTypes>(body: Request['body']): asserts body is BasePayload<T> {}
