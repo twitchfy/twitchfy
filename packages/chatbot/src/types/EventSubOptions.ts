@@ -12,5 +12,5 @@ type OmitClientProps<T> = T extends { clientId: string; clientSecret: string } ?
  */
 export type EventSubOptions<T extends EventSubConnection> =
   (T extends EventSubConnection.WebSocket ? OmitClientProps<WebSocketConnectionOptions> : T extends EventSubConnection.Webhook ?
-    OmitClientProps<WebhookConnectionOptions> & { server: Express } : OmitClientProps<ConduitOptions>);
+    OmitClientProps<WebhookConnectionOptions> & { server?: Express } : OmitClientProps<ConduitOptions>);
 
