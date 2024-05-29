@@ -193,24 +193,25 @@ export class WebhookConnection extends BaseConnection<WebhookConnection, Webhook
       return invalidSignature?.();
     }
 
-    switch(headers['twitch-eventsub-message-type']){
-    case 'notification': {
-      await notificationHandler(this, body);
-      return success();
-    }
-      break;
-    case 'revocation': {
-      this.makeWarn(`Subscription was revoked (${body.subscription.id})`);
-      return success();
-    }
-      break;
-    case 'webhook_callback_verification': {
+    if(headers['twitch-eventsub-message-type'] === 'webhook_callback_verification'){
       this.makeDebug(`Get webhook callback verification for ${body.subscription.id}`);
       verification((body as Body<'webhook_callback_verification'>).challenge);
       subscription.status = 'enabled';
       this.subscriptions.set(subscription.id, subscription);
       return;
     }
+
+    success();
+
+    switch(headers['twitch-eventsub-message-type']){
+    case 'notification': {
+      await notificationHandler(this, body);
+    }
+      break;
+    case 'revocation': {
+      this.makeWarn(`Subscription was revoked (${body.subscription.id})`);
+    }
+      break;
     }
   }
 
