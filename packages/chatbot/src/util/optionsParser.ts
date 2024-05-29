@@ -101,7 +101,7 @@ export function optionsParser<T extends EventSubConnection>(chatbot: ChatBot<T>,
 
         // @ts-expect-error
 
-        args[i] = new BaseUser<T>(chatbot, { ...mention!.user, display_name: mention!.displayName });
+        args[i] = new BaseUser<T>(chatbot, { ...mention!.user, display_name: mention!.user.displayName });
 
       }
 
