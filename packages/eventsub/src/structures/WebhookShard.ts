@@ -120,18 +120,7 @@ export class WebhookShard {
       return invalidSignature?.();
     }
 
-    switch(headers['twitch-eventsub-message-type']){
-    case 'notification': {
-      await conduitNotificationHandler.bind(this)(body);
-      return success();
-    }
-      break;
-    case 'revocation': {
-      this.makeWarn(`Subscription was revoked (${body.subscription.id})`);
-      return success();
-    }
-      break;
-    case 'webhook_callback_verification': {
+    if(headers['twitch-eventsub-message-type'] === 'webhook_callback_verification'){
       this.makeDebug(`Get webhook callback verification for shard (${this._shardId})`);
       verification((body as Body<'webhook_callback_verification'>).challenge);
       let shardId = this._shardId;
@@ -142,6 +131,17 @@ export class WebhookShard {
       parentPort.postMessage({ topic: 'webhook.callback.verified', shardId : this._shardId });
       return;
     }
+
+    success();
+    switch(headers['twitch-eventsub-message-type']){
+    case 'notification': {
+      await conduitNotificationHandler.bind(this)(body);
+    }
+      break;
+    case 'revocation': {
+      this.makeWarn(`Subscription was revoked (${body.subscription.id})`);
+    }
+      break;
     }
 
   }
