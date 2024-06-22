@@ -67,6 +67,13 @@ export class BaseChannel<T extends EventSubConnection = EventSubConnection> exte
   }
 
   /**
+   * The chatroom warns manager. See {@link WarnsManager}.
+   */
+
+  public get warns() {
+    return this.chatroom.warns;
+  }
+  /**
      * Fetches all the emotes of this channel.
      * @returns The a Collection containing all the emotes of the channel.
      */

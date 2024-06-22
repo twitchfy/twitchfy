@@ -4,7 +4,7 @@ import type { ChatBot } from './ChatBot';
 import { BaseUser } from './BaseUser';
 import { AutoMod } from './AutoMod';
 import { BaseChannel } from './BaseChannel';
-import { MessageManager, BanManager, TimeoutManager, ChatRoomSettingsManager } from './managers';
+import { MessageManager, BanManager, TimeoutManager, ChatRoomSettingsManager, WarnsManager } from './managers';
 import type { EventSubConnection } from '../enums';
 
 /**
@@ -38,6 +38,11 @@ export class ChatRoom<T extends EventSubConnection> extends Base<T> {
   public readonly settings: ChatRoomSettingsManager<T>;
 
   /**
+   * The warns manager of the chatroom.
+   */
+  public readonly warns: WarnsManager<T>;
+
+  /**
    * The automod manager of the chatroom.
    */
   public readonly automod: AutoMod<T>;
@@ -66,6 +71,7 @@ export class ChatRoom<T extends EventSubConnection> extends Base<T> {
     this.timeouts = new TimeoutManager<T>(this.chatbot, this);
     this.settings = new ChatRoomSettingsManager<T>(this.chatbot, this);
     this.messages = new MessageManager<T>(this.chatbot, this);
+    this.warns = new WarnsManager<T>(this.chatbot, this);
     this.automod = new AutoMod<T>(this.chatbot, this);
   }
 

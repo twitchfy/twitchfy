@@ -10,3 +10,4 @@ export * from './SendChatMessageBody';
 export * from './SubscriptionBody';
 export * from './UpdateConduitShardsBody';
 export * from './UpdateConduitBody';
+export * from './WarnUserBody';

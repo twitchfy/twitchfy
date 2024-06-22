@@ -18,3 +18,4 @@ export * from './GetVideosOptions';
 export * from './GenerateUserTokenOptions';
 export * from './UpdateConduitShardsOptions';
 export * from './UpdateConduitOptions';
+export * from './WarnUserOptions';

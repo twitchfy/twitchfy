@@ -1,6 +1,6 @@
-import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse, GetCheermotesResponse, GetChannelEmotesResponse, GetGlobalEmotesResponse, GetClipsResponse, GetVideosResponse, GetModeratedChannelsResponse, PostCreateConduitResponse, PatchUpdateConduitShardsResponse, PatchUpdateConduitResponse, GetConduitsResponse, ConduitShardData } from '@twitchfy/api-types';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse, GetCheermotesResponse, GetChannelEmotesResponse, GetGlobalEmotesResponse, GetClipsResponse, GetVideosResponse, GetModeratedChannelsResponse, PostCreateConduitResponse, PatchUpdateConduitShardsResponse, PatchUpdateConduitResponse, GetConduitsResponse, ConduitShardData, PostWarnChatUserResponse } from '@twitchfy/api-types';
 import { RequestManager } from './RequestManager';
-import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody, UpdateConduitShardsBody, UpdateConduitBody } from './structures';
+import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody, UpdateConduitShardsBody, UpdateConduitBody, WarnUserBody } from './structures';
 import { TokenAdapter } from './structures';
 import { handlePagination } from './utils';
 import type { HelixClientOptions, GetSubscriptionFilter, GenerateUserTokenOptions, GenerateAppTokenOptions, HelixClientCallbacks, GetStreamsOptions, GetClipsOptions, GetVideosOptions } from './interfaces';
@@ -404,6 +404,11 @@ export class BaseClient {
     if(status) params.append('status', status);
 
     return await handlePagination(this, '/eventsub/conduits/shards', params.toString(), 'GET', { ...requestOptions, useTokenType: 'app' }) as ConduitShardData[];
+  }
+
+  public async warnChatUser(broadcaster_id: string, moderator_id: string, body: WarnUserBody, requestOptions?: RequestOptions<'user'>){
+    const data = await this.requestManager.post('/moderation/warnings', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), body, { ...requestOptions, useTokenType: 'user' }) as PostWarnChatUserResponse;
+    return data.data[0];
   }
   
   public async refreshToken(token: TokenAdapter<'code', true>){

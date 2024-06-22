@@ -9,3 +9,5 @@ export * from './ChatBotBanManager';
 export * from './ChatBotTimeoutManager';
 export * from './AutoModSettingsManager';
 export * from './ChatBotUserManager';
+export * from './ChatBotWarnsManager';
+export * from './WarnsManager';

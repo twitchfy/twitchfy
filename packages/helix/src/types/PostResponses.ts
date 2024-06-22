@@ -1,3 +1,3 @@
-import type { BanUserResponse, PostCreateClipResponse, PostEventSubSubscriptionsResponse, PostSendChatMessageResponse, PostCreateConduitResponse } from '@twitchfy/api-types';
+import type { BanUserResponse, PostCreateClipResponse, PostEventSubSubscriptionsResponse, PostSendChatMessageResponse, PostCreateConduitResponse, PostWarnChatUserResponse } from '@twitchfy/api-types';
 
-export type PostResponses = BanUserResponse | PostCreateClipResponse |  PostEventSubSubscriptionsResponse | PostSendChatMessageResponse | PostCreateConduitResponse | void
+export type PostResponses = BanUserResponse | PostCreateClipResponse |  PostEventSubSubscriptionsResponse | PostSendChatMessageResponse | PostCreateConduitResponse | PostWarnChatUserResponse |void

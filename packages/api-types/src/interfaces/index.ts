@@ -17,3 +17,4 @@ export * from './Cheermote';
 export * from './Emote';
 export * from './Video';
 export * from './Moderation';
+export * from './Warnings';

@@ -4,7 +4,7 @@ import { BaseMessage } from '../BaseMessage';
 import type { EventSubConnection } from '../../enums';
 
 /**
- * The message manager of the chatobot.
+ * The message manager of the chatbot.
  */
 export class ChatBotMessageManager<T extends EventSubConnection> extends Base<T>{
     

@@ -52,3 +52,4 @@ export * from './ChannelChatClear';
 export * from './Channel';
 export * from './Video';
 export * from './BaseChannel';
+export * from './Warning';
