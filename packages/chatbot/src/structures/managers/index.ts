@@ -11,3 +11,5 @@ export * from './AutoModSettingsManager';
 export * from './ChatBotUserManager';
 export * from './ChatBotWarnsManager';
 export * from './WarnsManager';
+export * from './ChatBotChatterManager';
+export * from './ChatterManager';

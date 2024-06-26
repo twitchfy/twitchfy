@@ -16,6 +16,7 @@ import type { ChannelProfile } from './ChannelProfile';
 import { Stream } from './Stream';
 import { Clip } from './Clip';
 import { ChatRoom } from './ChatRoom';
+import { ChatBotChatterManager} from './managers';
 import { ChatBotWarnsManager } from './managers';
 import { ChannelManager, ChatBotBanManager, ChatBotMessageManager, ChatBotTimeoutManager, ChatBotUserManager } from './managers';
 import { EventSubConnection } from '../enums';
@@ -93,6 +94,12 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
   public readonly warns: ChatBotWarnsManager<T>;
 
   /**
+   * The chatters manager of the chatbot.
+   */
+
+  public readonly chatters: ChatBotChatterManager<T>;
+
+  /**
    * The Twitch user of the chatbot.
    */
   public user: ChatBotUser<T>;
@@ -148,6 +155,7 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
     this.timeouts = new ChatBotTimeoutManager<T>(this);
     this.users = new ChatBotUserManager<T>(this);
     this.warns = new ChatBotWarnsManager<T>(this);
+    this.chatters = new ChatBotChatterManager<T>(this);
     this.handlers = {
       commands: new CommandHandler(join(process.cwd(), options.paths.output, options.paths.commands || '.')),
       events: new EventHandler(join(process.cwd(), options.paths.output, options.paths.events || '.'))
