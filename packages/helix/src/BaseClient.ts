@@ -183,6 +183,14 @@ export class BaseClient {
     return await handlePagination(this, '/chat/chatters', params.toString(), 'GET', { ...requestOptions, useTokenType: 'user' }) as Chatter[];
   }
 
+  public async getChattersCount(broadcaster_id: string, moderator_id: string, requestOptions?: RequestOptions<'user'>): Promise<number>{
+
+    const data = await this.requestManager.get('/chat/chatters', new URLSearchParams({ broadcaster_id, moderator_id }).toString(), { ...requestOptions, useTokenType: 'user' }) as GetFollowersResponse;
+
+    return data.total;
+
+  }
+
   public async getChannelFollowerCount(broadcaster_id: string, requestOptions?: RequestOptions<'user'>): Promise<number> {
 
     const data = await this.requestManager.get('/channels/followers', new URLSearchParams({ broadcaster_id }).toString(), { ...requestOptions, useTokenType: 'user' }) as GetFollowersResponse;
