@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { ChannelUpdateMessage, ChannelFollowMessage, ChannelChatClearMessage, StreamOnlineMessage, ChannelAdBreakBeginMessage, ChannelChatClearUserMessagesMessage, ChannelChatMessageMessage } from '../structures';
+import { ChannelUpdateMessage, ChannelFollowMessage, ChannelChatClearMessage, StreamOnlineMessage, ChannelAdBreakBeginMessage, ChannelChatClearUserMessagesMessage, ChannelChatMessageMessage, StreamOfflineMessage } from '../structures';
 import { SubscriptionTypes } from '../enums';
 import type { BasePayload } from '../interfaces';
 import type { WebhookConnection } from '../webhook';
@@ -119,10 +119,27 @@ export async function notificationHandler(connection: WebhookConnection | WebSoc
     
     await subscription.callbacks.execute(new ChannelChatMessageMessage(connection, subscription, payload.event));
   }
+  
+    break;
+
+  case SubscriptionTypes.StreamOffline : {
+      
+    setPayloadType<SubscriptionTypes.StreamOffline>(payload);
+  
+    const subscription = connection.subscriptions.get<SubscriptionTypes.StreamOffline>(payload.subscription.id);
+  
+    if(!subscription) return;
+  
+    //@ts-expect-error
+  
+    await subscription.callbacks.execute(new StreamOfflineMessage(connection, subscription, payload.event));
+
+  }
+
+    break;
 
   }
 
 }
 
 function setPayloadType<T extends SubscriptionTypes>(notification: BasePayload): asserts notification is BasePayload<T> {}
-

@@ -5,6 +5,7 @@ export * from './ChannelFollow';
 export * from './ChannelUpdate';
 export * from './ChannelChatMessage';
 export * from './StreamOnline';
+export * from './StreamOffline';
 export * from './Base';
 export * from './BaseStream';
 export * from './BaseUser';

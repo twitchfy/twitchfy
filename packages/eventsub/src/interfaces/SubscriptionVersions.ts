@@ -11,4 +11,5 @@ export interface SubscriptionVersions {
     [SubscriptionTypes.ChannelAdBreakBegin]: '1'
     [SubscriptionTypes.ChannelChatClearUserMessages]: '1'
     [SubscriptionTypes.ChannelChatMessage]: '1'
+    [SubscriptionTypes.StreamOffline]: '1'
 }

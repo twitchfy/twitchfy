@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Worker } from 'node:worker_threads';
 import { findFirstMissingId } from './findFirstMissingId';
-import { StreamOnlineMessage, type Conduit, Shard, ChannelChatMessageMessage, ChannelFollowMessage, ChannelUpdateMessage, ChannelChatClearMessage, ChannelChatClearUserMessagesMessage, ChannelAdBreakBeginMessage } from '../structures';
+import { StreamOnlineMessage, type Conduit, Shard, ChannelChatMessageMessage, ChannelFollowMessage, ChannelUpdateMessage, ChannelChatClearMessage, ChannelChatClearUserMessagesMessage, ChannelAdBreakBeginMessage, StreamOfflineMessage } from '../structures';
 import type { ShardMessages } from '../types';
 import type { BasePayload } from '../interfaces';
 import type { SubscriptionTypes } from '../enums';
@@ -260,10 +260,23 @@ export async function handleShardMessage(this: { conduit: Conduit, worker: Worke
     }
 
       break;
+
+    case 'stream.offline': {
+
+      setPayloadType<SubscriptionTypes.StreamOffline>(message.payload);
+
+      const subscription = this.conduit.subscriptions.get<SubscriptionTypes.StreamOffline>(message.payload.subscription.id);
+
+      if (!subscription) return;
+
+      subscription.callbacks.execute(new StreamOfflineMessage(this.conduit, subscription, message.payload.event));
+    }
+
+      break;
     }
   }
   }
-
 }
+
 
 function setPayloadType<T extends SubscriptionTypes>(notification: BasePayload): asserts notification is BasePayload<T> { }

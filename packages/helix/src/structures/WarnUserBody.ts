@@ -1,4 +1,4 @@
-import type { WarnUserOptions } from 'interfaces';
+import type { WarnUserOptions } from '../interfaces';
 
 export class WarnUserBody {
   data: WarnUserBodyData;

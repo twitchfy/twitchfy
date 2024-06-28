@@ -1,7 +1,7 @@
 /**
  * Options for subscribing to the ChannelChatMessage event.
  */
-export interface ChannelChatMessage {
+export interface ChannelChatMessageOptions {
     /**
      * The broadcaster user ID to listen to chat messages for.
      */

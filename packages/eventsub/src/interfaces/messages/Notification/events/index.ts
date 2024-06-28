@@ -5,4 +5,5 @@ export * from './ChannelFollow/ChannelFollowEvent';
 export * from './ChannelUpdate/ChannelUpdateEvent';
 export * from './StreamOnline/StreamOnlineEvent';
 export * from './ChannelChatMessage/ChannelChatMessageEvent';
+export * from './StreamOffline/StreamOfflineEvent';
 export * from './SubscriptionEvents';

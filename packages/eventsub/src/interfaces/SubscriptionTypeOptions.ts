@@ -1,4 +1,4 @@
-import type { ChannelUpdateOptions, ChannelFollowOptions, ChannelChatClearOptions, StreamOnlineOptions, ChannelAdBreakBeginOptions, ChannelChatClearUserMessagesOptions, ChannelChatMessage } from './options';
+import type { ChannelUpdateOptions, ChannelFollowOptions, ChannelChatClearOptions, StreamOnlineOptions, ChannelAdBreakBeginOptions, ChannelChatClearUserMessagesOptions, ChannelChatMessageOptions, StreamOfflineOptions } from './options';
 import type { SubscriptionTypes } from '../enums';
 
 /**
@@ -11,5 +11,6 @@ export interface SubscriptionTypeOptions {
     [SubscriptionTypes.StreamOnline]: StreamOnlineOptions
     [SubscriptionTypes.ChannelAdBreakBegin]: ChannelAdBreakBeginOptions
     [SubscriptionTypes.ChannelChatClearUserMessages]: ChannelChatClearUserMessagesOptions
-    [SubscriptionTypes.ChannelChatMessage]: ChannelChatMessage
+    [SubscriptionTypes.ChannelChatMessage]: ChannelChatMessageOptions
+    [SubscriptionTypes.StreamOffline]: StreamOfflineOptions
 }
