@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import type { ChannelFollowMessage, SubscriptionType, ChannelChatClearMessage, ChannelUpdateMessage, StreamOnlineMessage, ChannelChatMessageMessage } from '@twitchfy/eventsub';
+import type { ChannelFollowMessage, SubscriptionType, ChannelChatClearMessage, ChannelUpdateMessage, StreamOnlineMessage, ChannelChatMessageMessage, StreamOfflineMessage } from '@twitchfy/eventsub';
 import { SubscriptionTypes, type SubscriptionMessage } from '@twitchfy/eventsub';
-import { ChannelChatClear, ChannelFollow, ChannelUpdate, ChatRoom, Message, StreamOnline, type ChatBot } from '../structures';
+import { ChannelChatClear, ChannelFollow, ChannelUpdate, ChatRoom, Message, StreamOffline, StreamOnline, type ChatBot } from '../structures';
 import type { EventSubConnection } from '../enums';
 import type { EventSubConnectionMap } from '../interfaces';
 import type { ChannelEvents, MessageData } from '../types';
@@ -49,6 +49,10 @@ export function handleEvent<T extends EventSubConnection>(this: ChatBot<T>, mess
     const typedMessage = message as ChannelChatMessageMessage<EventSubConnectionMap[T]>;
     data = new Message<T>(this, message as MessageData<T>, new ChatRoom(this, { broadcaster_id: typedMessage.broadcaster.id, broadcaster_login: typedMessage.broadcaster.login, broadcaster_name: typedMessage.broadcaster.displayName }));
   }
+
+    break;
+
+  case 'StreamOffline': data = new StreamOffline<T>(this, message as StreamOfflineMessage<EventSubConnectionMap[T]>);
 
     break;
 

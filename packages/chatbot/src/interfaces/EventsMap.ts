@@ -1,4 +1,4 @@
-import type { ChannelFollow, ChannelChatClear, ChannelUpdate, StreamOnline, Message } from '../structures';
+import type { ChannelFollow, ChannelChatClear, ChannelUpdate, StreamOnline, Message, StreamOffline } from '../structures';
 import type { EventSubConnection } from '../enums';
 
 /**
@@ -11,5 +11,6 @@ export interface EventsMap<T extends EventSubConnection> {
     ['ChannelUpdate']: ChannelUpdate<T>
     ['StreamOnline']: StreamOnline<T>
     ['ChannelChatMessage']: Message<T>;
+    ['StreamOffline']: StreamOffline<T>;
     ['ChatBotReady']: never;
 }

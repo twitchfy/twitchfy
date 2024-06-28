@@ -19,7 +19,7 @@
   "homepage": "https://github.com/twitchfy/twitchfy#readme",
   "dependencies": {
     "@twitchfy/api-types": "^1.0.2",
-    "@twitchfy/eventsub": "^1.0.7",
+    "@twitchfy/eventsub": "^1.0.8",
     "@twitchfy/helix": "^1.0.4"
   },
   "keywords": [
