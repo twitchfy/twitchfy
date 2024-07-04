@@ -12,3 +12,4 @@ export * from './UserTokenAdapter';
 export * from './ModifyType';
 export * from './PaginationResponses';
 export * from './PickRequired';
+export * from './GenerateUserTokenOptions';

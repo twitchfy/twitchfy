@@ -15,7 +15,7 @@ export * from './HelixClientCallbacks';
 export * from './GetStreamsOptions';
 export * from './GetClipsOptions';
 export * from './GetVideosOptions';
-export * from './GenerateUserTokenOptions';
 export * from './UpdateConduitShardsOptions';
 export * from './UpdateConduitOptions';
 export * from './WarnUserOptions';
+export * from './InitDeviceFlowOptions';

@@ -1,21 +1,21 @@
-import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse, GetCheermotesResponse, GetChannelEmotesResponse, GetGlobalEmotesResponse, GetClipsResponse, GetVideosResponse, GetModeratedChannelsResponse, PostCreateConduitResponse, PatchUpdateConduitShardsResponse, PatchUpdateConduitResponse, GetConduitsResponse, ConduitShardData, PostWarnChatUserResponse } from '@twitchfy/api-types';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse, GetCheermotesResponse, GetChannelEmotesResponse, GetGlobalEmotesResponse, GetClipsResponse, GetVideosResponse, GetModeratedChannelsResponse, PostCreateConduitResponse, PatchUpdateConduitShardsResponse, PatchUpdateConduitResponse, GetConduitsResponse, ConduitShardData, PostWarnChatUserResponse, TokenDeviceFlowResponse, StartDCFResponse } from '@twitchfy/api-types';
 import { RequestManager } from './RequestManager';
 import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody, UpdateConduitShardsBody, UpdateConduitBody, WarnUserBody } from './structures';
-import { TokenAdapter } from './structures';
+import { DeviceFlowContext, TokenAdapter } from './structures';
 import { handlePagination } from './utils';
-import type { HelixClientOptions, GetSubscriptionFilter, GenerateUserTokenOptions, GenerateAppTokenOptions, HelixClientCallbacks, GetStreamsOptions, GetClipsOptions, GetVideosOptions } from './interfaces';
-import type { ModifyType, PickRequired, RequestOptions, UserTokenAdapter } from './types';
+import type { HelixClientOptions, GetSubscriptionFilter, GenerateAppTokenOptions, HelixClientCallbacks, GetStreamsOptions, GetClipsOptions, GetVideosOptions, InitDeviceFlowOptions } from './interfaces';
+import type { ModifyType, PickRequired, RequestOptions, UserTokenAdapter, GenerateUserTokenOptions } from './types';
 
 
 export class BaseClient {
 
-  public clientId: string;
-  public clientSecret: string;
+  public readonly clientId: string;
+  public readonly clientSecret?: string;
   public preferedToken: 'app' | 'user';
   public appToken?: TokenAdapter<'app', boolean>;
   public userToken?: UserTokenAdapter<boolean>;
   public proxy?: string;
-  public requestManager: RequestManager;
+  public readonly requestManager: RequestManager;
   public callbacks: HelixClientCallbacks;
 
 
@@ -419,7 +419,7 @@ export class BaseClient {
     return data.data[0];
   }
   
-  public async refreshToken(token: TokenAdapter<'code', true>){
+  public async refreshToken(token: TokenAdapter<'code' | 'device', true>){
 
     const data = await this.requestManager.refreshToken(token.refreshToken);
 
@@ -431,12 +431,28 @@ export class BaseClient {
 
   }
 
-  public async generateUserToken<T extends boolean = true, K extends boolean = false>(options?: GenerateUserTokenOptions<T, K>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
-    return await BaseClient.generateUserToken<T, K>({ ...options, clientId: this.clientId, clientSecret: this.clientSecret });
+  public async initDeviceFlow<T extends boolean = false>(options: InitDeviceFlowOptions<T>){
+    return await BaseClient.initDeviceFlow<T>({ ...options, clientId: options.clientId || this.clientId });
+  }
+
+
+  public async generateUserToken<T extends boolean = true, K extends boolean = false>(options: GenerateUserTokenOptions<T, K>): Promise<(K extends true ? TokenCodeFlowResponse | TokenDeviceFlowResponse : TokenAdapter<'code' | 'device', T>)> {
+    return await BaseClient.generateUserToken<T, K>({ clientId: this.clientId, clientSecret: this.clientSecret, ...options });
   }
 
   public async generateAppToken<T extends boolean = true, K extends boolean = false>(options?: GenerateAppTokenOptions<T, K>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)> {
-    return await BaseClient.generateAppToken<T, K>({ ...options, clientId: this.clientId, clientSecret: this.clientSecret });
+    return await BaseClient.generateAppToken<T, K>({ clientId: this.clientId, clientSecret: this.clientSecret, ...options });
+  }
+
+  public static async initDeviceFlow<T extends boolean = false>(options: PickRequired<InitDeviceFlowOptions<T>, 'clientId'>): Promise<T extends true ? StartDCFResponse : DeviceFlowContext>{
+
+    const data = await RequestManager.initDeviceFlow(options);
+
+    if(options.raw) return data as T extends true ? StartDCFResponse : DeviceFlowContext;
+
+    const client = await import('./HelixClient');
+
+    return new DeviceFlowContext(client.HelixClient, { ...data, clientId: options.clientId, scopes: options.scopes }) as T extends true ? StartDCFResponse : DeviceFlowContext; 
   }
 
   public static async generateAppToken<T extends boolean = true, K extends boolean = false>(options: PickRequired<GenerateAppTokenOptions<T, K>, 'clientId' | 'clientSecret'>): Promise<(K extends true ? TokenClientCredentialsFlowResponse : TokenAdapter<'app', T>)>{
@@ -449,17 +465,19 @@ export class BaseClient {
 
   }
 
-  public static async generateUserToken<T extends boolean = true, K extends boolean = false>(options: PickRequired<GenerateUserTokenOptions<T, K>, 'clientId' | 'clientSecret'>): Promise<(K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>)> {
+  public static async generateUserToken<T extends boolean = true, K extends boolean = false>(options: GenerateUserTokenOptions<T, K> & { clientId: string, clientSecret?: string }): Promise<(K extends true ? TokenCodeFlowResponse | TokenDeviceFlowResponse: TokenAdapter<'code' | 'device', T>)> {
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const data = await RequestManager.generateUserToken(options);
 
-    if(options?.raw) return data as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
+    if(options?.raw) return data as K extends true ? TokenCodeFlowResponse | TokenDeviceFlowResponse : TokenAdapter<'code' | 'device' , T>;
 
-    return new TokenAdapter({ type: 'code', token: data.access_token, refreshToken: data.refresh_token, refresh: options?.refresh ?? true }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
+    return new TokenAdapter({ type: options.flow, token: data.access_token, refreshToken: data.refresh_token, refresh: options?.refresh ?? true }) as K extends true ? TokenCodeFlowResponse : TokenAdapter<'code', T>;
 
   }
 
-  public setUserToken(token: TokenAdapter<'code' | 'implicit', boolean>){
+  public setUserToken(token: UserTokenAdapter<boolean>){
 
     this.userToken = token;
 

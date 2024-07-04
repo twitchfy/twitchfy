@@ -4,7 +4,7 @@ import type { UserTokenAdapter } from '../types';
 
 export interface HelixClientOptions{
     clientId: string
-    clientSecret: string
+    clientSecret?: string
     appToken?: TokenAdapter<'app', boolean>
     userToken?: UserTokenAdapter<boolean>
     preferedToken?: 'app' | 'user'

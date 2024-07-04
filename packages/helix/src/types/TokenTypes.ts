@@ -1,1 +1,1 @@
-export type TokenTypes = 'implicit' | 'code' | 'app'
+export type TokenTypes = 'implicit' | 'code' | 'app' | 'device'
