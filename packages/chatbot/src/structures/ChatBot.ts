@@ -266,9 +266,24 @@ export class ChatBot<T extends EventSubConnection = EventSubConnection> {
     // @ts-expect-error
     this.eventsub.on(Events.SubscriptionMessage, listener);
 
-    const tokenInfo = await this.helixClient.getUserToken(false);
+    const tokenInfo = await this.helixClient.getUserToken(false).catch(async(err) => {
+      if(this.helixClient.userToken?.refresh){
+        //@ts-expect-error
+        const token = await this.helixClient.refreshToken(this.helixClient.userToken).catch(() => {
+          throw err;
+        });
 
-    this.userId = tokenInfo.user_id;
+        this.helixClient.setUserToken(token);
+
+        return await this.helixClient.getUserToken(false);
+      
+      }
+
+      throw err;
+      
+    });
+
+    this.userId = tokenInfo!.user_id;
 
     this.user = new ChatBotUser(this, await this.helixClient.getUser(this.userId));
 

@@ -423,11 +423,11 @@ export class BaseClient {
 
     const data = await this.requestManager.refreshToken(token.refreshToken);
 
-    token.token = data.access_token;
+    const newToken = new TokenAdapter({ ...token, token: data.access_token, refreshToken: data.refresh_token });
 
-    token.refreshToken = data.refresh_token;
+    this.callbacks.onUserTokenRefresh?.(token, newToken);
 
-    return token;
+    return newToken;
 
   }
 
