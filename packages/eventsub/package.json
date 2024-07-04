@@ -1,6 +1,6 @@
 {
   "name": "@twitchfy/eventsub",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A powerful node module to interact with the EventSub API over Twitch.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/twitchfy/twitchfy#readme",
   "dependencies": {
     "@twitchfy/api-types": "^1.0.3",
-    "@twitchfy/helix": "^1.0.5",
+    "@twitchfy/helix": "^1.0.6",
     "@vladfrangu/async_event_emitter": "^2.2.4",
     "websocket": "^1.0.34"
   },
