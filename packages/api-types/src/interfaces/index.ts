@@ -18,3 +18,4 @@ export * from './Emote';
 export * from './Video';
 export * from './Moderation';
 export * from './Warnings';
+export * from './DeviceFlow';

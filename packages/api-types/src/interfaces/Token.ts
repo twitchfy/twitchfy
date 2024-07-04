@@ -6,6 +6,14 @@ export interface TokenCodeFlowResponse {
     token_type: string
 }
 
+export interface TokenDeviceFlowResponse {
+    access_token: string
+    expires_in: number
+    refresh_token: string
+    scope: string[]
+    token_type: string
+}
+
 export interface TokenClientCredentialsFlowResponse {
     access_token: string
     expires_in: number
