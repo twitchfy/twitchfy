@@ -1,6 +1,6 @@
 {
   "name": "@twitchfy/api-types",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A node module containing the Twitch Api types",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
