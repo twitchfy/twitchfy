@@ -249,7 +249,7 @@ export class RequestManager {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-expect-error
-    default: token = this.client.preferedToken === 'app' ? this.client.appToken ?? this.client.userToken : requestOptions.userToken ?? this.client.userToken ?? this.client.appToken;
+    default: token = requestOptions.userToken ?? this.client.preferedToken === 'app' ? this.client.appToken ?? this.client.userToken : this.client.userToken ?? this.client.appToken;
 
       break;
 
