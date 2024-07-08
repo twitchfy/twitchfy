@@ -15,7 +15,7 @@ import type { ChannelEvents, MessageData } from '../types';
  * @returns 
  * @internal
  */
-export function handleEvent<T extends EventSubConnection>(this: ChatBot<T>, message: SubscriptionMessage<EventSubConnectionMap[T]>, subscription: SubscriptionType<SubscriptionTypes, EventSubConnectionMap[T]>){
+export async function handleEvent<T extends EventSubConnection>(this: ChatBot<T>, message: SubscriptionMessage<EventSubConnectionMap[T]>, subscription: SubscriptionType<SubscriptionTypes, EventSubConnectionMap[T]>){
 
   const key = getSubscriptonKey(subscription.type);
 
@@ -61,7 +61,7 @@ export function handleEvent<T extends EventSubConnection>(this: ChatBot<T>, mess
   }
 
   // @ts-expect-error
-  return event.run(this, data);
+  return await event.run(this, data);
 }
 
 /**
