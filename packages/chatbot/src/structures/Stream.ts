@@ -48,7 +48,7 @@ export class Stream<T extends EventSubConnection> extends BaseStream<T> {
    */
   public constructor(chatbot: ChatBot<T>, data: GetStream){
     super(chatbot, data);
-    this.data;
+    this.data = data;
     this.viewerCount = data.viewer_count;
     this.language = data.language;
     this.tags = data.tags;
