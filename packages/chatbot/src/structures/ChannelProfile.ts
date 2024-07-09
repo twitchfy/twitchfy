@@ -85,6 +85,7 @@ export class ChannelProfile<T extends EventSubConnection> extends Base<T> {
    */
   private async addMassEvents(events: ChannelEvents[]){
     for(const event of events){
+      if(this.hasEvent(event)) continue;
       await this.addEvent(event);
     }
   }
