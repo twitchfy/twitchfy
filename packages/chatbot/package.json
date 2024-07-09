@@ -1,6 +1,6 @@
 {
   "name": "@twitchfy/chatbot",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "A powerful node module to make your own Twitch ChatBot",
   "main": "dist/index.js",
   "readme": "README.md",
