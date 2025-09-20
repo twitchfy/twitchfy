@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/twitchfy/twitchfy#readme",
   "dependencies": {
-    "@twitchfy/api-types": "^1.0.3",
-    "@twitchfy/helix": "^1.0.7",
+    "@twitchfy/api-types": "^1.0.4",
+    "@twitchfy/helix": "^1.0.9",
     "@vladfrangu/async_event_emitter": "^2.2.4",
     "websocket": "^1.0.34"
   },
