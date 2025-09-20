@@ -123,24 +123,26 @@ export class Clip<T extends EventSubConnection> extends BaseClip<T>{
   }
 
   /**
-   * Fetches the download URL of the clip. For this to work, the bot has to be an editor of the clip's channel and the user token must have the `editor:manage:clips` scope or `channel:manage:clips` if the bot is the broadcaster of the channel. 
-   * @returns The download URL of the clip or null if it doesn't exist.
+   * Fetches the download URLs of the clip. Either landscape or portrait. For this to work, the bot has to be an editor of the clip's channel and the user token must have the `editor:manage:clips` scope or `channel:manage:clips` if the bot is the broadcaster of the channel.
+   * @returns An object with each download URL. The field is null if the download URL doesn't exist.
    */
 
-  public async getDownloadURL(): Promise<string | null> {
+  public async getDownloadURL(): Promise<{ landscape: string | null; portrait: string | null }> {
     const data = await this.chatbot.helixClient.getClipDownload(this.id, this.chatbot.userId, this.broadcaster.id);
-    return data[0].landscape_download_url ? data[0].landscape_download_url : data[0].portrait_download_url ?? null;
+    return {
+      landscape: data[0].landscape_download_url ?? null,
+      portrait: data[0].portrait_download_url ?? null
+    };
   }
 
   /**
-   * Downloads the clip's video data.
-   * @returns A buffer containing the clip's video data or null if it couldn't be downloaded. For this to work, the bot has to be an editor of the clip's channel and the user token must have the `editor:manage:clips` scope or `channel:manage:clips` if the bot is the broadcaster of the channel.
+   * Downloads the clip's video data. For this to work, the bot has to be an editor of the clip's channel and the user token must have the `editor:manage:clips` scope or `channel:manage:clips` if the bot is the broadcaster of the channel.
+   * @returns An object of buffers containing the clip's video data in either portrait or landscape format. The field is null if the download URL doesn't exist or the fetch fails.
    */
-  public async download(): Promise<Buffer | null> {
-    const url = await this.getDownloadURL();
-    if (!url) return null;
-    const response = await fetch(url);
-    if (!response.ok) return null;
-    return await response.arrayBuffer().then(buffer => Buffer.from(buffer));
+  public async download(): Promise<{ landscape: Buffer | null; portrait: Buffer | null }> {
+    const urls = await this.getDownloadURL();
+    const landscape = urls.landscape ? await fetch(urls.landscape).then(res => res.ok ? res.arrayBuffer().then(buffer => Buffer.from(buffer)) : null) : null;
+    const portrait = urls.portrait ? await fetch(urls.portrait).then(res => res.ok ? res.arrayBuffer().then(buffer => Buffer.from(buffer)) : null) : null;
+    return { landscape, portrait };
   }
 }
