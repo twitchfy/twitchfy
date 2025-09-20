@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/twitchfy/twitchfy#readme",
   "dependencies": {
-    "@twitchfy/api-types": "^1.0.3"
+    "@twitchfy/api-types": "^1.0.4"
   },
   "keywords": [
     "twitch",
