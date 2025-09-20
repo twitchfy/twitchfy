@@ -1,7 +1,7 @@
+import type { EventSubConnection } from '../../enums';
 import { Base } from '../Base';
 import { User } from '../User';
 import type { ChatBot } from '../ChatBot';
-import type { EventSubConnection } from 'enums';
 
 /**
  * The user manager of the chatbot.

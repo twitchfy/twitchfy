@@ -121,4 +121,26 @@ export class Clip<T extends EventSubConnection> extends BaseClip<T>{
   public async stream(){
     return await this.chatbot.stream({ user_id: this.broadcaster.id });
   }
+
+  /**
+   * Fetches the download URL of the clip. For this to work, the bot has to be an editor of the clip's channel and the user token must have the `editor:manage:clips` scope or `channel:manage:clips` if the bot is the broadcaster of the channel. 
+   * @returns The download URL of the clip or null if it doesn't exist.
+   */
+
+  public async getDownloadURL(): Promise<string | null> {
+    const data = await this.chatbot.helixClient.getClipDownload(this.id, this.chatbot.userId, this.broadcaster.id);
+    return data[0].landscape_download_url ? data[0].landscape_download_url : data[0].portrait_download_url ?? null;
+  }
+
+  /**
+   * Downloads the clip's video data.
+   * @returns A buffer containing the clip's video data or null if it couldn't be downloaded. For this to work, the bot has to be an editor of the clip's channel and the user token must have the `editor:manage:clips` scope or `channel:manage:clips` if the bot is the broadcaster of the channel.
+   */
+  public async download(): Promise<Buffer | null> {
+    const url = await this.getDownloadURL();
+    if (!url) return null;
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    return await response.arrayBuffer().then(buffer => Buffer.from(buffer));
+  }
 }

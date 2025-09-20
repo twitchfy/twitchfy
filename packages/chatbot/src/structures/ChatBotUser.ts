@@ -1,7 +1,7 @@
 import type { User as UserData } from '@twitchfy/api-types';
+import type { EventSubConnection } from '../enums';
 import type { ChatBot } from './ChatBot';
 import { User } from './User';
-import type { EventSubConnection } from 'enums';
 
 /**
  * Represents a Twitch chatbot user.
