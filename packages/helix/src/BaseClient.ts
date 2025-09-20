@@ -1,4 +1,4 @@
-import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse, GetCheermotesResponse, GetChannelEmotesResponse, GetGlobalEmotesResponse, GetClipsResponse, GetVideosResponse, GetModeratedChannelsResponse, PostCreateConduitResponse, PatchUpdateConduitShardsResponse, PatchUpdateConduitResponse, GetConduitsResponse, ConduitShardData, PostWarnChatUserResponse, TokenDeviceFlowResponse, StartDCFResponse } from '@twitchfy/api-types';
+import type { User, UserResponse, Channel, ChannelResponse , Ban, BanUserResponse, GetChatSettingsResponse, ChatSettings, GetBan, GetBansResponse, AutoModSettings, GetAutoModSettingsResponse, Chatter, GetFollowersResponse, GetFollowers, PostCreateClip, PostCreateClipResponse, GetStream, GetStreamResponse, PostEventSubSubscriptionsResponse, PostEventSubSubscription, TokenCodeFlowResponse, PostSendChatMessageResponse, TokenClientCredentialsFlowResponse, GetCheermotesResponse, GetChannelEmotesResponse, GetGlobalEmotesResponse, GetClipsResponse, GetVideosResponse, GetModeratedChannelsResponse, PostCreateConduitResponse, PatchUpdateConduitShardsResponse, PatchUpdateConduitResponse, GetConduitsResponse, ConduitShardData, PostWarnChatUserResponse, TokenDeviceFlowResponse, StartDCFResponse, GetClipsDownloadResponse } from '@twitchfy/api-types';
 import { RequestManager } from './RequestManager';
 import type { WhisperBody, BanBody, TimeoutBody, AnnouncementBody, ChatSettingsBody, AutoModSettingsBody, SendChatMessageBody, SubscriptionBody, UpdateConduitShardsBody, UpdateConduitBody, WarnUserBody } from './structures';
 import { DeviceFlowContext, TokenAdapter } from './structures';
@@ -419,6 +419,11 @@ export class BaseClient {
     return data.data[0];
   }
   
+
+  public async getClipDownload(clip_id: string, editor_id: string, broadcaster_id: string, requestOptions?: RequestOptions){
+    const data = await this.requestManager.get('/clips/downloads', new URLSearchParams({ clip_id, editor_id, broadcaster_id }).toString(), requestOptions) as GetClipsDownloadResponse;
+    return data.data;
+  }
   public async refreshToken(token: TokenAdapter<'code' | 'device', true>){
 
     const data = await this.requestManager.refreshToken(token.refreshToken);
