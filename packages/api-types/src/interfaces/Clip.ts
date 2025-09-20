@@ -33,3 +33,14 @@ export interface GetClip {
     vod_offset: number | null
     is_featured: boolean
 }
+
+
+export interface GetClipsDownloadData {
+    clip_id: string
+    landscape_download_url: string | null
+    portrait_download_url: string | null
+}
+
+export interface GetClipsDownloadResponse {
+    data: GetClipsDownloadData[]
+}
