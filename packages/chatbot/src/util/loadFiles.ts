@@ -1,5 +1,6 @@
 import { readdir, stat } from 'fs/promises';
 import { join } from 'path';
+import { pathToFileURL } from 'node:url';
 
 /**
  * Load all files from a directory.
@@ -39,9 +40,7 @@ export async function loadFiles<T>(dirPath: string): Promise<{ default: T }[]>{
 }
 
 export async function magicImport(path: string) {
-  try {
-    return require(path);
-  } catch {
-    return eval('((path) => import(`file:///${path}?update=${Date.now()}`))')(path.split('\\').join('\\\\'));
-  }
+  const url = pathToFileURL(path);
+  url.searchParams.set('update', Date.now().toString());
+  return import(url.href);
 }

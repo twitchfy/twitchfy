@@ -1,21 +1,12 @@
-import type { Request, Router as RouterType, IRouter } from 'express';
+import { Router, type Request, type IRouter } from 'express';
 import type { WebhookShard } from '../structures';
-
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-let Router : typeof RouterType | undefined = undefined;
-
-try {
-  Router = require('express').Router;
-} catch {
-  // Do nothing
-}
 
 /**
  * The router for the conduit subscription route.
  */
-export const ConduitSubscriptionRouter: IRouter | undefined = Router? Router() : undefined;
+export const ConduitSubscriptionRouter: IRouter = Router();
 
-ConduitSubscriptionRouter?.post('/', async(req: Request, res) => {
+ConduitSubscriptionRouter.post('/', async(req: Request, res) => {
 
   const connection = res.locals.webhookConnection as WebhookShard;
 

@@ -1,20 +1,12 @@
-import type { Request , IRouter, Router as RouterType } from 'express';
+import { Router, type Request, type IRouter } from 'express';
 import type { WebhookConnection } from '../../webhook';
-
-let Router: typeof RouterType | undefined = undefined;
-
-try {
-  Router = require('express').Router;
-} catch {
-  // Do nothing
-}
 
 /**
  * The router for the subscription route.
  */
-export const SubscriptionRouter: IRouter | undefined = Router? Router() : undefined;
+export const SubscriptionRouter: IRouter = Router();
 
-SubscriptionRouter?.post('/', async(req: Request, res) => {
+SubscriptionRouter.post('/', async(req: Request, res) => {
 
   const connection = res.locals.webhookConnection as WebhookConnection;
 
