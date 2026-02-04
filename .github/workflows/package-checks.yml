@@ -1,0 +1,114 @@
+name: Package checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      api-types: ${{ steps.filter.outputs.api-types }}
+      chatbot: ${{ steps.filter.outputs.chatbot }}
+      eventsub: ${{ steps.filter.outputs.eventsub }}
+      helix: ${{ steps.filter.outputs.helix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Filter paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            api-types:
+              - 'packages/api-types/**'
+            chatbot:
+              - 'packages/chatbot/**'
+            eventsub:
+              - 'packages/eventsub/**'
+            helix:
+              - 'packages/helix/**'
+
+  lint-api-types:
+    name: Lint & typecheck api-types
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.api-types == 'true' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint api-types
+        run: npx eslint packages/api-types --ext .ts
+      - name: Typecheck api-types
+        run: npx -y tsc -p packages/api-types/tsconfig.json --noEmit
+
+  lint-chatbot:
+    name: Lint & typecheck chatbot
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.chatbot == 'true' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint chatbot
+        run: npx eslint packages/chatbot --ext .ts
+      - name: Typecheck chatbot
+        run: npx -y tsc -p packages/chatbot/tsconfig.json --noEmit
+
+  lint-eventsub:
+    name: Lint & typecheck eventsub
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.eventsub == 'true' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint eventsub
+        run: npx eslint packages/eventsub --ext .ts
+      - name: Typecheck eventsub
+        run: npx -y tsc -p packages/eventsub/tsconfig.json --noEmit
+
+  lint-helix:
+    name: Lint & typecheck helix
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.helix == 'true' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint helix
+        run: npx eslint packages/helix --ext .ts
+      - name: Typecheck helix
+        run: npx -y tsc -p packages/helix/tsconfig.json --noEmit
