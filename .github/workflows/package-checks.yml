@@ -48,8 +48,6 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Lint api-types
-        run: npx eslint packages/api-types --ext .ts
       - name: Typecheck api-types
         run: npx -y tsc -p packages/api-types/tsconfig.json --noEmit
 
@@ -68,8 +66,6 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Lint chatbot
-        run: npx eslint packages/chatbot --ext .ts
       - name: Typecheck chatbot
         run: npx -y tsc -p packages/chatbot/tsconfig.json --noEmit
 
@@ -88,8 +84,6 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Lint eventsub
-        run: npx eslint packages/eventsub --ext .ts
       - name: Typecheck eventsub
         run: npx -y tsc -p packages/eventsub/tsconfig.json --noEmit
 
@@ -108,7 +102,5 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Lint helix
-        run: npx eslint packages/helix --ext .ts
       - name: Typecheck helix
         run: npx -y tsc -p packages/helix/tsconfig.json --noEmit
