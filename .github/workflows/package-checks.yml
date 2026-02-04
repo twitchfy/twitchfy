@@ -47,7 +47,7 @@ jobs:
           node-version: 20
           cache: npm
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
       - name: Lint api-types
         run: npx eslint packages/api-types --ext .ts
       - name: Typecheck api-types
@@ -67,7 +67,7 @@ jobs:
           node-version: 20
           cache: npm
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
       - name: Lint chatbot
         run: npx eslint packages/chatbot --ext .ts
       - name: Typecheck chatbot
@@ -87,7 +87,7 @@ jobs:
           node-version: 20
           cache: npm
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
       - name: Lint eventsub
         run: npx eslint packages/eventsub --ext .ts
       - name: Typecheck eventsub
@@ -107,7 +107,7 @@ jobs:
           node-version: 20
           cache: npm
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
       - name: Lint helix
         run: npx eslint packages/helix --ext .ts
       - name: Typecheck helix
